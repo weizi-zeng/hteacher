@@ -1,0 +1,128 @@
+﻿.winHeader 
+{
+    background-image:url(../images/cheader.png);
+    background-repeat:no-repeat;
+    background-size:cover;
+    border:none;
+    overflow: hidden;
+    height: 60px;
+    background-color:#D0F0FD;
+}
+
+.userInfo 
+{
+    padding-top:4px;
+    padding-right: 50px;
+    float: right;
+}
+
+.userOpera
+{
+    padding-top:4px;
+    padding-right: 50px;
+    float: right;
+}
+
+.userOpera a, a:hover
+{
+    text-decoration:none;
+}
+
+.winFooter
+{
+    font-weight: bold; 
+    text-align: center; 
+    vertical-align: middle;
+    background-color: #DBEAF9;
+}
+
+.panel-header
+{
+    font-size:18px;
+    font-weight:bold;
+    background-color:Aqua;
+    color:Blue;
+    border-radius: 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+#nav 
+{
+     padding-bottom: 20px;
+    
+}
+#nav .panel-title {
+    font-size: 14px;
+    margin-bottom: 0;
+    margin-top: 0;
+    text-align:center;
+    /* color: #222222;  */
+}
+
+.accordion .accordion-header {
+    color: #222222;
+    background-color: #C6ECFF;
+    background-image: linear-gradient(to bottom, #2DAAE5, #E5F8FF);
+    background-repeat: repeat-x;
+    /* border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25); */
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.accordion .accordion-header-selected 
+{
+    background-color: #59CDF1;
+    background-image: linear-gradient(to bottom, #59CDF1, #9FE0FE);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #FFFFFF;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.panel-body .accordion-body 
+{
+    width: 96%; 
+    background-color: rgb(225, 246, 254);
+    border:dashed 1px #02B2FC;
+}
+
+.accordion {
+    background-color: #E1F6FE;
+}
+
+.navlist li 
+{
+    background-color:#C0F5FF;
+}
+
+
+.menuListChildHover 
+{
+    border: 1px dashed #99BBE8;
+    background: #E0ECFF;
+    cursor: pointer;
+    color: #416AA3;
+    font-weight: bold;
+    background-color: #0065D1; /*#D0F0FD*/
+    border-radius: 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+#tabs a.tabs-inner {
+   background-color: #7DC7EA;
+   width:100px;
+}
+
+
+#tabs .tabs li {
+    margin: 0 1px -1px 0;
+    background-color: #7DC7EA;
+    border:none;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.tabs li a.tabs-inner {
+    background: linear-gradient(to bottom, #46C3FF 0px, #E0ECFF 100%) repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+    color: #222222;
+}
