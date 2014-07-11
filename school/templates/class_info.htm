@@ -1,0 +1,110 @@
+<!-- $Id: class_info.htm 16854 2009-12-07 06:20:09Z sxc_shop $ -->
+{include file="pageheader.htm"}
+<div class="main-div">
+<form method="post" action="class.php" name="theForm" onsubmit="return validate()">
+<table width="100%" >
+  <tr>
+    <td class="label">ID:</td>
+    <td>{$class.class_id}</td>
+  </tr>
+  
+  <tr>
+    <td class="label">班级编号:</td>
+    <td>
+    {if $form_action eq "update"}
+    	{$class.code}
+    {else}
+    <input type="text" name="code" maxlength="60" value="{$class.code}" />
+    {$lang.require_field}
+    {/if}
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="label">班级名称:</td>
+    <td>
+    <input type="text" name="name" maxlength="60" value="{$class.name}" />
+    {$lang.require_field}
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="label">所属年级:</td>
+    <td>
+    <select name="grade" >
+    	{foreach from=$grade_list item=grade}
+    		{if $class.grade eq $grade.grade_id}
+    		<option value="{$grade.grade_id}" selected="selected">{$grade.name}</option>
+    		{else}
+    		<option value="{$grade.grade_id}">{$grade.name}</option>
+    		{/if}
+    	{/foreach}
+    </select>
+    {$lang.require_field}
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="label">班主任:</td>
+    <td>
+    <input type="text" name="hteacher" maxlength="60" value="{$class.hteacher}" />
+    </td>
+  </tr>
+  
+  <tr>
+    <td class="label">主要教室:</td>
+    <td>
+    <input type="text" name="classroom" maxlength="60" value="{$class.classroom}" />
+    </td>
+  </tr>
+  
+  <tr>
+    <td colspan="2" align="center"><div style="color:red" id="warn"></div></td>
+  </tr>
+  
+  <tr>
+  	<td>&nbsp;</td>
+    <td align="left">
+      <input type="submit" value="{$lang.button_submit}" class="button" />
+      <input type="reset" value="{$lang.button_reset}" class="button" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="id" value="{$class.class_id}" />    </td>
+  </tr>
+</table>
+
+</form>
+</div>
+{insert_scripts files="../js/utils.js,validator.js"}
+{literal}
+<script language="JavaScript">
+<!--
+
+/**
+ * 检查表单输入的数据
+ */
+function validate()
+{
+	if (document.forms['theForm'].elements['act'].value == "insert")
+    {
+    	var code = $('input[name="code"]').val();
+    	if(!code){
+    		$('#warn').text("班级编号不能为空");
+    		$('input[name="code"]').focus();
+    		return false;
+    	}
+    }
+	
+	var name = $('input[name="name"]').val();
+	if(!name){
+		$('#warn').text("班级名称不能为空");
+		$('input[name="name"]').focus();
+		return false;
+	}
+    
+    $('#warn').text("");
+    return true;
+}
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}

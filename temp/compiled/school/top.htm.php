@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>学校管理中心</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="styles/general.css" rel="stylesheet" type="text/css" />
+
+
+<style type="text/css">
+#header-div {
+  background: #318efc;
+  border-bottom: 1px solid #FFF;
+}
+
+#logo-div {
+  height: 50px;
+  float: left;
+}
+
+#license-div {
+  height: 50px;
+  float: left;
+  text-align:center;
+  vertical-align:middle;
+  line-height:50px;
+}
+
+#license-div a:visited, #license-div a:link {
+  color: #EB8A3D;
+}
+
+#license-div a:hover {
+  text-decoration: none;
+  color: #EB8A3D;
+}
+
+#submenu-div {
+  height: 50px;
+  background-image:url(images/sheader.png);
+  background-repeat:no-repeat;
+  background-size:cover;
+}
+
+#submenu-div ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#submenu-div li {
+  float: right;
+  padding: 0 10px;
+  margin: 3px 0;
+  border-left: 1px solid #FFF;
+}
+
+#submenu-div a:visited, #submenu-div a:link {
+  color: #FFF;
+  text-decoration: none;
+}
+
+#submenu-div a:hover {
+  color: #F5C29A;
+}
+
+#loading-div {
+  clear: right;
+  text-align: right;
+  display: block;
+}
+
+#menu-div {
+  background: #66c2eb;
+  font-weight: bold;
+  height: 24px;
+  line-height:24px;
+}
+
+#menu-div ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+#menu-div li {
+  float: left;
+  border-right: 1px solid #192E32;
+  border-left:1px solid #BBDDE5;
+}
+
+#menu-div a:visited, #menu-div a:link {
+  display:block;
+  padding: 0 20px;
+  text-decoration: none;
+  color: #335B64;
+  background:#66c2eb;
+}
+
+#menu-div a:hover {
+  color: #000;
+  background:#80BDCB;
+}
+
+#submenu-div a.fix-submenu{clear:both; margin-left:5px; padding:1px 5px; *padding:3px 5px 5px; background:#DDEEF2; color:#278296;}
+#submenu-div a.fix-submenu:hover{padding:1px 5px; *padding:3px 5px 5px; background:#FFF; color:#278296;}
+#menu-div li.fix-spacel{width:30px; border-left:none;}
+#menu-div li.fix-spacer{border-right:none;}
+</style>
+<?php echo $this->smarty_insert_scripts(array('files'=>'../js/transport.js')); ?>
+<script type="text/javascript">
+
+/**
+ * 帮助系统调用
+ */
+function web_address()
+{
+  var ne_add = parent.document.getElementById('main-frame');
+  var ne_list = ne_add.contentWindow.document.getElementById('search_id').innerHTML;
+  ne_list.replace('-', '');
+  var arr = ne_list.split('-');
+  window.open('help.php?al='+arr[arr.length - 1],'_blank');
+}
+
+
+/**
+ * 授权检测回调处理
+ */
+function start_sendmail_Response(result)
+{
+  // 运行正常
+  if (result.error == 0)
+  {
+    var str = '';
+		if (result['content']['auth_str'])
+		{
+			str = '<a href="javascript:void(0);" target="_blank">' + result['content']['auth_str'];
+			if (result['content']['auth_type'])
+			{
+				str += '[' + result['content']['auth_type'] + ']';
+			}
+			str += '</a> ';
+		}
+
+    document.getElementById('license-div').innerHTML = str;
+  }
+}
+
+function modalDialog(url, name, width, height)
+{
+  if (width == undefined)
+  {
+    width = 400;
+  }
+  if (height == undefined)
+  {
+    height = 300;
+  }
+
+  if (window.showModalDialog)
+  {
+    window.showModalDialog(url, name, 'dialogWidth=' + (width) + 'px; dialogHeight=' + (height+5) + 'px; status=off');
+  }
+  else
+  {
+    x = (window.screen.width - width) / 2;
+    y = (window.screen.height - height) / 2;
+
+    window.open(url, name, 'height='+height+', width='+width+', left='+x+', top='+y+', toolbar=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, modal=yes');
+  }
+}
+
+function ShowToDoList()
+{
+  try
+  {
+    var mainFrame = window.top.frames['main-frame'];
+    mainFrame.window.showTodoList(adminId);
+  }
+  catch (ex)
+  {
+  }
+}
+
+
+var adminId = "<?php echo $this->_var['admin_id']; ?>"; 
+</script>
+</head>
+<body>
+<div id="header-div">
+  <div id="logo-div" style="bgcolor:#000000;"></div>
+  <div id="license-div" style="bgcolor:#000000;"></div>
+  <div id="submenu-div">
+    <ul>
+      <li><a href="../" target="_blank">查看前台</a></li>
+      <li><a href="privilege.php?act=modif" target="main-frame">个人设置</a></li>
+      <li><a href="javascript:window.top.frames['main-frame'].document.location.reload();window.top.frames['header-frame'].document.location.reload()"><?php echo $this->_var['lang']['refresh']; ?></a></li>
+    </ul>
+    <div id="send_info" style="padding: 5px 10px 0 0; clear:right;text-align: right; color: #FF9900;width:40%;float: right;">
+      <a href="index.php?act=clear_cache" target="main-frame" class="fix-submenu">清除缓存</a>
+      <a href="../login.php?act=logout" target="_top" class="fix-submenu">退出系统</a>
+    </div>
+    <div id="load-div" style="padding: 5px 10px 0 0; text-align: right; color: #FF9900; display: none;width:40%;float:right;"><img src="images/top_loader.gif" width="16" height="16" alt="<?php echo $this->_var['lang']['loading']; ?>" style="vertical-align: middle" /> <?php echo $this->_var['lang']['loading']; ?></div>
+  </div>
+</div>
+<div id="menu-div">
+  <ul>
+    <li class="fix-spacel">&nbsp;</li>
+    <li><a href="index.php?act=main" target="main-frame">起始页</a></li>
+    <li><a href="privilege.php?act=modif" target="main-frame">设置导航</a></li>
+    <?php $_from = $this->_var['nav_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('key', 'item');if (count($_from)):
+    foreach ($_from AS $this->_var['key'] => $this->_var['item']):
+?>
+    <li><a href="<?php echo $this->_var['key']; ?>" target="main-frame"><?php echo $this->_var['item']; ?></a></li>
+    <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+    <li class="fix-spacer">&nbsp;</li>
+  </ul>
+  <br class="clear" />
+</div>
+</body>
+</html>

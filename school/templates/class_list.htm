@@ -1,0 +1,101 @@
+{if $full_page}
+<!-- $Id: classs_list.htm 17053 2010-03-15 06:50:26Z sxc_shop $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<div class="form-div">
+  <form action="javascript:searchclass()" name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    &nbsp;班级编号&nbsp;<input type="text" name="code" size="8" />
+    &nbsp;班级名称&nbsp;<input type="text" name="keyword" /> <input type="submit" value="{$lang.button_search}" />
+  </form>
+</div>
+
+<form method="POST" action="" name="listForm" >
+
+<!-- start classs list -->
+<div class="list-div" id="listDiv">
+{/if}
+<!--用户列表部分-->
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>
+      <a href="javascript:listTable.sort('class_id'); ">ID</a>{$sort_class_id}
+    </th>
+    <th><a href="javascript:listTable.sort('code'); ">编号</a>{$sort_code}</th>
+    <th>名称</th>
+    <th>所属年级</th>
+    <th>班主任</th>
+    <th>主要教室</th>
+    <th><a href="javascript:listTable.sort('has_left'); ">是否已经毕业</a>{$sort_has_left}</th>
+    <th><a href="javascript:listTable.sort('is_active'); ">是否注册本系统</a>{$sort_is_active}</th>
+    <th><a href="javascript:listTable.sort('created'); ">添加时间</a>{$sort_created}</th>
+    <th>{$lang.handler}</th>
+  <tr>
+  
+  {foreach from=$class_list item=class}
+  <tr>
+    <td>{$class.class_id}</td>
+    <td class="first-cell">{$class.code|escape}</td>
+    <td>{$class.name}</td>
+    <td>{$class.grade_name}</td>
+    <td><span onclick="listTable.edit(this, 'edit_hteacher', {$class.class_id})">{$class.hteacher}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_classroom', {$class.class_id})">{$class.classroom}</span></td>
+    
+    <td align="center">
+    <img style="cursor:pointer;" src="images/{if $class.has_left eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_left', {$class.class_id})" />
+    </td>
+    
+    <td align="center">
+    <img style="cursor:pointer;" src="images/{if $class.is_active eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_active', {$class.class_id})" />
+    </td>
+    
+    <td align="center">{$class.created}</td>
+    
+    <td align="center">
+      <a href="class.php?act=edit&id={$class.class_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>
+      <a href="javascript:void(0);" onclick="listTable.remove({$class.class_id}, '确认删除，如果此班级的信息被使用需要先删除关联的其他表的数据，否则将会报错？')" title="删除"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
+    </td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="13">{$lang.no_records}</td></tr>
+  {/foreach}
+  <tr>
+      <td align="right" nowrap="true" colspan="13">
+      {include file="page.htm"}
+      </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+<!-- end classs list -->
+</form>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+{literal}
+
+/**
+ * 搜索用户
+ */
+function searchclass()
+{
+    listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter['code'] = Utils.trim(document.forms['searchForm'].elements['code'].value);
+    listTable.filter['page'] = 1;
+    listTable.loadList();
+}
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}
+{/if}

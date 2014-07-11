@@ -1,0 +1,112 @@
+
+<script language="JavaScript">
+<!--
+  /**
+   * 检查表单输入的内容
+   */
+  function validate()
+  {
+    var username = document.getElementById("username");
+    if(!username.value){
+    	document.getElementById("username").focus();
+    	document.getElementById("warn").innerHTML = "用户名不能为空！";
+    	return false;
+    }
+    
+    var password = document.getElementById("password");
+    if(!password.value){
+    	document.getElementById("password").focus();
+    	document.getElementById("warn").innerHTML = "密码不能为空！";
+    	return false;
+    }
+    
+    return true;
+  }
+//-->
+</script>
+
+
+    <div class="right" style="overflow:hidden">
+	
+		<!--登录-->
+      <div id="login">
+			<form method="post" action="login.php?act=signin" name='theForm' onsubmit="return validate()">
+			
+			
+				<div style=" margin:10px 0 20px -20px; padding-top:40px;">
+						
+						<div class="return_message" style="display:none" id="infobarNoCookie">
+                            <div class="re_mes_t txt_alert">
+                             			  用于登录的提示信息。
+                            </div>
+                        </div>
+                        
+                        <div class="loginPanel" style="background:none">
+										
+                                        <div style="height:25px;">
+                                        <label for="uin" class="column">
+                                            帐　号：
+                                        </label>
+                                        <input class="txt text" id="username" name="username" tabindex="1" style="ime-mode: disabled;" type="text">
+                                        </div>
+                                        <div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div>
+                                        
+                                        
+                                        <div style="height:25px;margin:8px 0 0 0;clear:left">
+                                            <label for="pp" class="column">
+                                                密　码：
+                                            </label>
+                                            <input id="password" name="password" value="" tabindex="2" class="txt text" type="password">
+                                        </div>
+										
+                                        <div style="margin:8px 0 0 0;color:red;" id="warn"></div>
+										
+                                        <div style="padding:16px 0 0 60px;clear:both; overflow:hidden;">
+										
+											
+                                            <input class="btn bold wd2" value="登 录" style="cursor:pointer;" id="btlogin" name="btlogin" tabindex="3" type="submit">
+											<a href="#" >忘记密码？</a>
+											
+                                        </div>
+										
+                                        <div style="margin:10px 0 10px 60px;color:#6076a0;clear:left;">
+                                        </div>
+                                        
+                        </div>
+                    </div>
+			</form>
+					
+      </div>
+      
+	  
+      <div id="right" width="270">
+		
+		   <div class="right_box">
+				<div class="right_title">在线调查</div>
+				<form id="searchForm">
+				<div class="right_ques" id="kkList"><span>您好！在使用校讯通门户网站过程中，您认为我们网站存在着那些不足？</span>
+							<label><input name="itemId" value="21" type="radio">设计风格</label>
+							<label><input name="itemId" value="22" type="radio">信息的及时和准确性</label>
+							<label><input name="itemId" value="23" type="radio">信息太少</label>
+							<label><input name="itemId" value="24" type="radio">使用不方便</label>
+							<label><input name="itemId" value="25" type="radio">其他</label>
+							<div class="right_button">
+					<input class="button_1" id="vote" value="投票" onclick="business.send();" type="button">
+					<input class="button_1" id="view" value="查看结果" onclick="business.view(1);" type="button">  
+				  </div></div></form>
+			  </div>
+			  
+			  <div class="right_box">
+				<div class="right_title">常见问题</div>
+				<ul class="right_list">
+						  <li><a href="#">为什么我登录不了？</a></li>
+							<li><a href="#">收不到短信怎么办？</a></li>
+							<li><a href="#">家长手机为何收不到孩子的刷卡信息？</a></li>
+							<li><a href="#">家长的手机号码错了（变了），怎么修改？（资料修改问题）</a></li>
+						  </ul>
+			  </div> 
+			  
+			 <div class="service"><a href="javascript:gotoService();"><img src="index_files/indexRight_data/service.jpg"></a></div>
+			 
+      </div>
+    </div>

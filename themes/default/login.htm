@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>管理员登录</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+{literal}
+<style type="text/css">
+body {
+  font-family: Tahoma,Verdana,微软雅黑,新宋体;
+  font-size:12px;
+}
+.login {
+	background-image:url(themes/default/images/login.png);
+	background-repeat:no-repeat;
+	width:800px;
+	height:600px;
+	margin:0 auto;
+	margin-top:150px;
+}
+</style>
+{/literal}
+<script language="JavaScript">
+<!--
+{literal}
+if (window.parent != window)
+{
+  window.top.location.href = location.href;
+}
+{/literal}
+//-->
+</script>
+</head>
+<body style="background: #91DBFE">
+
+<div class="login">
+<form method="post" action="login.php?act=signin" name='theForm' onsubmit="return validate()">
+  <table cellspacing="0" cellpadding="0" style="padding-top: 200px" align="center">
+  <tr>
+    <td style="padding-left: 50px">
+      <table>
+      <tr><td colspan="2" text-align="center"><div style="color:red;" >{$msg_detail}</div></td></tr>
+      <tr>
+        <td>用户名</td>
+        <td><input type="text" name="username" id="username"/></td>
+      </tr>
+      <tr>
+        <td>密码</td>
+        <td><input type="password" name="password" id="password"/></td>
+      </tr>
+      {if $gd_version > 0}
+      <tr>
+        <td>验证码</td>
+        <td><input type="text" name="captcha" class="capital" id="captcha"/></td>
+      </tr>
+      <tr>
+      <td>&nbsp;</td>
+      <td align="left"><img src="login.php?act=captcha&{$random}" width="145" height="20" alt="CAPTCHA" border="1" 
+      	onclick= this.src="login.php?act=captcha&"+Math.random() style="cursor: pointer;" title="换一张" />
+      </td>
+      </tr>
+      {/if}
+      <tr><td colspan="2"><input type="checkbox" value="1" name="remember" id="remember" /><label for="remember">记住账户密码</label></td></tr>
+      <tr><td colspan="2"><div style="color:red;" id="warn"></div></td></tr>
+      <tr><td>&nbsp;</td><td><input type="submit" value="登录管理中心" class="button" /></td></tr>
+      <tr>
+        <td colspan="2" align="left">
+        &raquo; <a href="./index.php" style="color:white">返回主页面</a>
+    <!--   &raquo; <a href="get_password.php?act=forget_pwd" style="color:white">忘记密码？</a>
+        &raquo; <a href="register.php" style="color:white">申请注册</a>   -->  
+        </td>
+      </tr>
+      </table>
+    </td>
+  </tr>
+  </table>
+</form>
+<input type="hidden" value="{$gd_version}" id="gd_version" />
+</div>
+
+<script language="JavaScript">
+<!--
+  document.forms['theForm'].elements['username'].focus();
+  {literal}
+  /**
+   * 检查表单输入的内容
+   */
+  function validate()
+  {
+    var username = document.getElementById("username");
+    if(!username.value){
+    	document.getElementById("username").focus();
+    	document.getElementById("warn").innerHTML = "用户名不能为空！";
+    	return false;
+    }
+    
+    var password = document.getElementById("password");
+    if(!password.value){
+    	document.getElementById("password").focus();
+    	document.getElementById("warn").innerHTML = "密码不能为空！";
+    	return false;
+    }
+	
+    var gd_version = document.getElementById("gd_version").value;
+    if(gd_version > 0){
+    	var captcha = document.getElementById("captcha");
+        if(!captcha.value){
+        	document.getElementById("captcha").focus();
+        	document.getElementById("warn").innerHTML = "验证码不能为空！";
+        	return false;
+        }
+    }
+    
+    return true;
+  }
+  {/literal}
+//-->
+</script>
+</body>
