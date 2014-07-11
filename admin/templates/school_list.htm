@@ -1,0 +1,101 @@
+{if $full_page}
+<!-- $Id: schools_list.htm 17053 2010-03-15 06:50:26Z sxc_shop $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<div class="form-div">
+  <form action="javascript:searchschool()" name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    &nbsp;学校编号&nbsp;<input type="text" name="code" size="8" />
+    &nbsp;学校名称&nbsp;<input type="text" name="keyword" /> <input type="submit" value="{$lang.button_search}" />
+  </form>
+</div>
+
+<form method="POST" action="" name="listForm" >
+
+<!-- start schools list -->
+<div class="list-div" id="listDiv">
+{/if}
+<!--用户列表部分-->
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>
+      <a href="javascript:listTable.sort('school_id'); ">ID</a>{$sort_school_id}
+    </th>
+    <th><a href="javascript:listTable.sort('code'); ">编号</a>{$sort_school_code}</th>
+    <th>名称</th>
+    <th>类型</th>
+    <th>地址</th>
+    <th>负责人</th>
+    <th>电话</th>
+    <th>邮箱</th>
+    <th>传真</th>
+    <th><a href="javascript:listTable.sort('is_active'); ">是否注册本系统</a>{$sort_is_active}</th>
+    <th><a href="javascript:listTable.sort('createtime'); ">添加时间</a>{$sort_createtime}</th>
+    <th>{$lang.handler}</th>
+  <tr>
+  
+  {foreach from=$school_list item=school}
+  <tr>
+    <td>{$school.school_id}</td>
+    <td class="first-cell">{$school.code|escape}</td>
+    <td>{$school.name}</td>
+    <td>{$school.type}</td>
+    <td>{$school.address}</td>
+    <td>{$school.header}</td>
+    <td><span onclick="listTable.edit(this, 'edit_mobtel', {$school.school_id})">{$school.mobtel}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_email', {$school.school_id})">{$school.email}</span></td>
+    <td>{$school.fox}</td>
+    
+    <td align="center">
+    <img style="cursor:pointer;" src="images/{if $school.is_active eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_active', {$school.school_id})" />
+    </td>
+    
+    <td align="center">{$school.createtime}</td>
+    <td align="center">
+      <a href="school.php?act=edit&id={$school.school_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16" /></a>
+      <a href="javascript:confirm_redirect('删除此学效将导致整个学习的所有数据不可用！确认删除吗？', 'school.php?act=remove&id={$school.school_id}')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16" /></a>
+    </td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="13">{$lang.no_records}</td></tr>
+  {/foreach}
+  <tr>
+      <td align="right" nowrap="true" colspan="13">
+      {include file="page.htm"}
+      </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+<!-- end schools list -->
+</form>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+{literal}
+
+/**
+ * 搜索用户
+ */
+function searchschool()
+{
+    listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter['code'] = Utils.trim(document.forms['searchForm'].elements['code'].value);
+    listTable.filter['page'] = 1;
+    listTable.loadList();
+}
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}
+{/if}

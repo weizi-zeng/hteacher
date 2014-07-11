@@ -1,0 +1,158 @@
+<!-- $Id: privilege_info.htm 16616 2009-08-27 01:56:35Z liuhui $ -->
+{include file="pageheader.htm"}
+<div class="main-div">
+<form name="theForm" method="post" enctype="multipart/form-data" onsubmit="return validate();">
+<table width="100%">
+  <tr>
+    <td class="label">账户：</td>
+    <td>
+      <input type="text" name="user_name" maxlength="20" value="{$user.user_name|escape}" size="34"/>{$lang.require_field}</td>
+  </tr>
+  
+   {if $form_action eq "insert"}
+  <tr>
+    <td class="label">密码：</td>
+    <td>
+      <input type="password" name="password" maxlength="32" size="34" />{$lang.require_field}</td>
+  </tr>
+  <tr>
+    <td class="label">确认密码：</td>
+    <td>
+      <input type="password" name="pwd_confirm" maxlength="32" size="34" />{$lang.require_field}</td>
+  </tr>
+  {/if}
+  
+  {if $form_action eq "update"}
+  <tr>
+    <td class="label">重置密码：</td>
+    <td>
+      <input type="password" name="new_password" maxlength="32" size="34" /></td>
+  </tr>
+  <tr>
+    <td class="label">确认重置密码：</td>
+    <td>
+      <input type="password" name="pwd_confirm" value="" size="34" /></td>
+  </tr>
+  {/if}
+  
+  <tr>
+    <td class="label">电话：</td>
+    <td>
+      <input type="text" name="cellphone" value="{$user.cellphone|escape}" size="34" />{$lang.require_field}</td>
+  </tr>
+  
+  <tr>
+    <td class="label">邮箱：</td>
+    <td>
+      <input type="text" name="email" value="{$user.email|escape}" size="34" />{$lang.require_field}</td>
+  </tr>
+  
+    <tr>
+   <td class="label">所属学校：</td>
+    <td>
+      <select name="school_code">
+        {foreach from=$school_list item=list}
+        <option value="{$list.code}" {if $list.code eq $user.school_code} selected="selected" {/if} >{$list.name}</option>
+        {/foreach}
+      </select>{$lang.require_field}
+    </td>
+  </tr>
+  
+  <tr><td>&nbsp;</td><td><div style="color:red;text-align:left;" id="warn"></div></td></tr>
+  
+  <tr>
+  	<td>&nbsp;</td>
+    <td align="left">
+      <input type="submit" value="确定" class="button" />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="reset" value="重置" class="button" />
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="id" value="{$user.user_id}" /></td>
+  </tr>
+</table>
+</form>
+</div>
+<script language="JavaScript">
+var action = "{$form_action}";
+<!--
+{literal}
+document.forms['theForm'].elements['user_name'].focus();
+
+
+/**
+* 检查表单输入的数据
+*/
+function validate()
+{
+	var user_name = document.forms['theForm'].elements['user_name'];
+	if(!user_name.value){
+		document.forms['theForm'].elements['user_name'].focus();
+		document.getElementById('warn').innerHTML = "用户名不能为空！";
+		return false;
+	}
+	
+	  if (action == "insert")
+	  {
+	    if (document.forms['theForm'].elements['password'])
+	    {
+	    	var password = document.forms['theForm'].elements['password'];
+	    	if(!password.value){
+	    		password.focus();
+	    		document.getElementById('warn').innerHTML = "密码不能为空！";
+	    		return false;
+	    	}
+	    	
+	    	var pwd_confirm = document.forms['theForm'].elements['pwd_confirm'];
+	    	if(!pwd_confirm.value){
+	    		pwd_confirm.focus();
+	    		document.getElementById('warn').innerHTML = "确认密码不能为空！";
+	    		return false;
+	    	}
+	    	
+	    	if(password.value!=pwd_confirm.value){
+	    		password.focus();
+	    		document.getElementById('warn').innerHTML = "你输入的密码与确认密码不一致！";
+	    		return false;
+	    	}
+	    }
+	  }
+	  else if (action == "update")
+	  {
+	    if (document.forms['theForm'].elements['new_password'].value.length > 0)
+	    {
+	    	var pwd_confirm = document.forms['theForm'].elements['pwd_confirm'];
+	    	if(!pwd_confirm.value){
+	    		pwd_confirm.focus();
+	    		document.getElementById('warn').innerHTML = "确认重置密码不能为空！";
+	    		return false;
+	    	}
+	    	
+	    	if(new_password.value!=pwd_confirm.value){
+	    		password.focus();
+	    		document.getElementById('warn').innerHTML = "你输入的重置密码与确认重置密码不一致！";
+	    		return false;
+	    	}
+	    }
+	  }
+	  
+  	var cellphone = document.forms['theForm'].elements['cellphone'];
+	if(!cellphone.value){
+		cellphone.focus();
+		document.getElementById('warn').innerHTML = "电话不能为空！";
+		return false;
+	}
+	 
+	var email = document.forms['theForm'].elements['email'];
+	if(!email.value){
+		email.focus();
+		document.getElementById('warn').innerHTML = "邮箱不能为空！";
+		return false;
+	}
+	
+  return true;
+}
+
+//-->
+{/literal}
+</script>
+{include file="pagefooter.htm"}

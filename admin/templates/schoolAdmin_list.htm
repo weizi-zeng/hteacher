@@ -1,0 +1,96 @@
+<!-- $Id: admin_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<div class="form-div">
+  <form action="javascript:searchSchoolAdmin()" name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    
+    &nbsp;所属学校&nbsp;
+    <select name="school_code" >
+    	<option value="" >所有...</option>
+    	{foreach from=$school_list item=list}
+    	<option value="{$list.code}" >{$list.name}</option>
+    	{/foreach}
+    </select>
+    &nbsp;学校管理员名称&nbsp;<input type="text" name="keyword" /> <input type="submit" value="{$lang.button_search}" />
+  </form>
+</div>
+
+
+<div class="list-div" id="listDiv">
+{/if}
+
+<table cellspacing='1' cellpadding='3' id='list-table'>
+  <tr>
+    <th>账户</th>
+    <th>电话</th>
+    <th>邮箱</th>
+    <th>所属学校</th>
+    <th>添加时间</th>
+    <th>最后登录时间</th>
+    <th>是否有效</th>
+    <th>操作</th>
+  </tr>
+  {foreach from=$schoolAdmin_list item=list}
+  <tr>
+    <td class="first-cell" >{$list.user_name}</td>
+    <td><span onclick="listTable.edit(this, 'edit_cellphone', {$list.user_id})">{$list.cellphone}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_email', {$list.user_id})">{$list.email}</span></td>
+    <td align="left">{$list.school}</td>
+    <td align="center">{$list.add_time}</td>
+    <td align="center">{$list.last_login|default:N/A}</td>
+    
+    <td align="center">
+    <img style="cursor:pointer;" src="images/{if $list.is_active eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_active', {$list.user_id})" />
+    </td>
+    
+    <td align="center">
+   <!--   <a href="schoolAdmin.php?act=allot&id={$list.user_id}&user={$list.user_name}" title="{$lang.allot_priv}"><img src="images/icon_priv.gif" border="0" height="16" width="16"></a>&nbsp;&nbsp;
+      <a href="admin_logs.php?act=list&id={$list.user_id}" title="{$lang.view_log}"><img src="images/icon_view.gif" border="0" height="16" width="16"></a>&nbsp;&nbsp; --> 
+      <a href="schoolAdmin.php?act=edit&id={$list.user_id}" title="{$lang.edit}"><img src="images/icon_edit.gif" border="0" height="16" width="16"></a>&nbsp;&nbsp;
+      <a href="javascript:;" onclick="listTable.remove({$list.user_id}, '{$lang.drop_confirm}')" title="{$lang.remove}"><img src="images/icon_drop.gif" border="0" height="16" width="16"></a></td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="13">{$lang.no_records}</td></tr>
+  {/foreach}
+  <tr>
+      <td align="right" nowrap="true" colspan="13">
+      {include file="page.htm"}
+      </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+{literal}
+
+/**
+ * 搜索用户
+ */
+function searchSchoolAdmin()
+{
+    listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter['school_code'] = Utils.trim(document.forms['searchForm'].elements['school_code'].value);
+    listTable.filter['page'] = 1;
+    listTable.loadList();
+}
+
+//-->
+</script>
+{/literal}
+
+{include file="pagefooter.htm"}
+{/if}
