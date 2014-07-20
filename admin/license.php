@@ -14,58 +14,139 @@
  */
 
 define('IN_ECS', true);
-
 require(dirname(__FILE__) . '/includes/init.php');
 
 /*------------------------------------------------------ */
-//-- 证书编辑页
+//-- 批量生成注册码
 /*------------------------------------------------------ */
-if ($_REQUEST['act']== 'list_edit')
+if ($_REQUEST['act'] == 'create')
 {
-    /* 检查权限 */
-    admin_priv('shop_authorized');
-
-    include_once(ROOT_PATH . 'includes/lib_license.php');
-
-    $license = get_shop_license();
-
-    $smarty->assign('ur_here', $_LANG['license_here']);
-    $smarty->assign('is_download', '0');
-    if ($license['certificate_id'] != '' && $license['token'] != '')
-    {
-        $smarty->assign('is_download', '1');
-    }
-
-    $smarty->assign('certificate_id', $license['certificate_id']);
-    $smarty->assign('token', $license['token']);
-
-    $smarty->display('license.htm');
+	/* 检查权限 */
+	admin_priv('license_manage');
+	assign_query_info();
+	$smarty->assign('ur_here',      "生成注册码");
+	$smarty->display('license_create.htm');
 }
 
 /*------------------------------------------------------ */
-//-- 证书下载
+//-- 批量生成注册码
 /*------------------------------------------------------ */
-
-elseif ($_REQUEST['act']== 'download')
+if ($_REQUEST['act']== 'createLicense')
 {
     /* 检查权限 */
-    admin_priv('shop_authorized');
+    admin_priv('license_manage');
+	
+	$license = create($sdate, $edate, $sum);
+	
+	//记录日志
+	admin_log("创建注册码", "createLicense", "sum:".$sum.",sdate:".$sdate.",edate:".$edate);
+	
+	//导出注册码
+	license_export($license);
+	
+// 	$links[] = array('text' => "返回", 'href' => 'license.php?act=list');
+// 	sys_msg("创建注册码成功，成功创建了".$sum."个注册码！", 0, $links);
+}
 
-    include_once(ROOT_PATH . 'includes/lib_license.php');
 
-    $license = get_shop_license();
+/*------------------------------------------------------ */
+//-- 查看注册码
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act']== 'list')
+{
+    /* 检查权限 */
+    admin_priv('license_manage');
+    
+    $smarty->assign('ur_here',      "注册码列表");
+    $smarty->assign('action_link',  array('text' => "生成注册码", 'href'=>'license.php?act=create'));
+    
+    $license_list = license_list();
+    
+    $smarty->assign('license_list',       $license_list['license_list']);
+    $smarty->assign('filter',       $license_list['filter']);
+    $smarty->assign('record_count', $license_list['record_count']);
+    $smarty->assign('page_count',   $license_list['page_count']);
+    $smarty->assign('full_page',    1);
+    
+    assign_query_info();
+    $smarty->display('license_list.htm');
+}
 
-    if ($license['certificate_id'] == '' || $license['token'] == '')
-    {
-        $links[] = array('text' => $_LANG['back'], 'href' => 'license.php?act=list_edit');
-        sys_msg($_LANG['no_license_down'], 0, $links);
-    }
-    /* 文件下载 */
-    ecs_header("Content-Type:text/plain");
-    ecs_header("Accept-Ranges:bytes");
-    ecs_header("Content-Disposition: attachment; filename=CERTIFICATE.CER");
-    echo $license['certificate_id'] . '|' . $license['token'];
-    exit;
+/*------------------------------------------------------ */
+//-- ajax返回注册码列表
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act'] == 'query')
+{
+	 $license_list = license_list();
+
+	$smarty->assign('license_list',       $license_list['license_list']);
+    $smarty->assign('filter',       $license_list['filter']);
+    $smarty->assign('record_count', $license_list['record_count']);
+    $smarty->assign('page_count',   $license_list['page_count']);
+
+	make_json_result($smarty->fetch('license_list.htm'), '', array('filter' => $license_list['filter'], 'page_count' => $license_list['page_count']));
+}
+
+/*------------------------------------------------------ */
+//-- 导出注册码
+/*------------------------------------------------------ */
+elseif($_REQUEST['act'] == 'export')
+{
+	/* 检查权限 */
+	admin_priv('license_manage');
+
+	include_once('includes/cls_phpzip.php');
+	$zip = new PHPZip;
+
+	$where = get_export_where_sql($_POST);
+
+	$sql = "SELECT g.*, b.brand_name as brandname " .
+           " FROM " . $ecs->table('goods') . " AS g LEFT JOIN " . $ecs->table('brand') . " AS b " .
+           "ON g.brand_id = b.brand_id" . $where;
+
+	$res = $db->query($sql);
+
+	/* csv文件数组 */
+	$goods_value = array();
+	$goods_value['goods_name'] = '""';
+	$goods_value['goods_sn'] = '""';
+	$goods_value['brand_name'] = '""';
+	$goods_value['market_price'] = 0;
+	$goods_value['shop_price'] = 0;
+	$goods_value['integral'] = 0;
+	$goods_value['original_img'] = '""';
+	$goods_value['goods_img'] = '""';
+	$goods_value['goods_thumb'] = '""';
+	$goods_value['keywords'] = '""';
+	$goods_value['goods_brief'] = '""';
+	$goods_value['goods_desc'] = '""';
+	$goods_value['goods_weight'] = 0;
+	$goods_value['goods_number'] = 0;
+	$goods_value['warn_number'] = 0;
+	$goods_value['is_best'] = 0;
+	$goods_value['is_new'] = 0;
+	$goods_value['is_hot'] = 0;
+	$goods_value['is_on_sale'] = 1;
+	$goods_value['is_alone_sale'] = 1;
+	$goods_value['is_real'] = 1;
+	$content = '"' . implode('","', $_LANG['ecshop']) . "\"\n";
+
+	while ($row = $db->fetchRow($res))
+	{
+		$goods_value['is_on_sale'] = $row['is_on_sale'];
+		$goods_value['is_alone_sale'] = $row['is_alone_sale'];
+		$goods_value['is_real'] = $row['is_real'];
+
+		$content .= implode(",", $goods_value) . "\n";
+
+	}
+	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+
+	$zip->add_file(ecs_iconv(EC_CHARSET, $charset, $content), 'goods_list.csv');
+
+	header("Content-Disposition: attachment; filename=goods_list.zip");
+	header("Content-Type: application/unknown");
+	die($zip->file());
 }
 
 /*------------------------------------------------------ */
@@ -134,21 +215,173 @@ elseif ($_REQUEST['act']== 'upload')
 
 }
 
-/*------------------------------------------------------ */
-//-- 证书删除
-/*------------------------------------------------------ */
 
-elseif ($_REQUEST['act']== 'del')
-{
-    /* 检查权限 */
-    admin_priv('shop_authorized');
 
-    $sql = "UPDATE " . $ecs->table('shop_config') . "
-            SET value = ''
-            WHERE code IN('certificate_id', 'token')";
-    $db->query($sql);
-
-    $links[] = array('text' => $_LANG['back'], 'href' => 'license.php?act=list_edit');
-    sys_msg($_LANG['delete_license'], 0, $links);
+/**
+ * 生成注册码
+ * @param unknown_type $sdate
+ * @param unknown_type $edate
+ * @param unknown_type $sum
+ */
+function create($sdate, $edate, $sum=500){
+	if($sum<1) return array();
+	
+	$max_id = $GLOBALS['db']->getOne("select max(license_id) from ".$GLOBALS['ecs']->table('license'));
+	$license = createLicense($max_id, $sum);
+	
+	$sql = "insert into ".$GLOBALS['ecs']->table('license')." (license, sdate, edate) values ";
+	
+	foreach($license as $k=>$v){
+		$sql .= "('".$v."','".$sdate."','".$edate."'),";
+	}
+	
+	$sql = sub_str($sql, str_len($sql)-1, false);
+	
+	$GLOBALS['db']->query($sql);
+	
+	return $license;
 }
+
+
+function createLicense($max_id, $sum){
+	$yard = yard();
+	
+	$license = array();
+	
+	for($i=0;$i<$sum;$i++){
+		$time = time()+(++$max_id);		//时间戳加上当前最大的id号表示唯一
+		$li = dechex($time);			//将唯一编号转换为十六进制
+		
+		$total = 0;
+		for($j=0;$j<str_len($li);$j++){
+			$res = ord($li[$j]);		//计算这些十六进制asic码总和
+			$total += $res;
+		}
+		$total = $total%36;				//将total模上36，获取最后一位校验码 
+		$y = $yard[$total];
+		
+		$li = $li ."". $y;
+		$license[] = $li;
+		
+// 		echo $li.'<br><br>';
+	}
+	
+	return $license;
+}
+
+
+/**
+ * 生成最后一位校验码
+ * Enter description here ...
+ * @return multitype:number string
+ */
+function yard(){
+	$yard = array();
+	$i=0;
+	for(;$i<10;$i++){
+		$yard[$i] = $i;
+	}
+	
+	for($j='a';$j<='z';$j++){
+		$yard[$i++] = $j;
+	}
+	
+	return $yard;
+}
+
+
+
+/**
+ *  返回学校管理员列表数据
+ *
+ * @access  public
+ * @param
+ *
+ * @return void
+ */
+function license_list()
+{
+	$result = get_filter();
+	if ($result === false)
+	{
+		
+		/* 过滤条件 */
+		$filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);//注册码
+		$filter['is_active'] = $_REQUEST['is_active']==="" ? -1 : intval($_REQUEST['is_active']);//注册码
+		$filter['sdate'] = empty($_REQUEST['sdate']) ? '' : trim($_REQUEST['sdate']);//注册码
+		$filter['edate'] = empty($_REQUEST['edate']) ? '' : trim($_REQUEST['edate']);//注册码
+		
+		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
+		{
+			$filter['keywords'] = json_str_iconv($filter['keywords']);
+		}
+
+		$filter['sort_by']    = empty($_REQUEST['sort_by'])    ? 'license_id' : trim($_REQUEST['sort_by']);
+		$filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC'     : trim($_REQUEST['sort_order']);
+
+		$ex_where = ' WHERE 1  ';
+		if ($filter['keywords'])
+		{
+			$ex_where .= " AND license LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
+		}
+		if ($filter['is_active']>-1)
+		{
+			$ex_where .= " AND is_active = '" . $filter['is_active'] ."'";
+		}
+		if ($filter['sdate'])
+		{
+			$ex_where .= " AND sdate = '" . $filter['sdate'] ."'";
+		}
+		if ($filter['edate'])
+		{
+			$ex_where .= " AND edate = '" . $filter['edate'] ."'";
+		}
+
+		$filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('license') . $ex_where);
+
+		/* 分页大小 */
+		$filter = page_and_size($filter);
+		$sql = "SELECT * ".
+                " FROM " . $GLOBALS['ecs']->table('license') . $ex_where .
+                " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
+                " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
+
+// 		echo $sql ; 
+		
+		$filter['keywords'] = stripslashes($filter['keywords']);
+		set_filter($filter, $sql);
+	}
+	else
+	{
+		$sql    = $result['sql'];
+		$filter = $result['filter'];
+	}
+
+	$list = $GLOBALS['db']->getAll($sql);
+
+	$arr = array('license_list' => $list, 'filter' => $filter,
+        'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+
+	return $arr;
+}
+
+
+function license_export($license){
+	
+	$content = "注册码\n";
+	
+	foreach ($license as $k=>$v)
+	{
+		$content .= $v . "\n";
+	}
+	
+	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	
+	$file = ecs_iconv(EC_CHARSET, $charset, $content);
+	
+	header("Content-Disposition: attachment; filename=license_list.csv");
+	header("Content-Type: application/unknown");
+	die($file);
+}
+
 ?>

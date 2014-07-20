@@ -1,6 +1,6 @@
 ﻿.winHeader 
 {
-    background-image:url(../images/cheader.png);
+    background-image:url(../images/header2.jpg);/*cheader.png*/
     background-repeat:no-repeat;
     background-size:cover;
     border:none;
@@ -109,7 +109,7 @@
 
 #tabs a.tabs-inner {
    background-color: #7DC7EA;
-   width:100px;
+   width:120px;
 }
 
 

@@ -33,8 +33,11 @@
         </div>
     </noscript>
     
-    <div title="数据列表" region="center" fit="true" border="false">
-    	 <div style="height:40px;" >
+    <div title="数据列表" region="center" style="height:300px;" border="false">
+    	<table id="dgData" style="height:400px"></table>
+    
+     	<div id="tb" style="padding:5px;height:auto">
+    	 <div style="height:40px;margin-bottom:5px;" >
           <form id="search_form" method="post">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
@@ -65,8 +68,8 @@
                 </table>
            </form>
      	</div>
-     
-        <table id="dgData"></table>
+     </div>
+        
     </div>
     
     

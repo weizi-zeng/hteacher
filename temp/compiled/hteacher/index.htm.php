@@ -46,12 +46,12 @@
         </div>
 
         <div class="userInfo">
-       		欢迎您——<?php echo $this->_var['admin']['user_name']; ?>管理员！
+       		欢迎您——<?php echo $this->_var['admin']['school']; ?>,<?php echo $this->_var['admin']['class']; ?>,<?php echo $this->_var['admin']['admin_name']; ?>管理员！
         </div>
     </div>
 
 
-    <div region="west" title="导航菜单"  split="true" title="west" style="width:160px;" id="west">
+    <div region="west" title="导航菜单"  split="true" title="west" style="width:180px;" id="west">
         <div id="nav" class="easyui-accordion" data-options="fit:true,border:true">
         	
         	<?php $_from = $this->_var['menus']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'menu');if (count($_from)):
@@ -142,26 +142,7 @@
         </div>
     </div>
     <div id="mm" class="easyui-menu" style="width: 150px;" title="多标签右键菜单">
-        <div id="mm-tabupdate">
-            刷新</div>
-        <div class="menu-sep">
-        </div>
-        <div id="mm-tabclose">
-            关闭</div>
-        <div id="mm-tabcloseall">
-            全部关闭</div>
-        <div id="mm-tabcloseother">
-            除此之外全部关闭</div>
-        <div class="menu-sep">
-        </div>
-        <div id="mm-tabcloseright">
-            当前页右侧全部关闭</div>
-        <div id="mm-tabcloseleft">
-            当前页左侧全部关闭</div>
-        <div class="menu-sep">
-        </div>
-        <div id="mm-exit">
-            退出</div>
+        <div id="mm-tabupdate">双击可关闭本页</div>
     </div>
 </body>
 </html>

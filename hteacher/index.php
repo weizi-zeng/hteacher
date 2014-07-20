@@ -21,7 +21,9 @@ require(dirname(__FILE__) . '/includes/init.php');
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 {
-	$admin = get_admin_by_id($_SESSION["admin_id"]);
+	$admin["admin_name"] = $_SESSION["admin_name"];
+	$admin["school"] = get_school_name($_SESSION["school_code"]);
+	$admin["class"] = get_class_name($_SESSION["class_code"]);
 	$smarty->assign('admin', $admin);
 	
 	$menus = get_menus_by_status($_SESSION["status_id"]);//区分角色
@@ -509,23 +511,35 @@ elseif ($_REQUEST['act'] == 'send_mail')
 function get_menus_by_status($status){
 	if($status==2){
 		return array(
+			array(id=>"7", title=>"量化管理",submenus=>array(
+				array(id=>"30", title=>"考试测试", url=>"test.php?act=list"),
+				array(id=>"71", title=>"项目设置", url=>"duty_item.php?act=list"),
+				array(id=>"72", title=>"值日记录", url=>"duty.php?act=list"),
+				array(id=>"73", title=>"量化分析", url=>"aly_duty.php?act=list")
+			)),
+			array(id=>"6", title=>"成绩分析",submenus=>array(
+				array(id=>"61", title=>"班级单科成绩分析", url=>"aly_class_subject.php?act=list"),
+				array(id=>"62", title=>"班级总分成绩分析", url=>"aly_class_total.php?act=list"),
+				array(id=>"63", title=>"个人历史成绩分析", url=>"aly_history_score.php?act=list"),
+				array(id=>"64", title=>"个人历史名次分析", url=>"aly_history_rank.php?act=list")
+			)),
+			array(id=>"3", title=>"成绩管理",submenus=>array(
+				array(id=>"31", title=>"考试安排", url=>"exam.php?act=list"),
+				array(id=>"32", title=>"考试成绩", url=>"score.php?act=list"),
+				array(id=>"34", title=>"成绩发布", url=>"score.php?act=list")
+			)),
 			array(id=>"1", title=>"基础信息",submenus=>array(
-				array(id=>"11", title=>"人员信息", url=>"person.php?act=list"),
-				array(id=>"12", title=>"花名册", url=>"student.php?act=list"),
-				array(id=>"13", title=>"监护人信息", url=>"guardian.php?act=list"),
-				array(id=>"14", title=>"班级相关教师", url=>"teacher.php?act=list"),
-				array(id=>"15", title=>"课程表", url=>"course.php?act=list")
+				array(id=>"12", title=>"学生花名册", url=>"student.php?act=list"),
+				array(id=>"13", title=>"家长信息管理", url=>"guardian.php?act=list"),
+				array(id=>"14", title=>"教师信息管理", url=>"teacher.php?act=list"),
+				array(id=>"15", title=>"课程安排表", url=>"course.php?act=list")
 			)),
 			array(id=>"2", title=>"班级公告",submenus=>array(
 				array(id=>"21", title=>"班级相册", url=>"person.php?act=list"),
 				array(id=>"22", title=>"班级动态", url=>"student.php?act=list"),
 				array(id=>"33", title=>"通知通告", url=>"guardian.php?act=list")
 			)),
-			array(id=>"3", title=>"班级考试",submenus=>array(
-				array(id=>"31", title=>"考试安排", url=>"person.php?act=list"),
-				array(id=>"32", title=>"成绩录入", url=>"student.php?act=list"),
-				array(id=>"33", title=>"成绩分析", url=>"student.php?act=list")
-			)),
+			
 			array(id=>"4", title=>"投诉建议",submenus=>array(
 				array(id=>"41", title=>"讨论区", url=>"person.php?act=list"),
 				array(id=>"42", title=>"意见箱", url=>"student.php?act=list")

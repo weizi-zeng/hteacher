@@ -173,7 +173,6 @@ class cls_session
             else
             {
             	$sql = 'SELECT data, expiry FROM ' . $this->session_data_table . " WHERE sesskey = '" . $this->session_id . "'";
-            	echo $sql;echo '<br>';
                 $session_data = $this->db->getRow($sql);
                 if (!empty($session_data['data']) && $this->_time - $session_data['expiry'] <= $this->max_life_time)
                 {

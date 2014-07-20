@@ -130,12 +130,11 @@ function sys_joindate($prefix)
  * @param   string  $last_time      最后登录时间
  * @return  void
  */
-function set_admin_session($user_id, $username, $action_list, $last_time, $role_id=0, $status_id=0, $school_code='super', $class_code='super')
+function set_admin_session($user_id, $username, $action_list, $role_id=0, $status_id=0, $school_code='super', $class_code='super')
 {
     $_SESSION['admin_id']    = $user_id;
     $_SESSION['admin_name']  = $username;
     $_SESSION['action_list'] = $action_list;
-    $_SESSION['last_check']  = $last_time; // 用于保存最后一次检查订单的时间
     $_SESSION['role_id'] = $role_id;	//角色
     $_SESSION['school_code']  = $school_code; //学校代码
     $_SESSION['status_id'] = $status_id;	//身份
@@ -616,18 +615,20 @@ function sort_flag($filter)
  */
 function page_and_size($filter)
 {
-    if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0)
-    {
-        $filter['page_size'] = intval($_REQUEST['page_size']);
-    }
-    elseif (isset($_COOKIE['ECSCP']['page_size']) && intval($_COOKIE['ECSCP']['page_size']) > 0)
-    {
-        $filter['page_size'] = intval($_COOKIE['ECSCP']['page_size']);
-    }
-    else
-    {
-        $filter['page_size'] = 15;
-    }
+	if(empty($filter['page_size'])){
+		if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0)
+		{
+			$filter['page_size'] = intval($_REQUEST['page_size']);
+		}
+		elseif (isset($_COOKIE['ECSCP']['page_size']) && intval($_COOKIE['ECSCP']['page_size']) > 0)
+		{
+			$filter['page_size'] = intval($_COOKIE['ECSCP']['page_size']);
+		}
+		else
+		{
+			$filter['page_size'] = 15;
+		}
+	}
 
     /* 每页显示 */
     $filter['page'] = (empty($_REQUEST['page']) || intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);

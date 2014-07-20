@@ -30,6 +30,7 @@ if (__FILE__ == '')
 @ini_set('session.use_cookies',   1);
 @ini_set('session.auto_start',    0);
 @ini_set('display_errors',        1);
+setlocale(LC_ALL, 'zh_CN');
 
 include('data/config.php');
 
@@ -195,7 +196,7 @@ if ($_REQUEST['act'] == 'signin')
 		}
 		
 		//将用户信息记录到session
-		set_admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['last_time'],
+		set_admin_session($row['user_id'], $row['user_name'], $row['action_list'],
 		 $row['role_id'], $row['status_id'],$row['school_code'],$row['class_code']);
 		
 		if(empty($row['ec_salt']))
@@ -217,6 +218,9 @@ if ($_REQUEST['act'] == 'signin')
 			$time = gmtime() + 3600 * 24 * 365;
 			setcookie('ECSCP[admin_id]',   $row['user_id'],                            $time);
 			setcookie('ECSCP[admin_pass]', md5($row['password'] . $_CFG['hash_code']), $time);
+			setcookie('ECSCP[status_id]',   $row['status_id'],                            $time);
+			setcookie('ECSCP[school_code]',   $row['school_code'],                            $time);
+			setcookie('ECSCP[class_code]',   $row['class_code'],                            $time);
 		}
 
 		/**
@@ -253,7 +257,10 @@ elseif ($_REQUEST['act'] == 'logout')
 	/* 清除cookie */
 	setcookie('ECSCP[admin_id]',   '', 1);
 	setcookie('ECSCP[admin_pass]', '', 1);
-
+	setcookie('ECSCP[status_id]',   '', 1);
+	setcookie('ECSCP[school_code]', '', 1);
+	setcookie('ECSCP[class_code]', '', 1);
+	
 	$sess->destroy_session();
 
 	login_display();

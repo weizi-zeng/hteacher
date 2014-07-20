@@ -134,6 +134,7 @@ $_LANG['08_members'] = '会员管理';
 $_LANG['08_schools'] = '学校管理';
 $_LANG['09_advice'] = '系统留言';
 $_LANG['10_priv_admin'] = '超级管理员';
+$_LANG['10_license_manage'] = '注册码管理';
 $_LANG['10_sys_log'] = '系统日志';
 $_LANG['10_support'] = '系统支持';
 $_LANG['11_system'] = '系统设置';
@@ -165,6 +166,10 @@ $_LANG['05_other_msg'] = '外围区意见箱';
 /* 权限管理 */
 $_LANG['02_admin_list'] = '超级管理员列表';
 $_LANG['03_admin_add'] = '添加超级管理员';
+
+/* 注册码管理 */
+$_LANG['02_license_create'] = '生成注册码';
+$_LANG['03_license_list'] = '注册码列表';
 
 /* 系统日志 */
 $_LANG['04_admin_logs'] = '管理员日志';

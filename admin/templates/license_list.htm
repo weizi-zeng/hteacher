@@ -1,0 +1,90 @@
+<!-- $Id: admin_list.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+
+{if $full_page}
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<div class="form-div">
+  <form action="javascript:searchLicense()" name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    &nbsp;注册码&nbsp;<input type="text" name="keyword" /> 
+     &nbsp;是否已注册使用&nbsp;
+     <select name="is_active">
+     	<option value="">所有...</option>
+     	<option value="0">否</option>
+     	<option value="1">是</option>
+     </select>
+      &nbsp;生效日期&nbsp;<input type="text" name="sdate" />
+      &nbsp;失效日期&nbsp;<input type="text" name="edate" />
+       <input type="submit" value="{$lang.button_search}" />
+  </form>
+</div>
+
+
+<div class="list-div" id="listDiv">
+{/if}
+
+<table cellspacing='1' cellpadding='3' id='list-table'>
+  <tr>
+    <th>ID</th>
+    <th>注册码</th>
+    <th>生效日期</th>
+    <th>失效日期</th>
+    <th>是否已注册使用</th>
+    <th>注册使用时间</th>
+  </tr>
+  {foreach from=$license_list item=list}
+  <tr>
+    <td class="first-cell" >{$list.license_id}</td>
+    <td align="center">{$list.license}</td>
+    <td align="center">{$list.sdate}</td>
+    <td align="center">{$list.edate}</td>
+    <td align="center">
+    <img src="images/{if $list.is_active eq 1}yes{else}no{/if}.gif" />
+    </td>
+    <td align="center">{$list.regtime|default:未使用}</td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="6">{$lang.no_records}</td></tr>
+  {/foreach}
+  <tr>
+      <td align="right" nowrap="true" colspan="6">
+      {include file="page.htm"}
+      </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+{literal}
+
+/**
+ * 搜索用户
+ */
+function searchLicense()
+{
+    listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter['is_active'] = Utils.trim(document.forms['searchForm'].elements['is_active'].value);
+    listTable.filter['sdate'] = Utils.trim(document.forms['searchForm'].elements['sdate'].value);
+    listTable.filter['edate'] = Utils.trim(document.forms['searchForm'].elements['edate'].value);
+    
+    listTable.filter['page'] = 1;
+    listTable.loadList();
+}
+
+//-->
+</script>
+{/literal}
+
+{include file="pagefooter.htm"}
+{/if}

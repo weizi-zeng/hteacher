@@ -74,6 +74,11 @@ $modules['09_advice']['05_other_msg']    = 'user_msg.php?act=list_outer';
 $modules['10_priv_admin']['02_admin_list']             = 'admin.php?act=list';
 $modules['10_priv_admin']['03_admin_add']             = 'admin.php?act=add';
 
+//注册码
+$modules['10_license_manage']['02_license_create']             = 'license.php?act=create';
+$modules['10_license_manage']['03_license_list']             = 'license.php?act=list';
+
+
 $modules['10_sys_log']['04_admin_logs']             = 'admin_logs.php?act=list';
 
 // $modules['10_support']['02_article']    = 'article.php?act=list';

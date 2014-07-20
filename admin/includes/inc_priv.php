@@ -31,6 +31,10 @@ if (!defined('IN_ECS'))
 //权限管理
     $purview['02_admin_list']           = array('admin_manage', 'admin_drop', 'allot_priv');
     $purview['03_admin_add']           = array('admin_manage');
+    
+    $purview['02_license_create']        = 'license_manage';
+    $purview['03_license_list']         = 'license_manage';
+    
     $purview['04_admin_logs']           = array('logs_manage', 'logs_drop');
 //     $purview['agency_list']          = 'agency_manage';
 //     $purview['suppliers_list']          = 'suppliers_manage'; // 供货商

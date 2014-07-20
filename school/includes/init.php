@@ -119,12 +119,20 @@ $sess = new cls_session($db, $ecs->table('sessions'), $ecs->table('sessions_data
 /* 必须获取学校代码*/
 $school_code = "";
 
-if(!isset($_SESSION) || !isset($_SESSION["school_code"]) || empty($_SESSION["school_code"]) || trim($_SESSION["school_code"])==''){
-	ecs_header("Location: ../login.php\n");
-	exit();
+if (!isset($_SESSION['school_code']) || trim($_SESSION["school_code"])=='')
+{
+	/* session 不存在，检查cookie */
+	if (!empty($_COOKIE['ECSCP']['school_code']) && !empty($_COOKIE['ECSCP']['school_code']))
+	{
+		$school_code = $_COOKIE['ECSCP']['school_code'];
+	}else {
+		ecs_header("Location: ../login.php\n");
+		exit();
+	}
 }else {
 	$school_code = $_SESSION["school_code"];
 }
+
 
 $db_name = $school_code."_school";
 /* 创建 ECSHOP 对象 */
@@ -218,7 +226,7 @@ if (!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0)
             if (md5($row['password'] . $_CFG['hash_code']) == $_COOKIE['ECSCP']['admin_pass'])
             {
                 !isset($row['last_time']) && $row['last_time'] = '';
-                set_admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['last_time'], $row['role_id'], $row['status_id'], $row['school_code'], $row['class_code']);
+                set_admin_session($row['user_id'], $row['user_name'], $row['action_list'], $row['role_id'], $row['status_id'], $row['school_code'], $row['class_code']);
 
                 // 更新最后登录时间和IP
                 $db->query('UPDATE hteacher.ht_admin_user '.

@@ -89,7 +89,6 @@ function get_school_name($school_code)
 	return $GLOBALS['db']->getOne($sql);
 }
 
-
 function is_only($table, $col, $name, $where='')
 {
 	$sql = 'SELECT COUNT(*) FROM ' .$table. " WHERE $col = '$name'";
@@ -149,5 +148,206 @@ function get_class_name($class_code)
 	return $GLOBALS['db']->getOne($sql);
 }
 
+function getWeekName($weekday){
+	$week = array(
+		"星期日",
+		"星期一",
+		"星期二",
+		"星期三",
+		"星期四",
+		"星期五",
+		"星期六"
+	);
+	return $week[$weekday];
+}
+
+/**
+* 根据班级代码获取所有学生
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_students($class_code)
+{
+	$sql = "SELECT * ".
+                " FROM ".$GLOBALS['ecs']->table("student")." " .
+                " WHERE class_code= '" . $class_code."'";
+	return $GLOBALS['db']->getAll($sql);
+}
+
+function get_student_name($class_code, $student_code)
+{
+	$sql = "select name from ".$GLOBALS['ecs']->table("student")." where class_code= '" . $class_code."' and code='".$student_code."'";
+	return $GLOBALS['db']->getOne($sql);
+}
+
+
+/**
+* 根据班级代码获取所有考试
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_exams($class_code)
+{
+	$sql = "SELECT * ".
+                " FROM ".$GLOBALS['ecs']->table("exam")." " .
+                " WHERE class_code= '" . $class_code."' order by code";
+
+	return $GLOBALS['db']->getAll($sql);
+}
+
+/**
+* 根据班级代码获取所有考试
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_subjects($class_code)
+{
+	$sql = "SELECT distinct subject ".
+                " FROM ".$GLOBALS['ecs']->table("exam")." " .
+                " WHERE class_code= '" . $class_code."'";
+
+	return $GLOBALS['db']->getAll($sql);
+}
+
+/**
+* 根据班级代码获取所有考试
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_exam_name($class_code)
+{
+	$sql = "SELECT distinct name ".
+                " FROM ".$GLOBALS['ecs']->table("exam")." " .
+                " WHERE class_code= '" . $class_code."'";
+
+	return $GLOBALS['db']->getAll($sql);
+}
+
+/**
+ * 处理掉双引号
+ * Enter description here ...
+ */
+function replace_dbquote($data){
+	return str_replace('"', '', trim($data));
+}
+
+
+/**
+* 获取这个项目所有的考试科目
+* @param unknown_type $exam_name
+*/
+function get_subjects_by_exam($class_code, $exam_name){
+	$sql = "SELECT code, subject ".
+	                " FROM ".$GLOBALS['ecs']->table("exam")." " .
+	                " WHERE class_code= '" . $class_code."' and name='".$exam_name."' order by subject ";
+	
+	return $GLOBALS['db']->getAll($sql);
+}
+
+function get_scores_by_exam($class_code, $exam_name="", $exam_code="", $student_code="", $order_by="", $exam_subject=""){
+	
+	$ex_where = " WHERE s.class_code='".$class_code."' ";
+	if ($exam_name)
+	{
+		$ex_where .= " AND  e.name='".$exam_name."'";
+	}
+	if ($exam_code)
+	{
+		$ex_where .= " AND  e.code='".$exam_code."'";
+	}
+	if ($student_code)
+	{
+		$ex_where .= " AND  s.student_code='".$student_code."'";
+	}
+	if ($exam_subject)
+	{
+		$ex_where .= " AND  e.subject='".$exam_subject."'";
+	}
+	if ($order_by)
+	{
+		$ex_where .= " order by ".$order_by;
+	}
+	
+	$sql = "SELECT s.score_id, s.exam_code, e.name as exam_name,
+			         	e.subject as exam_subject, s.student_code, s.score,
+			         	st.name as student_name, s.add_score, s.created ".
+	                " FROM " . $GLOBALS['ecs']->table("score")  ." s 
+					left join ".$GLOBALS['ecs']->table("exam") ." e on s.exam_code=e.code 
+					left join ".$GLOBALS['ecs']->table("student") ." st on s.student_code=st.code
+					". $ex_where ;
+	
+	return $GLOBALS['db']->getAll($sql);
+}
+
+
+/**
+* 根据班级代码获取所有值日项目
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_duty_items($class_code)
+{
+	$sql = "SELECT * ".
+                " FROM ".$GLOBALS['ecs']->table("duty_item")." " .
+                " WHERE class_code= '" . $class_code."'";
+	return $GLOBALS['db']->getAll($sql);
+}
+
+/**
+ * 获取所有量化数据
+ */
+function get_dutys($class_code, $student_code, $duty_item="", $stime="", $etime="", $order_by="", $group=""){
+
+	$ex_where = " WHERE d.class_code='".$class_code."' ";
+	if ($student_code)
+	{
+		$ex_where .= " AND  d.student_code='".$student_code."'";
+	}
+	if ($duty_item)
+	{
+		$ex_where .= " AND  d.duty_item='".$duty_item."'";
+	}
+	
+	if ($stime)
+	{
+		$ex_where .= " AND  d.date_>='".$stime."'";
+	}
+	
+	if ($etime)
+	{
+		$ex_where .= " AND  d.date_<='".$etime."'";
+	}
+	if ($group)
+	{
+		$ex_where .= " group by ".$group;
+	}
+	if ($order_by)
+	{
+		$ex_where .= " order by ".$order_by;
+	}
+
+	$sql = "SELECT student_code, sum(score) as score, date_, desc_ ,created ".
+	                " FROM " . $GLOBALS['ecs']->table("duty")  ." d 
+					". $ex_where ;
+	
+// 	echo $sql ;echo '<br>';
+	
+	return $GLOBALS['db']->getAll($sql);
+}
 
 ?>
