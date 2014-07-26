@@ -803,8 +803,10 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
     if ($limit_ext_types && stristr($limit_ext_types, '|' . $extname . '|') === false)
     {
         return '';
+    }else if(stristr($extname, "csv")){
+    	return "xls";
     }
-
+	
     $str = $format = '';
 
     $file = @fopen($filename, 'rb');
@@ -821,7 +823,7 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
                 $extname == 'xls' || $extname == 'txt'  || $extname == 'zip' || $extname == 'rar' || $extname == 'ppt' ||
                 $extname == 'pdf' || $extname == 'rm'   || $extname == 'mid' || $extname == 'wav' || $extname == 'bmp' ||
                 $extname == 'swf' || $extname == 'chm'  || $extname == 'sql' || $extname == 'cert'|| $extname == 'pptx' || 
-                $extname == 'xlsx' || $extname == 'docx')
+                $extname == 'xlsx' || $extname == 'docx' || $extname == 'csv')
             {
                 $format = $extname;
             }
@@ -831,7 +833,7 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
             return '';
         }
     }
-
+    
     if ($format == '' && strlen($str) >= 2 )
     {
         if (substr($str, 0, 4) == 'MThd' && $extname != 'txt')
@@ -868,7 +870,7 @@ function check_file_type($filename, $realname = '', $limit_ext_types = '')
             {
                 $format = 'doc';
             }
-            elseif (substr($str,0x200,2) == "\x09\x08" || $extname == 'xls')
+            elseif (substr($str,0x200,2) == "\x09\x08" || $extname == 'xls' || $extname == 'csv')
             {
                 $format = 'xls';
             } elseif (substr($str,0x200,4) == "\xFD\xFF\xFF\xFF" || $extname == 'ppt')

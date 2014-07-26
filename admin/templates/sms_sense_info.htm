@@ -1,0 +1,12 @@
+<!-- $Id: sms_my_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<form method="POST" action="sms.php?act=update_sense" >
+	{if $info}
+	<div style="color:green;" >{$info}</div>
+	{/if}
+	<input type="submit" value="更新敏感词汇" />
+	<div class="main-div">
+		<textarea name="sense" rows="40" cols="200">{$sense}</textarea>
+	</div>
+ </form>
+{include file="pagefooter.htm"}

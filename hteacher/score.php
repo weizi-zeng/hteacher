@@ -369,38 +369,5 @@ function insert_datas($scores_list){
 	
 }
 
-function set_params(){
-	global $smarty, $_SESSION;
-	
-	//查询条件加载
-	//班级所有学生
-	$students = get_students($_SESSION["class_code"]);
-	$smarty->assign("students", $students);
-	//班级所有考试
-	$exams = get_exams($_SESSION["class_code"]);
-	$smarty->assign("exams", $exams);
-	
-	$exam_names = array();//项目
-	$exam_codes = array();
-	foreach($exams as $k=>$v){
-		$isExist = false;
-		
-		foreach($exam_names as $name){
-			if($name==$v["name"]){
-				$isExist = true;
-				break;
-			}
-		}
-		if(!$isExist){
-			$exam_names[] = $v["name"];
-		}
-	
-		$exam_codes[] = $v["code"];
-	}
-	
-	$smarty->assign("exam_names", $exam_names);
-	$smarty->assign("exam_codes", $exam_codes);
-}
-
 
 ?>

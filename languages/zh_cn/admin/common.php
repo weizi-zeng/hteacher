@@ -194,11 +194,16 @@ $_LANG['05_synchronous'] = '同步数据';
 $_LANG['convert'] = '转换数据';
 
 /* 短信管理 */
-$_LANG['02_sms_my_info'] = '账号信息';
-$_LANG['03_sms_send'] = '发送短信';
-$_LANG['04_sms_charge'] = '账户充值';
-$_LANG['05_sms_send_history'] = '发送记录';
-$_LANG['06_sms_charge_history'] = '充值记录';
+// $_LANG['02_sms_my_info'] = '账号信息';
+// $_LANG['03_sms_send'] = '发送短信';
+// $_LANG['04_sms_charge'] = '账户充值';
+// $_LANG['05_sms_send_history'] = '发送记录';
+// $_LANG['06_sms_charge_history'] = '充值记录';
+$_LANG['01_sms_setting'] = '服务器设置';
+$_LANG['02_sms_sensitive'] = '敏感词汇';
+$_LANG['03_sms_statistics'] = '短信统计';
+$_LANG['04_sms_record'] = '发送记录';
+
 
 $_LANG['email_list'] = '邮件订阅管理';
 $_LANG['view_sendlist'] = '邮件队列管理';

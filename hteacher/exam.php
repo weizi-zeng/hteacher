@@ -6,6 +6,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'list')
 {
+	set_params();
 	$smarty->display('exam_list.htm');
 	exit;
 }
@@ -62,6 +63,7 @@ elseif ($_REQUEST['act'] == 'import')
 	}
 	insert_datas($exams_list);
 
+	set_params();
 	$smarty->display('exam_list.htm');
 	exit;
 }
@@ -131,6 +133,68 @@ elseif ($_REQUEST['act'] == 'ajax_delete')
 	
 	make_json_result("删除成功！");
 }
+
+elseif ($_REQUEST['act'] == 'getSmsContent')
+{
+	$exam_name    = !empty($_REQUEST['exam_name'])        ? trim($_REQUEST['exam_name'])      : "";
+	
+	$sql = "select * from ".$ecs->table("exam")." where name='".$exam_name."'";
+	$rows = $db->getAll($sql);
+	
+	$content = "【《".$exam_name."》考试安排】";
+	foreach ($rows as $row){
+		$content.=$row["examdate"].','.$row["stime"].'-'.$row["etime"].'在'.$row["classroom"].'考试'.$row["subject"].'；';
+	}
+	make_json(array("error"=>0,"msg"=>$content));
+}
+
+
+elseif ($_REQUEST['act'] == 'publish')
+{
+	$exam_name    = !empty($_REQUEST['exam_name'])        ? trim($_REQUEST['exam_name'])      : "";
+	
+	$sql = "select * from ".$ecs->table("exam")." where name='".$exam_name."'";
+	$rows = $db->getAll($sql);
+	
+	$title = "《".$exam_name."》考试安排";
+	$notice = '<table cellspacing="0" cellpadding="0" style="width:100%"><tbody>';
+	$notice .= '<tr style="font-weight:bold;">';
+	$notice .= '<td style="text-align:center;width:20%;border:1px solid rgb(27, 240, 180)">考试编号</td>';
+	$notice .= '<td style="text-align:center;width:15%;border:1px solid rgb(27, 240, 180)">考试科目</td>';
+	$notice .= '<td style="text-align:center;width:15%;border:1px solid rgb(27, 240, 180)">监考老师</td>';
+	$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">考试日期</td>';
+	$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">考试起止时间</td>';
+	$notice .= '<td style="text-align:center;width:20%;border:1px solid rgb(27, 240, 180)">所在教室</td>';
+	$notice .= '</tr>';
+	
+	foreach ($rows as $row){
+		$notice .= '<tr>';
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["code"].'</td>';
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["subject"].'</td>';
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["teacher"].'</td>';
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["examdate"].'</td>';
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["stime"].'-'.$row["etime"].'</td>';
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["classroom"].'</td>';
+		$notice .= '</tr>';
+	}
+	$notice .= "</tbody></table>";
+	
+	$sql = "INSERT INTO ".$ecs->table('notice')."(title, urgency, class_code, content, author, ".
+			                "is_active, created) ".
+			            "VALUES ('$title', 1, '$_SESSION[class_code]', '$notice', ".
+			                "'$_SESSION[admin_name]', 1, now())";
+	$db->query($sql);
+	$notice_id = $db->insert_id();
+	
+	admin_log($title, 'add', 'notice:'.$title);
+
+	ecs_header("Location:notice.php?act=view&show_back=1&notice_id=$notice_id\n");
+	exit();
+}
+
+
+
+
 
 /**
  *  返回班级管理员列表数据

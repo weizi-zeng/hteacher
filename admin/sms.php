@@ -16,390 +16,193 @@
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
-require_once(ROOT_PATH . 'includes/cls_sms.php');
+require(ROOT_PATH . '/includes/cls_sms.php');
 
-$action = isset($_REQUEST['act']) ? $_REQUEST['act'] : 'display_my_info';
-$sms = new sms();
+$action = isset($_REQUEST['act']) ? $_REQUEST['act'] : 'setting';
 
 switch ($action)
 {
-//    /* 注册短信服务。*/
-//    case 'register' :
-//        $email      = isset($_POST['email'])    ? $_POST['email']       : '';
-//        $password   = isset($_POST['password']) ? $_POST['password']    : '';
-//        $domain     = isset($_POST['domain'])   ? $_POST['domain']      : '';
-//        $phone      = isset($_POST['phone'])    ? $_POST['phone']       : '';
-//
-//        $result = $sms->register($email, $password, $domain, $phone);
-//
-//        $link[] = array('text'  =>  $_LANG['back'],
-//                        'href'  =>  'sms.php?act=display_my_info');
-//
-//        if ($result === true)//注册成功
-//        {
-//            sys_msg($_LANG['register_ok'], 0, $link);
-//        }
-//        else
-//        {
-//            @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]
-//                          . $_LANG['api_errors']['register'][$sms->errors['api_errors']['error_no']];
-//            sys_msg($_LANG['register_error'] . $error_detail, 1, $link);
-//        }
-//
-//        break;
-//
-//    /* 启用短信服务。 */
-//    case 'enable' :
-//        $username = isset($_POST['email'])      ? $_POST['email']       : '';
-//        //由于md5函数对空串也加密，所以要进行判空操作
-//        $password = isset($_POST['password']) && $_POST['password'] !== ''
-//                ? md5($_POST['password'])
-//                : '';
-//
-//        $result = $sms->restore($username, $password);
-//
-//        $link[] = array('text'  =>  $_LANG['back'],
-//                        'href'  =>  'sms.php?act=display_my_info');
-//
-//        if ($result === true)//启用成功
-//        {
-//            sys_msg($_LANG['enable_ok'], 0, $link);
-//        }
-//        else
-//        {
-//            @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]
-//                          . $_LANG['api_errors']['auth'][$sms->errors['api_errors']['error_no']];
-//            sys_msg($_LANG['enable_error'] . $error_detail, 1, $link);
-//        }
-//
-//        break;
-//
-//    /* 注销短信特服信息 */
-//    case 'disable' :
-//        $result = $sms->clear_my_info();
-//
-//        $link[] = array('text'  =>  $_LANG['back'],
-//                        'href'  =>  'sms.php?act=display_my_info');
-//
-//        if ($result === true)//注销成功
-//        {
-//            sys_msg($_LANG['disable_ok'], 0, $link);
-//        }
-//        else
-//        {
-//            sys_msg($_LANG['disable_error'], 1, $link);
-//        }
-//
-//        break;
-
-    /* 显示短信发送界面，如果尚未注册或启用短信服务则显示注册界面。 */
-    case 'display_send_ui' :
-        /* 检查权限 */
-         admin_priv('sms_send');
-
-        if ($sms->has_registered())
-        {
-            $smarty->assign('ur_here', $_LANG['03_sms_send']);
-            $special_ranks = get_rank_list();
-            $send_rank['1_0'] = $_LANG['user_list'];
-            foreach($special_ranks as $rank_key => $rank_value)
-            {
-                $send_rank['2_' . $rank_key] = $rank_value;
-            }
-            assign_query_info();
-            $smarty->assign('send_rank',   $send_rank);
-            $smarty->display('sms_send_ui.htm');
-        }
-        else
-        {
-            $smarty->assign('ur_here', $_LANG['register_sms']);
-            $smarty->assign('sms_site_info', $sms->get_site_info());
-            assign_query_info();
-            $smarty->display('sms_register_ui.htm');
-        }
-
-        break;
-
-    /* 发送短信 */
-    case 'send_sms' :
-        $send_num = isset($_POST['send_num'])   ? $_POST['send_num']    : '';
-
-        if(isset($send_num))
-        {
-            $phone = $send_num.',';
-        }
-
-        $send_rank = isset($_POST['send_rank'])     ? $_POST['send_rank'] : 0;
-
-        if ($send_rank != 0)
-        {
-            $rank_array = explode('_', $send_rank);
-
-            if($rank_array['0'] == 1)
-            {
-                $sql = 'SELECT mobile_phone FROM ' . $ecs->table('users') . "WHERE mobile_phone <>'' ";
-                $row = $db->query($sql);
-                while ($rank_rs = $db->fetch_array($row))
-                {
-                    $value[] = $rank_rs['mobile_phone'];
-                }
-            }
-            else
-            {
-                $rank_sql = "SELECT * FROM " . $ecs->table('user_rank') . " WHERE rank_id = '" . $rank_array['1'] . "'";
-                $rank_row = $db->getRow($rank_sql);
-                //$sql = 'SELECT mobile_phone FROM ' . $ecs->table('users') . "WHERE mobile_phone <>'' AND rank_points > " .$rank_row['min_points']." AND rank_points < ".$rank_row['max_points']." ";
-
-                if($rank_row['special_rank']==1) 
-                {
-                    $sql = 'SELECT mobile_phone FROM ' . $ecs->table('users') . " WHERE mobile_phone <>'' AND user_rank = '" . $rank_array['1'] . "'";
-                }
-                else
-                {
-                    $sql = 'SELECT mobile_phone FROM ' . $ecs->table('users') . "WHERE mobile_phone <>'' AND rank_points > " .$rank_row['min_points']." AND rank_points < ".$rank_row['max_points']." ";
-                }
-                
-                $row = $db->query($sql);
-                
-                while ($rank_rs = $db->fetch_array($row))
-                {
-                    $value[] = $rank_rs['mobile_phone'];
-                }
-            }
-            if(isset($value))
-            {
-                $phone .= implode(',',$value);
-            }
-        }       
-      
-        $msg       = isset($_POST['msg'])       ? $_POST['msg']         : '';
-        
-
-        $send_date = isset($_POST['send_date']) ? $_POST['send_date']   : '';   
-               
-        $result = $sms->send($phone, $msg, $send_date, $send_num = 13);
-
-        $link[] = array('text'  =>  $_LANG['back'] . $_LANG['03_sms_send'],
-                        'href'  =>  'sms.php?act=display_send_ui');
-
-        if ($result === true)//发送成功
-        {
-            sys_msg($_LANG['send_ok'], 0, $link);
-        }
-        else
-        {
-            @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]
-                          . $_LANG['api_errors']['send'][$sms->errors['api_errors']['error_no']];
-            sys_msg($_LANG['send_error'] . $error_detail, 1, $link);
-        }
-
-        break;
-
-//    /* 显示发送记录的查询界面，如果尚未注册或启用短信服务则显示注册界面。 */
-//    case 'display_send_history_ui' :
-//        /* 检查权限 */
-//         admin_priv('send_history');
-//        if ($sms->has_registered())
-//        {
-//            $smarty->assign('ur_here', $_LANG['05_sms_send_history']);
-//            assign_query_info();
-//            $smarty->display('sms_send_history_query_ui.htm');
-//        }
-//        else
-//        {
-//            $smarty->assign('ur_here', $_LANG['register_sms']);
-//            $smarty->assign('sms_site_info', $sms->get_site_info());
-//            assign_query_info();
-//            $smarty->display('sms_register_ui.htm');
-//        }
-//
-//        break;
-//
-//    /* 获得发送记录，如果客户端支持XSLT，则直接发送XML格式的文本到客户端；
-//       否则在服务器端把XML转换成XHTML后发送到客户端。
-//    */
-//    case 'get_send_history' :
-//        $start_date = isset($_POST['start_date'])   ? $_POST['start_date']  : '';
-//        $end_date   = isset($_POST['end_date'])     ? $_POST['end_date']    : '';
-//        $page_size  = isset($_POST['page_size'])    ? $_POST['page_size']   : 20;
-//        $page       = isset($_POST['page'])         ? $_POST['page']        : 1;
-//
-//        $is_xslt_supported = isset($_POST['is_xslt_supported']) ? $_POST['is_xslt_supported'] : 'no';
-//        if ($is_xslt_supported === 'yes')
-//        {
-//            $xml = $sms->get_send_history_by_xml($start_date, $end_date, $page_size, $page);
-//            header('Content-Type: application/xml; charset=utf-8');
-//            //TODO:判断错误信息，链上XSLT
-//            echo $xml;
-//        }
-//        else
-//        {
-//            $result = $sms->get_send_history($start_date, $end_date, $page_size, $page);
-//
-//            if ($result !== false)
-//            {
-//                $smarty->assign('sms_send_history', $result);
-//                $smarty->assign('ur_here', $_LANG['05_sms_send_history']);
-//
-//                /* 分页信息 */
-//                $turn_page = array( 'total_records' => $result['count'],
-//                                    'total_pages'   => intval(ceil($result['count']/$page_size)),
-//                                    'page'          => $page,
-//                                    'page_size'     => $page_size);
-//                $smarty->assign('turn_page', $turn_page);
-//                $smarty->assign('start_date', $start_date);
-//                $smarty->assign('end_date', $end_date);
-//
-//                assign_query_info();
-//
-//                $smarty->display('sms_send_history.htm');
-//            }
-//            else
-//            {
-//                $link[] = array('text'  =>  $_LANG['back_send_history'],
-//                                'href'  =>  'sms.php?act=display_send_history_ui');
-//
-//                @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]
-//                              . $_LANG['api_errors']['get_history'][$sms->errors['api_errors']['error_no']];
-//
-//                sys_msg($_LANG['history_query_error'] . $error_detail, 1, $link);
-//            }
-//        }
-//
-//        break;
-//
-//    /* 显示充值页面 */
-//    case 'display_charge_ui' :
-//        /* 检查权限 */
-//         admin_priv('sms_charge');
-//        if ($sms->has_registered())
-//        {
-//            $smarty->assign('ur_here', $_LANG['04_sms_charge']);
-//            assign_query_info();
-//            $sms_charge = array();
-//            $sms_charge['charge_url'] = $sms->get_url('charge');
-//            $sms_charge['login_info'] = $sms->get_login_info();
-//            $smarty->assign('sms_charge', $sms_charge);
-//            $smarty->display('sms_charge_ui.htm');
-//        }
-//        else
-//        {
-//            $smarty->assign('ur_here', $_LANG['register_sms']);
-//            $smarty->assign('sms_site_info', $sms->get_site_info());
-//            assign_query_info();
-//            $smarty->display('sms_register_ui.htm');
-//        }
-//
-//        break;
-//
-//    /* 显示充值记录的查询界面，如果尚未注册或启用短信服务则显示注册界面。 */
-//    case 'display_charge_history_ui' :
-//         /* 检查权限 */
-//         admin_priv('charge_history');
-//        if ($sms->has_registered())
-//        {
-//            $smarty->assign('ur_here', $_LANG['06_sms_charge_history']);
-//            assign_query_info();
-//            $smarty->display('sms_charge_history_query_ui.htm');
-//        }
-//        else
-//        {
-//            $smarty->assign('ur_here', $_LANG['register_sms']);
-//            $smarty->assign('sms_site_info', $sms->get_site_info());
-//            assign_query_info();
-//            $smarty->display('sms_register_ui.htm');
-//        }
-//
-//        break;
-//
-//    /* 获得充值记录，如果客户端支持XSLT，则直接发送XML格式的文本到客户端；
-//       否则在服务器端把XML转换成XHTML后发送到客户端。
-//    */
-//    case 'get_charge_history' :
-//        $start_date = isset($_POST['start_date'])   ? $_POST['start_date']  : '';
-//        $end_date   = isset($_POST['end_date'])     ? $_POST['end_date']    : '';
-//        $page_size  = isset($_POST['page_size'])    ? $_POST['page_size']   : 20;
-//        $page       = isset($_POST['page'])         ? $_POST['page']        : 1;
-//
-//        $is_xslt_supported = isset($_POST['is_xslt_supported']) ? $_POST['is_xslt_supported'] : 'no';
-//        if ($is_xslt_supported === 'yes')
-//        {
-//            $xml = $sms->get_charge_history_by_xml($start_date, $end_date, $page_size, $page);
-//            header('Content-Type: application/xml; charset=utf-8');
-//            //TODO:判断错误信息，链上XSLT
-//            echo $xml;
-//        }
-//        else
-//        {
-//            $result = $sms->get_charge_history($start_date, $end_date, $page_size, $page);
-//            if ($result !== false)
-//            {
-//                $smarty->assign('sms_charge_history', $result);
-//
-//                /* 分页信息 */
-//                $turn_page = array( 'total_records' => $result['count'],
-//                                    'total_pages'   => intval(ceil($result['count']/$page_size)),
-//                                    'page'          => $page,
-//                                    'page_size'     => $page_size);
-//                $smarty->assign('turn_page', $turn_page);
-//                $smarty->assign('start_date', $start_date);
-//                $smarty->assign('end_date', $end_date);
-//
-//                assign_query_info();
-//
-//                $smarty->display('sms_charge_history.htm');
-//            }
-//            else
-//            {
-//                $link[] = array('text'  =>  $_LANG['back_charge_history'],
-//                                'href'  =>  'sms.php?act=display_charge_history_ui');
-//
-//                @$error_detail = $_LANG['server_errors'][$sms->errors['server_errors']['error_no']]
-//                              . $_LANG['api_errors']['get_history'][$sms->errors['api_errors']['error_no']];
-//
-//                sys_msg($_LANG['history_query_error'] . $error_detail, 1, $link);
-//            }
-//        }
-//
-//        break;
-//
-//    /* 显示我的短信服务个人信息 */
-//    default :
-//        /* 检查权限 */
-//         admin_priv('my_info');
-//        $sms_my_info = $sms->get_my_info();
-//        if (!$sms_my_info)
-//        {
-//            $link[] = array('text'  =>  $_LANG['back'], 'href'  =>  './');
-//            sys_msg($_LANG['empty_info'], 1, $link);
-//        }
-//
-//        if (!$sms_my_info['sms_user_name'])//此处不用$sms->has_registered()能够减少一次数据库查询
-//        {
-//            $smarty->assign('ur_here', $_LANG['register_sms']);
-//            $smarty->assign('sms_site_info', $sms->get_site_info());
-//            assign_query_info();
-//            $smarty->display('sms_register_ui.htm');
-//        }
-//        else
-//        {
-//            /* 立即更新短信特服信息 */
-//            $sms->restore($sms_my_info['sms_user_name'], $sms_my_info['sms_password']);
-//
-//            /* 再次获取个人数据，保证显示的数据是最新的 */
-//            $sms_my_info = $sms->get_my_info();//这里不再进行判空处理，主要是因为如果前个式子不出错，这里一般不会出错
-//
-//            /* 格式化时间输出 */
-//            $sms_last_request = $sms_my_info['sms_last_request']
-//                    ? $sms_my_info['sms_last_request']
-//                    : 0;//赋0防出错
-//            $sms_my_info['sms_last_request'] = local_date('Y-m-d H:i:s O', $sms_my_info['sms_last_request']);
-//
-//            $smarty->assign('sms_my_info', $sms_my_info);
-//            $smarty->assign('ur_here', $_LANG['02_sms_my_info']);
-//            assign_query_info();
-//            $smarty->display('sms_my_info.htm');
-//        }
+	case 'setting':
+		$smarty->assign('ur_here', "服务器设置");
+		$sql = "select * from ".$ecs->table("sms_server")." where is_active=1 limit 1";
+		$row = $db->getRow($sql);
+		
+		$sql = "select cellphone from ".$ecs->table("admin_user")." where user_id=".$_SESSION["admin_id"];
+		$admin_phone = $db->getOne($sql);
+		
+		$smarty->assign('sms_my_info', $row);
+		$smarty->assign('phone', $admin_phone);
+		
+		assign_query_info();
+		$smarty->display('sms_my_info.htm');
+		exit;
+		
+	case 'register':
+		//更新数据库数据
+		$sms_server_id = empty($_POST["sms_server_id"])?0:intval($_POST["sms_server_id"]);
+		$user = trim($_POST["user"]);
+		$pass = trim($_POST["pass"]);
+		$server = trim($_POST["server"]);
+		$port = trim($_POST["port"]);
+		$total = empty($_POST["total"])?0:intval($_POST["total"]);
+		
+		$is_active = empty($_POST["is_active"])?0:intval($_POST["is_active"]);
+		
+		$phone = trim($_POST["phone"]);
+		
+		$sql = "update ".$ecs->table("sms_server")." set user='$user',pass='$pass',server='$server',port='$port',is_active='$is_active',total='$total' where sms_server_id=".$sms_server_id;
+		$db->query($sql);
+		
+		$msg = "服务器设置成功！";
+		//短信测试
+		if($is_active && str_len($phone)>3){
+			$sms = new sms();
+			$res = $sms->send($phone, "您好，您已开通您的短信服务，感谢您的使用！【长沙开拓者】", "", "", $_SESSION["admin_name"]);
+			if($res['error']==1){
+				$msg .= $res['msg'];
+			}else {
+				$msg .="请查收短信";
+			}
+		}
+		sys_msg($msg,0,array(),false);
+		exit;
+	case 'sense':
+		$smarty->assign('ur_here', "敏感词汇");
+		$sms = new sms();
+		$smarty->assign('sense', implode("|", $sms->sense));
+		assign_query_info();
+		$smarty->display('sms_sense_info.htm');
+		exit;
+		
+	case 'update_sense':
+		$sms = new sms();
+		$sms->getSmsKeys();
+		$sense = implode("|", $sms->sense);
+		$sql = "update ".$ecs->table("sms_server")." set sense='".addslashes($sense)."' where sms_server_id=".$sms->sms_server_id;//mysql_like_quote
+		$db->query($sql);
+		
+		$smarty->assign('sense', $sense);
+		$smarty->assign('info', "更新成功!");
+		
+		assign_query_info();
+		$smarty->display('sms_sense_info.htm');
+		exit;
+		
+		
+	case 'statistics':
+		$smarty->assign('ur_here', "短信统计");
+		
+		$statics = array();
+		$sms = new sms();
+		
+		$statics = array('total'=>$sms->total,'used'=>$sms->used);
+		
+		$inf = $sms->getBalance();
+		$statics["remainder"] = empty($inf[1])?0:intval($inf[1]);
+		
+		$schools = get_school_list();
+		foreach($schools as $s){
+			$statics['school'][$s['code']]['name'] = $s['name'];
+			$num = $db->getOne("select sum(num) from ".$s['code']."_school.ht_sms ");
+			$statics['school'][$s['code']]['num'] = $num?$num:0;
+		}
+		
+		$smarty->assign('statics', $statics);
+		assign_query_info();
+		$smarty->display('sms_statics_info.htm');
+		exit;
+		
+	case 'record':
+		$smarty->assign('ur_here',      "短信发送记录");
+		
+		$schools = get_school_list();
+		$smarty->assign('schools', $schools);
+		
+		$sms_list = sms_list();
+		$smarty->assign('sms_list',    $sms_list['sms_list']);
+		
+		$smarty->assign('filter',       $sms_list['filter']);
+		$smarty->assign('record_count', $sms_list['record_count']);
+		$smarty->assign('page_count',   $sms_list['page_count']);
+		$smarty->assign('full_page',    1);
+		
+		assign_query_info();
+		$smarty->display('sms_list.htm');
+		
+		exit;
+		
+	case 'query':
+		$sms_list = sms_list();
+		$smarty->assign('sms_list',    $sms_list['sms_list']);
+		
+		$smarty->assign('filter',       $sms_list['filter']);
+		$smarty->assign('record_count', $sms_list['record_count']);
+		$smarty->assign('page_count',   $sms_list['page_count']);
+		
+		make_json_result($smarty->fetch('sms_list.htm'), '', array('filter' => $sms_list['filter'], 'page_count' => $sms_list['page_count']));
+		exit;
+		
+	default:
+		die("您访问的页面不存在！");
+	exit;
 }
+
+
+
+/**
+ *  返回短信列表数据
+ */
+function sms_list()
+{
+	$result = get_filter();
+	if ($result === false)
+	{
+		/* 过滤条件 */
+		$filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);//关键字
+		$filter['school'] = empty($_REQUEST['school']) ? '' : trim($_REQUEST['school']);//学校code
+		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
+		{
+			$filter['keywords'] = json_str_iconv($filter['keywords']);
+		}
+
+		$filter['sort_by']    = empty($_REQUEST['sort_by'])    ? 'sms_id' : trim($_REQUEST['sort_by']);
+		$filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC'     : trim($_REQUEST['sort_order']);
+
+		$ex_where = ' WHERE 1 ';
+		if ($filter['keywords'])
+		{
+			$ex_where .= " AND content LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
+		}
+		
+		$database = $filter['school']?$filter['school']."_school":"hteacher";
+		$table = $database.".ht_sms ";
+
+		$filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $table . $ex_where);
+
+		/* 分页大小 */
+		$filter = page_and_size($filter);
+		$sql = "SELECT * ".
+                " FROM " . $table . $ex_where .
+                " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
+                " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
+
+		$filter['keywords'] = stripslashes($filter['keywords']);
+		set_filter($filter, $sql);
+	}
+	else
+	{
+		$sql    = $result['sql'];
+		$filter = $result['filter'];
+	}
+
+	$sms_list = $GLOBALS['db']->getAll($sql);
+
+	$arr = array('sms_list' => $sms_list, 'filter' => $filter,
+        'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+
+	return $arr;
+}
+
+
 
 ?>

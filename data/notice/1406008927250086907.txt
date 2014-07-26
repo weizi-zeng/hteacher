@@ -1,0 +1,13 @@
+ERROR: CctrlControl ("start", ENSEMBLE) failed! Return value:1
+CctrlGetLastError() returned:112
+
+the service for the Cache instance did not start.
+
+Consult the windows NT Application Event log for details
+using the Event Viewer application accessible from the 
+Administrative Tools menu.
+
+You may find additional information in Cache console log 
+(cconsole.log) in the manager directory
+
+Instance name = ENSEMBLE.

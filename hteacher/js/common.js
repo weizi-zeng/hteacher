@@ -941,3 +941,31 @@ function GridColSorter(val1, val2) {
         return val1 > val2 ? 1 : -1;
     }
 }
+
+
+function showLoading(e, title, left, top) {
+    if (!title) {
+        title = "正在为您努力处理中，请稍等...";
+    }
+    if(!left){
+        left = 0;
+    }
+    if (!top) {
+        top = -20;
+    }
+    left = e.pageX + left;
+    top = e.pageY + top;
+
+    var htm = '<div style="position:fixed;left:' + left + 'px;top:' + top + 'px;z-index:10000;"><span class="icon-loading">&nbsp;&nbsp;&nbsp;&nbsp;</span>' + title + '</div>';
+    $('#loadingDiv').html(htm);
+    $('#loadingDiv').show();
+}
+
+function clearLoading(title) {
+    if (!title) {
+        title = "处理完毕";
+    }
+
+    $('#loadingDiv').children('div').html(title);
+    $('#loadingDiv').hide();
+}

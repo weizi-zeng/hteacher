@@ -31,6 +31,9 @@
         </div>
     </noscript>
     
+     <!-- 固定写法，用于加载ajax正在处理提示 -->
+    <div id="loadingDiv" style="display:none;"></div>
+    
     <div title="数据列表" region="center" style="height:300px;" border="false">
     	<table id="dgData" style="height:400px"></table>
     
@@ -136,7 +139,7 @@
                 </form>
             </div>
             <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
-                <a id="btn_edit_ok" onclick="save();" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+                <a id="save" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
                 <a id="btn_edit_cancel" onclick="me.edit_window.window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
             </div>
         </div>

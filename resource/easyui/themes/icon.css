@@ -1,4 +1,142 @@
 ﻿/*直接把Css目前放在自己的项目中，在使用的页面引入icon.css文件*/
+.icon-view
+{ 
+    background: url('icons/view.gif') no-repeat scroll center center transparent;
+}
+.icon-loading
+{
+	background:url('icons/loading.gif') no-repeat center center;
+}
+.icon-qcinstrument
+{
+	background:url('icons/qcinstrument.png') no-repeat center center;
+}
+.icon-qcmaterial
+{
+	background:url('icons/qcmaterial.png') no-repeat center center;
+}
+.icon-qcbatch
+{
+	background:url('icons/qcbatch.png') no-repeat center center;
+}
+.icon-qcevaluate
+{
+	background:url('icons/qcevaluate.png') no-repeat center center;
+}
+.icon-qcexportdata
+{
+	background:url('icons/qcexportdata.png') no-repeat center center;
+}
+.icon-qclotprint
+{
+	background:url('icons/qclotprint.png') no-repeat center center;
+}
+.icon-qcprint
+{
+	background:url('icons/qcprint.png') no-repeat center center;
+}
+.icon-qcprintpreview
+{
+	background:url('icons/qcprintpreview.png') no-repeat center center;
+}
+.icon-qcseelarge
+{
+	background:url('icons/qcseelarge.png') no-repeat center center;
+}
+.icon-qcselect
+{
+	background:url('icons/qcselect.png') no-repeat center center;
+}
+.icon-qcadd
+{
+	background:url('icons/qcadd.png') no-repeat center center;
+}
+.icon-qcdelete
+{
+	background:url('icons/qcdelete.png') no-repeat center center;
+}
+.icon-qcreceive
+{
+	background:url('icons/qcreceive.png') no-repeat center center;
+}
+.icon-qcupdate
+{
+	background:url('icons/qcupdate.png') no-repeat center center;
+}
+.icon-qcdeal
+{
+	background:url('icons/qcdeal.png') no-repeat center center;
+}
+.icon-qcsave
+{
+	background:url('icons/qcsave.png') no-repeat center center;
+}
+.icon-qccalculate
+{
+	background:url('icons/qccalculate.png') no-repeat center center;
+}
+.icon-qcexclude
+{
+	background:url('icons/qcexclude.png') no-repeat center center;
+}
+.icon-printadd
+{
+	background:url('icons/printadd.png') no-repeat center center;
+}
+.icon-printsave
+{
+	background:url('icons/printsave.png') no-repeat center center;
+}
+.icon-printopen
+{
+	background:url('icons/printopen.png') no-repeat center center;
+}
+.icon-printprintpreview
+{
+	background:url('icons/printprintpreview.png') no-repeat center center;
+}
+.icon-printok
+{
+	background:url('icons/printok.png') no-repeat center center;
+}
+.icon-printdelete
+{
+	background:url('icons/printdelete.png') no-repeat center center;
+}
+.icon-printsetting
+{
+	background:url('icons/printsetting.png') no-repeat center center;
+}
+.icon-printbtngrid
+{
+	background:url('icons/printbtngrid.jpg') no-repeat center center;
+}
+.icon-printbtnimage
+{
+	background:url('icons/printbtnimage.jpg') no-repeat center center;
+}
+.icon-printbtnlable
+{
+	background:url('icons/printbtnlable.jpg') no-repeat center center;
+}
+.icon-printbtnline
+{
+	background:url('icons/printbtnline.jpg') no-repeat center center;
+}
+.icon-printbtntext
+{
+	background:url('icons/printbtntext.jpg') no-repeat center center;
+}
+.icon-printbtnuser
+{
+	background:url('icons/printbtnuser.jpg') no-repeat center center;
+}
+
+
+
+
+
+
 
 .icon-accept
   {    background: url('icons/accept.png') no-repeat scroll center center transparent;

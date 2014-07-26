@@ -65,11 +65,10 @@ if (!defined('IN_ECS'))
     $purview['convert']              = 'convert';
 
 //短信管理
-    $purview['02_sms_my_info']       = 'my_info';
-    $purview['03_sms_send']          = 'sms_send';
-    $purview['04_sms_charge']        = 'sms_charge';
-    $purview['05_sms_send_history']  = 'send_history';
-    $purview['06_sms_charge_history']= 'charge_history';
+    $purview['01_sms_setting']       = 'sms_manage';
+    $purview['02_sms_sensitive']       = 'sms_manage';
+    $purview['03_sms_statistics']    = 'sms_manage';
+    $purview['04_sms_record']        = 'sms_manage';
 
 //邮件群发管理
     $purview['attention_list']       = 'attention_list';

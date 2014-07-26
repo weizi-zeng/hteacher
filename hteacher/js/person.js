@@ -21,6 +21,12 @@
             me.dgData = $('#dgData');
             $('#btn_search_ok').click(function () { me.dgData.datagrid({ pageNumber: 1 }); });
             $("#bthday").datebox();
+            $('#save').click(function(e){
+            	if ($(this).hasClass("l-btn-disabled")) {
+                    return;
+                }
+            	save(e);
+            });
         }
 
         //加载数据列表
@@ -140,12 +146,14 @@
     }
 
     //保存
-    function Save() {
+    function save(e) {
         if (me.edit_form.form('validate')) {
             $.ajax({
                 url: me.actionUrl + '?act=ajax_save',
                 data: me.edit_form.serialize(),
                 success: function (r) {
+                	clearLoading();
+                	$("#save").linkbutton('enable');
                     if (r) {
                     	if(r.error==0){
                     		showInfo(r.content);
@@ -157,6 +165,8 @@
                     }
                 }
             });
+            showLoading(e);
+        	$("#save").linkbutton('disable');
         }
     }
     

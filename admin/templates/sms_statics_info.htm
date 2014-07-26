@@ -1,0 +1,27 @@
+<!-- $Id: sms_my_info.htm 14216 2008-03-10 02:27:21Z testyang $ -->
+{include file="pageheader.htm"}
+<div class="main-div">
+	<table  border="0" cellspacing="0" cellpadding="0">
+	  <tr>
+	    <td class="label">短信总数：</td>
+	    <td>{$statics.total}条</td>
+	  </tr>
+	  <tr>
+	    <td class="label">共使用：</td>
+	    <td>{$statics.used}条</td>
+	  </tr>
+	  
+	  <tr>
+	    <td class="label">短信供应商显示的短信剩余量：</td>
+	    <td>{$statics.remainder}条</td>
+	  </tr>
+	  
+	  {foreach from=$statics.school item=sch}
+	  <tr>
+	    <td class="label">{$sch.name}</td>
+	    <td>{$sch.num}条</td>
+	  </tr>
+	  {/foreach}
+	</table>
+	</div>
+{include file="pagefooter.htm"}

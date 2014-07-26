@@ -39,6 +39,9 @@
         </div>
     </noscript>
 
+     <!-- 固定写法，用于加载ajax正在处理提示 -->
+    <div id="loadingDiv" style="display:none;"></div>
+    
     <div region="north" split="true" class="winHeader">
          <div class="userOpera">
             <a href="javascript:void(0);" id="editpass">修改密码</a>|

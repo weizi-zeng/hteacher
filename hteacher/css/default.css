@@ -9,7 +9,7 @@ body
 }
 a
 {
-    color: Black;
+    color: blue;
     text-decoration: none;
 }
 a:hover
@@ -257,4 +257,8 @@ input[type=checkbox]
 .menu-active 
 {
     background-color:#91DBFE;
+}
+
+.navlist a,.userOpera a {
+	color:black;
 }

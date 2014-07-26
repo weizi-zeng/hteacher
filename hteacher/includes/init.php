@@ -320,4 +320,7 @@ else
     ob_start();
 }
 
+/* 允许上传的文件类型 */
+$allow_file_types = '|CSV|GIF|JPG|PNG|BMP|SWF|DOC|XLS|PPT|MID|WAV|ZIP|RAR|PDF|CHM|RM|TXT|XLSX|CSV|';
+
 ?>

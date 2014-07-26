@@ -18,6 +18,12 @@
             me.edit_form = me.edit_window.find('#edit_form');
             me.search_form = $('#search_form');
             me.dgData = $('#dgData');
+            $('#save').click(function(e){
+            	if ($(this).hasClass("l-btn-disabled")) {
+                    return;
+                }
+            	save(e);
+            });
         }
 
         //加载数据列表
@@ -95,12 +101,14 @@
     }
 
     //保存
-    function save() {
+    function save(e) {
         if (me.edit_form.form('validate')) {
             $.ajax({
                 url: me.actionUrl + '?act=ajax_save',
                 data: me.edit_form.serialize(),
                 success: function (r) {
+                	clearLoading();
+                	$("#save").linkbutton('enable');
                     if (r) {
                     	if(r.error==0){
                     		showInfo(r.content);
@@ -112,6 +120,8 @@
                     }
                 }
             });
+            showLoading(e);
+        	$("#save").linkbutton('disable');
         }
     }
     
@@ -150,8 +160,9 @@
             showError('选择的记录ID为空!');
             return;
         }
-        var name=rows[0]["name"];
-        $.messager.confirm('提示信息', '确认要删除选择项？【'+ids+ ','+ name + '】', function (isClickedOk) {
+        var stage=rows[0]["stage"];
+//        var subject=rows[0]["subject"];
+        $.messager.confirm('提示信息', '确认要删除选择项？【'+ids+ ','+ stage + '】', function (isClickedOk) {
             if (isClickedOk) {
                 $.ajax({
                     url: me.actionUrl+"?act=ajax_delete",

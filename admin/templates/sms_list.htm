@@ -1,0 +1,98 @@
+{if $full_page}
+<!-- $Id: smss_list.htm 17053 2010-03-15 06:50:26Z sxc_shop $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,listtable.js"}
+
+<div class="form-div">
+  <form action="javascript:searchsms()" name="searchForm">
+    <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    &nbsp;学校编号&nbsp;
+    <select name="school" >
+    	<option value="">超级系统管理员</option>
+    	{foreach from=$schools item=sch}
+    	<option value="{$sch.code}">{$sch.name}</option>
+    	{/foreach}
+    </select>
+    &nbsp;关键字&nbsp;<input type="text" name="keyword" /> <input type="submit" value="{$lang.button_search}" />
+  </form>
+</div>
+
+<div style="color:red;">
+	短信状态说明：0：未发送或者是正在发送；1：发送成功；2：发送失败；
+</div>
+<form method="POST" action="" name="listForm" >
+
+<!-- start smss list -->
+<div class="list-div" id="listDiv">
+{/if}
+<!--用户列表部分-->
+<table cellpadding="3" cellspacing="1">
+  <tr>
+    <th>
+      ID
+    </th>
+    <th>内容</th>
+    <th>电话</th>
+    <th>状态</th>
+    <th>短信数量</th>
+    <th>班级</th>
+    <th>发送时间</th>
+    <th>发送人</th>
+    <th>创建时间</th>
+  <tr>
+  
+  {foreach from=$sms_list item=sms}
+  <tr>
+    <td>{$sms.sms_id}</td>
+    <td class="first-cell">{$sms.content|escape}</td>
+    <td>{$sms.phones}</td>
+    <td>{$sms.status}</td>
+    <td>{$sms.num}</td>
+    <td>{$sms.class_code}</td>
+    
+    <td>{$sms.sended}</td>
+    <td>{$sms.creator}</td>
+    <td>{$sms.created}</td>
+  </tr>
+  {foreachelse}
+  <tr><td class="no-records" colspan="13">{$lang.no_records}</td></tr>
+  {/foreach}
+  <tr>
+      <td align="right" nowrap="true" colspan="13">
+      {include file="page.htm"}
+      </td>
+  </tr>
+</table>
+
+{if $full_page}
+</div>
+<!-- end smss list -->
+</form>
+
+<script type="text/javascript" language="JavaScript">
+<!--
+listTable.recordCount = {$record_count};
+listTable.pageCount = {$page_count};
+
+{foreach from=$filter item=item key=key}
+listTable.filter.{$key} = '{$item}';
+{/foreach}
+
+{literal}
+
+/**
+ * 搜索用户
+ */
+function searchsms()
+{
+    listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter['school'] = Utils.trim(document.forms['searchForm'].elements['school'].value);
+    listTable.filter['page'] = 1;
+    listTable.loadList();
+}
+
+//-->
+</script>
+{/literal}
+{include file="pagefooter.htm"}
+{/if}

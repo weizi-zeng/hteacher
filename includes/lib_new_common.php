@@ -77,7 +77,7 @@ function get_school_list()
 {
 	$list = array();
 	$sql  = 'SELECT * '.
-            'FROM hteacher.ht_school ORDER BY school_id DESC';
+            'FROM hteacher.ht_school where removed=0 ORDER BY school_id DESC';
 	$list = $GLOBALS['db']->getAll($sql);
 
 	return $list;
@@ -348,6 +348,54 @@ function get_dutys($class_code, $student_code, $duty_item="", $stime="", $etime=
 // 	echo $sql ;echo '<br>';
 	
 	return $GLOBALS['db']->getAll($sql);
+}
+
+
+
+function set_params(){
+	global $smarty, $_SESSION;
+
+	//查询条件加载
+	//班级所有学生
+	$students = get_students($_SESSION["class_code"]);
+	$smarty->assign("students", $students);
+	//班级所有考试
+	$exams = get_exams($_SESSION["class_code"]);
+	$smarty->assign("exams", $exams);
+
+	$exam_names = array();//项目
+	$exam_codes = array();
+	$exam_subjects = array();//科目
+	foreach($exams as $k=>$v){
+		$isExist = false;
+		foreach($exam_names as $name){
+			if($name==$v["name"]){
+				$isExist = true;
+				break;
+			}
+		}
+		if(!$isExist){
+			$exam_names[] = $v["name"];
+		}
+		
+		
+		$isExist = false;
+		foreach($exam_subjects as $name){
+			if($name==$v["subject"]){
+				$isExist = true;
+				break;
+			}
+		}
+		if(!$isExist){
+			$exam_subjects[] = $v["subject"];
+		}
+
+		$exam_codes[] = $v["code"];
+	}
+
+	$smarty->assign("exam_names", $exam_names);
+	$smarty->assign("exam_codes", $exam_codes);
+	$smarty->assign("exam_subjects", $exam_subjects);
 }
 
 ?>

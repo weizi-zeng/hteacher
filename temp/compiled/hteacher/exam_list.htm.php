@@ -31,6 +31,9 @@
         </div>
     </noscript>
     
+     <!-- 固定写法，用于加载ajax正在处理提示 -->
+    <div id="loadingDiv" style="display:none;"></div>
+    
     <div title="数据列表" region="center" style="height:300px;" border="false">
     	<table id="dgData" style="height:400px"></table>
     
@@ -43,9 +46,6 @@
             <a href="javascript:void(0)" onclick="importexams();" class="easyui-linkbutton" iconCls="icon-application_put" >导入</a>
             <a href="javascript:void(0)" onclick="template();" class="easyui-linkbutton" iconCls="icon-arrow_down" >下载模板</a>
             
-            <a href="javascript:void(0)" onclick="publicexam();" class="easyui-linkbutton" iconCls="icon-application_view_list" >发布考试信息</a>
-            <a href="javascript:void(0)" onclick="sendexam();" class="easyui-linkbutton" iconCls="icon-note_go" >将考试信息短信通知到家长</a>
-            
          </div>
     	 <div style="height:40px;margin-bottom:5px;" >
           <form id="search_form" method="post">
@@ -53,21 +53,44 @@
                     <tr>
                    		<td style="text-align: right; width:80px;">考试编号：</td>
                         <td style="text-align: left; width:150px;">
-                        	<input type="text" id="search_code" name="search_code" style="width: 170px;" />
+                        	<select id="search_code" name="search_code" style="width:120px;">
+                        		<option value="">所有...</option>
+                        		<?php $_from = $this->_var['exam_codes']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'exam_code');if (count($_from)):
+    foreach ($_from AS $this->_var['exam_code']):
+?>
+                        		<option value="<?php echo $this->_var['exam_code']; ?>"><?php echo $this->_var['exam_code']; ?></option>
+                        		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+                        	</select>
                         </td>
                         
                         <td style="text-align: right; width:80px;">考试项目：</td>
                         <td style="text-align: left; width:150px;">
-                        	<input type="text" id="search_name" name="search_name" style="width: 170px;" />
+                        	<select id="search_name" name="search_name" style="width:120px;">
+                        		<option value="">所有...</option>
+                        		<?php $_from = $this->_var['exam_names']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'exam_name');if (count($_from)):
+    foreach ($_from AS $this->_var['exam_name']):
+?>
+                        		<option value="<?php echo $this->_var['exam_name']; ?>"><?php echo $this->_var['exam_name']; ?></option>
+                        		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+                        	</select>
                         </td>
                         
                         <td style="text-align: right; width:80px;">考试科目：</td>
                         <td style="text-align: left; width:150px;">
-                            <input type="text" id="search_subject" name="search_subject" style="width: 170px;" />
+                        	<select id="search_subject" name="search_subject" style="width:120px;">
+                        		<option value="">所有...</option>
+                        		<?php $_from = $this->_var['exam_subjects']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'exam_subject');if (count($_from)):
+    foreach ($_from AS $this->_var['exam_subject']):
+?>
+                        		<option value="<?php echo $this->_var['exam_subject']; ?>"><?php echo $this->_var['exam_subject']; ?></option>
+                        		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+                        	</select>
                         </td>
                         
-                        <td style="text-align: left; width:150px;">
-                        	<a href="javascript:void(0)" onclick="searchexams();" class="easyui-linkbutton" icon="icon-search">查找</a>
+                        <td style="text-align: left; width:450px;">
+                        	 <a href="javascript:void(0)" onclick="searchexams();" class="easyui-linkbutton" icon="icon-search">查找</a>
+                        	 <a href="javascript:void(0)" onclick="publicexam();" class="easyui-linkbutton" iconCls="icon-application_view_list" >发布考试</a>
+           					 <a href="javascript:void(0)" onclick="sendexam();" class="easyui-linkbutton" iconCls="icon-note_go" >短信通知</a>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
@@ -139,7 +162,7 @@
                 </form>
             </div>
             <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
-                <a id="btn_edit_ok" onclick="save();" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+                <a id="save" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
                 <a id="btn_edit_cancel" onclick="me.edit_window.window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
             </div>
         </div>
@@ -161,6 +184,48 @@
             
         </div>
     </div>
+    
+    
+    
+    <div title="发送短信" id="send_sms_window" class="easyui-window" closed="true" style="width: 680px;height:500px;padding: 0px;" border="false">
+    	<div class="easyui-layout" fit="true">
+    	
+    		<table id="student_dgData" style="height:400px"></table>
+    
+     	 <div id="student_toolbar" style="padding:5px;height:auto">
+     		<div style="color:red;">不能发送带广告性质或者营销性质的短信，否则短信账号会被冻结</div>
+     		<div>短信内容不能超过140个字符，当前还可以输入<span style="color:red" id="tip">140</span>个字符</div>
+	     	 <div style="margin-bottom:5px">
+	     	 	短信内容：
+	     	 	<textarea rows="4" id="sms_content" onkeyup="check()" style="width:460px;" maxlength="140"></textarea>
+	     	 	<label><input type="checkbox" id="sms_copy" checked="checked" style="width:20px;"/>抄送给自己</label>
+	            <a href="javascript:void(0)" id="sms_send" class="easyui-linkbutton" iconCls="icon-arrow_up" >发送短信</a>
+	            <a onclick="$('#send_sms_window').window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
+	         </div>
+	     </div>
+        </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
                 
 </body>
 </html>
