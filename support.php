@@ -1,21 +1,46 @@
 <?php 
+	define('IN_ECS', true);
+	require (dirname(__FILE__) . '/includes/sinit.php');
+
+	$act = empty($_REQUEST["act"])?"":trim($_REQUEST["act"]);
+// 	$token = empty($_REQUEST["token"])?"0":intval($_REQUEST["token"]);
+	$msg = "";
+	if($act=='subMsg'){
+		
+		$recorder = empty($_REQUEST["recorder"])?"匿名":trim($_REQUEST["recorder"]);
+		$e_mail = empty($_REQUEST["e_mail"])?"":trim($_REQUEST["e_mail"]);
+		$title = empty($_REQUEST["title"])?"无标题":trim($_REQUEST["title"]);
+		$content = empty($_REQUEST["content"])?"":trim($_REQUEST["content"]);
+		
+		$sql = "INSERT INTO " . $ecs->table("feedback") . "(parent_id, user_id, user_name, user_email, msg_title,
+			                                                 msg_type, msg_content, msg_time, msg_status, msg_from)" .
+			            " VALUES (0, 0, '$recorder', '$e_mail', ".
+			            " '$title', 0, '$content', '" . gmtime() . "', '0', 'outer')";
+		
+		$db->query($sql);
+		
+		$msg = "信息已经成功提交，感谢您的支持！我们将尽快联系您！";
+	}
+
+
+	$title = "技术支持";
 	require_once 'themes/default/header.htm';
 ?>
   
-  <div class="nav">
-   <div class="nav_1">
-      <a id="first_menu1" href="index.php">首页</a>
-      <a id="first_menu2" href="introduction.php">系统介绍</a>
-      <a id="first_menu3" href="contact.php">联系我们</a>
-      <a id="first_menu4" href="support.php" style="color:black;">技术支持</a>
-    </div>
-  </div>
+  <script type="text/javascript">
+		function submsg(o){
+			if ($("#subMsg_form").form('validate')) {
+				return true;
+			}
+			return false;
+		}
+  </script>
+  
   
   <div class="content" id="cont" style="overflow:hidden">
     <div class="left" style="overflow:hidden">
     	<div width="100%" width="674px">
 			
-			<form id="form1">
 				<div class="left">
 				 
 				  <div class="left_box">
@@ -25,70 +50,58 @@
 						<div id="bannerCareers"><img src="images/support.png" width="620px" height="200px" alt=""></div>
 						<!--banner结束-->
 								
-								
 						<!--主要内容部分容器开始-->
 						<div id="container">
 						<div id="containerT"><img src="images/container_t.gif" alt="主要内容部分容器上边框"></div>
 			
+						<form class="cmxform" id="subMsg_form" action="support.php"  method="post" enctype="multipart/form-data"  onsubmit="return submsg(this);">
 						<div id="containerM1">
-														
-														
-									<form  class="cmxform" id="messageform" name="form1" method="post" action="msgaction.jsp">
-
+							
 								<table width="100%" height="252" border="0" align="left" cellpadding="0" cellspacing="0">
 								  <tr>
 									<td colspan="2" align="center" class="tab_list1"><h1 style="font-size:16px">留&nbsp;言&nbsp;板</h1></td>
 								  </tr>
 								  <tr>
-									<td width="20%" align="right" class="tab_list2">您的邮箱</td>
-									<td width="80%" class="tab_list3"><label>
-									  <input type="text" name="E_mail" id="e_mail" title="必填" class="required email"/>
-									  *</label></td>
-								  </tr>
-								  <tr>
 									<td align="right" class="tab_list2">您的称呼</td>
-									<td class="tab_list3"><label>
-									  <input type="text" name="Recorder" id="textfield2" title="必填" class="required" />
-									  *</label></td>
-								  </tr>
-								  <tr>
-									<td align="right" class="tab_list2">联系电话</td>
-									<td class="tab_list3"><label>
-									  <input type="text" name="Phone" id="phone"  />
-									</label></td>
-								  </tr>
-								  <tr>
-									<td align="right" class="tab_list2">留言标题</td>
-									<td class="tab_list3"><label>
-									  <input type="text" name="Title" id="title"  title="必填" class="required"size="50" />
-									  *</label></td>
-								  </tr>
-								  <tr>
-									<td align="right" class="tab_list2">留言内容</td>
-									<td class="tab_list3"><label>
-									  <textarea name="Content" id="Content" cols="45" rows="10"  title="必填" class="required"></textarea>
-									  *</label>
+									<td class="tab_list3">
+									  <input type="text" name="recorder" id="recorder" />
 									</td>
 								  </tr>
 								  <tr>
-									<td align="right" class="tab_list2">验证码</td>
-									<td class="tab_list3"><input name="rand" type="text" size="6" title="必填" class="required"/><img border=0 src="image.jsp" id="randimage">* </td>
+									<td align="right" class="tab_list2">联系电话</td>
+									<td class="tab_list3">
+									  <input type="text" name="phone" id="phone" maxlength="20"/>
+									</td>
+								  </tr>
+								  <tr>
+									<td width="20%" align="right" class="tab_list2">您的邮箱</td>
+									<td width="80%" class="tab_list3">
+									  <input type="text" name="e_mail" id="e_mail" class="easyui-validatebox" data-options="required:true,validType:'email'"/>
+									</td>
+								  </tr>
+								  <tr>
+									<td align="right" class="tab_list2">留言标题</td>
+									<td class="tab_list3">
+									  <input type="text" name="title" id="title" size="50" />
+									</td>
+								  </tr>
+								  <tr>
+									<td align="right" class="tab_list2">留言内容</td>
+									<td class="tab_list3">
+									  <textarea name="content" id="content" cols="45" rows="10"  class="easyui-validatebox" data-options="required:true"></textarea>
+									</td>
 								  </tr>
 								  <tr>
 									<td align="right">&nbsp;</td>
-									<td height="40"><input type="submit" name="Submit2" value="提 交" />
-										<input type="reset" name="Submit" value="重 置" /></td>
+									<td height="40"><input type="submit" value="提 交" />
+										<input type="reset" value="重 置" />
+										<input type="hidden" name="act" value="subMsg" />
+										</td>
 								  </tr>
 								</table>
-								<div id="result" ></div>
-										  <input type="hidden" name="mark" value="中文"/>
-									</form>
-									<!--<button id="reset">清空</button>-->
-									
-						
-						
 						</div>
-
+						</form>
+						
 						<div id="containerB"><img src="images/container_b.gif" alt="主要内容部分容器下边框"></div>
 						</div>
 						<!--主要内容部分容器结束-->
@@ -97,7 +110,6 @@
 				  </div>
 				   
 				</div><!--left[end]-->
-			 </form>
 		
     	</div>
     </div>

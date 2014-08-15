@@ -29,7 +29,6 @@
     <th><a href="javascript:listTable.sort('msg_title'); ">{$lang.msg_title}</a>{$sort_msg_title}</th>
     <th><a href="javascript:listTable.sort('msg_type'); ">{$lang.msg_type}</a>{$sort_msg_type}</th>
     <th><a href="javascript:listTable.sort('msg_time'); ">{$lang.msg_time}</a>{$sort_msg_time}</th>
-    <th><a href="javascript:listTable.sort('msg_status'); ">{$lang.msg_status}</a>{$sort_msg_status}</th>
     <th><a href="javascript:listTable.sort('reply'); ">{$lang.reply}</a>{$sort_reply}</th>
     <th>{$lang.handler}</th>
   </tr>
@@ -38,13 +37,8 @@
     <td><input type="checkbox" name="checkboxes[]" value="{$msg.msg_id}" />{$msg.msg_id}</td>
     <td align="center">{$msg.user_name}</td>
     <td align="left">{$msg.msg_title|truncate:40|escape:html}</td>
-    <td align="center">{$msg.msg_type}{if $msg.order_id}<br><a href="order.php?act=info&order_id={$msg.order_id}">{$msg.order_sn}{/if}</a></td>
+    <td align="center">{$msg.msg_type}</td>
     <td align="center"  nowrap="nowrap">{$msg.msg_time}</td>
-    {if $msg.msg_area eq 0}
-    <td align="center">{$lang.display}</td>
-    {else}
-    <td align="center">{if $msg.msg_status eq 0}{$lang.hidden}{else}{$lang.display}{/if}</td>
-    {/if}
     <td align="center">{if $msg.reply eq 0}{$lang.unreplyed}{else}{$lang.replyed}{/if}</td>
     <td align="center">
       <a href="user_msg.php?act=view&id={$msg.msg_id}&list_from={$list_from}" title="{$lang.view}">
@@ -65,8 +59,6 @@
       <select name="sel_action">
 	    <option value="">{$lang.select_please}</option>
         <option value="remove">{$lang.delete}</option>
-        <option value="allow">{$lang.allow}</option>
-        <option value="deny">{$lang.forbid}</option>
       </select>
       <input type="hidden" name="act" value="batch" />
       <input type="hidden" name="list_from" value="{$list_from}" />

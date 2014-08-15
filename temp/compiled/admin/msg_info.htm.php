@@ -13,7 +13,10 @@
           <a href="user_msg.php?act=drop_file&id=<?php echo $this->_var['msg']['msg_id']; ?>&file=<?php echo $this->_var['msg']['message_img']; ?>"><?php echo $this->_var['lang']['drop']; ?></a>
         </div>
         <?php endif; ?>
-        <div align="right"  nowrap="nowrap">【 <?php if ($this->_var['msg']['msg_area'] == "1"): ?><?php echo $this->_var['lang']['message_board']; ?><?php else: ?><?php echo $this->_var['lang']['user_center']; ?><?php endif; ?> 】<a href="mailto:<?php echo $this->_var['msg']['user_email']; ?>"><?php echo $this->_var['msg']['user_name']; ?></a> @ <?php echo $this->_var['msg']['msg_time']; ?></div>
+        <div align="right"  nowrap="nowrap">
+        	【 <?php if ($this->_var['list_from'] == "list_school"): ?>学校管理员意见<?php elseif ($this->_var['list_from'] == "list_class"): ?>班主任意见<?php elseif ($this->_var['list_from'] == "list_customer"): ?>监护人投诉<?php else: ?>外围区 <?php echo $this->_var['msg']['user_email']; ?><?php endif; ?> 】
+        	<a href="mailto:<?php echo $this->_var['msg']['user_email']; ?>"><?php echo $this->_var['msg']['user_name']; ?></a> @ <?php echo $this->_var['msg']['msg_time']; ?>
+        </div>
       </td>
     </tr>
 <?php if ($this->_var['msg']['msg_area'] == "1"): ?>
@@ -51,6 +54,7 @@
 <?php endif; ?>
 
 <div class="main-div">
+<?php if ($this->_var['list_from'] != 'list_outer'): ?>
 <form method="post" action="user_msg.php?act=action" name="theForm"  onsubmit="return validate()">
 <table border="0" width="98%">
   <tr>
@@ -65,10 +69,12 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
+  <!-- 
   <tr>
     <td></td>
     <td><input name="send_email_notice" type="checkbox" value='1'/><?php echo $this->_var['lang']['send_email_notice']; ?></td>
   </tr>
+   -->
   <?php if ($this->_var['msg']['reply_id']): ?>
   <tr>
     <td>&nbsp;</td>
@@ -87,7 +93,16 @@
   </tr>
 </table>
 </form>
+<?php else: ?>
+<table border="0" width="98%">
+  <tr>
+    <td>由于系统没有邮箱服务器，只能通过其他邮箱进行回复。</td>
+  </tr>
+</table>
+<?php endif; ?>
 </div>
+
+
 <?php echo $this->smarty_insert_scripts(array('files'=>'../js/utils.js,validator.js')); ?>
 <script language="JavaScript">
 <!--

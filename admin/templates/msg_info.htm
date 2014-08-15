@@ -13,7 +13,10 @@
           <a href="user_msg.php?act=drop_file&id={$msg.msg_id}&file={$msg.message_img}">{$lang.drop}</a>
         </div>
         {/if}
-        <div align="right"  nowrap="nowrap">【 {if $msg.msg_area eq "1"}{$lang.message_board}{else}{$lang.user_center}{/if} 】<a href="mailto:{$msg.user_email}">{$msg.user_name}</a> @ {$msg.msg_time}</div>
+        <div align="right"  nowrap="nowrap">
+        	【 {if $list_from eq "list_school"}学校管理员意见{elseif $list_from eq "list_class"}班主任意见{elseif $list_from eq "list_customer"}监护人投诉{else}外围区 {$msg.user_email}{/if} 】
+        	<a href="mailto:{$msg.user_email}">{$msg.user_name}</a> @ {$msg.msg_time}
+        </div>
       </td>
     </tr>
 {if $msg.msg_area eq "1"}
@@ -51,6 +54,7 @@
 {/if}
 
 <div class="main-div">
+{if $list_from neq 'list_outer'}
 <form method="post" action="user_msg.php?act=action" name="theForm"  onsubmit="return validate()">
 <table border="0" width="98%">
   <tr>
@@ -65,10 +69,12 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
+  <!-- 
   <tr>
     <td></td>
     <td><input name="send_email_notice" type="checkbox" value='1'/>{$lang.send_email_notice}</td>
   </tr>
+   -->
   {if $msg.reply_id}
   <tr>
     <td>&nbsp;</td>
@@ -87,7 +93,16 @@
   </tr>
 </table>
 </form>
+{else}
+<table border="0" width="98%">
+  <tr>
+    <td>由于系统没有邮箱服务器，只能通过其他邮箱进行回复。</td>
+  </tr>
+</table>
+{/if}
 </div>
+
+
 {insert_scripts files="../js/utils.js,validator.js"}
 <script language="JavaScript">
 <!--

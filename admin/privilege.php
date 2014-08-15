@@ -549,7 +549,7 @@ elseif ($_REQUEST['act'] == 'modif')
     /* 模板赋值 */
     $smarty->assign('lang',        $_LANG);
     $smarty->assign('ur_here',     $_LANG['modif_info']);
-    $smarty->assign('action_link', array('text' => $_LANG['admin_list'], 'href'=>'privilege.php?act=list'));
+//     $smarty->assign('action_link', array('text' => $_LANG['admin_list'], 'href'=>'privilege.php?act=list'));
     $smarty->assign('user',        $user_info);
     $smarty->assign('menus',       $modules);
     $smarty->assign('nav_arr',     $nav_lst);

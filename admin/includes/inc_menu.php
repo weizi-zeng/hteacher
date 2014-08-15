@@ -76,6 +76,10 @@ $modules['09_advice']['03_classAdmin_msg']           = 'user_msg.php?act=list_cl
 $modules['09_advice']['04_customer_msg']    = 'user_msg.php?act=list_customer';
 $modules['09_advice']['05_other_msg']    = 'user_msg.php?act=list_outer';
 
+//常见问题
+$modules['09_problems']['01_problems_list']    = 'problems.php?act=list';
+$modules['09_problems']['02_problems_add']    = 'problems.php?act=add';
+
 $modules['10_priv_admin']['02_admin_list']             = 'admin.php?act=list';
 $modules['10_priv_admin']['03_admin_add']             = 'admin.php?act=add';
 

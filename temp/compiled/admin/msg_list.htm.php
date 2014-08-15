@@ -29,7 +29,6 @@
     <th><a href="javascript:listTable.sort('msg_title'); "><?php echo $this->_var['lang']['msg_title']; ?></a><?php echo $this->_var['sort_msg_title']; ?></th>
     <th><a href="javascript:listTable.sort('msg_type'); "><?php echo $this->_var['lang']['msg_type']; ?></a><?php echo $this->_var['sort_msg_type']; ?></th>
     <th><a href="javascript:listTable.sort('msg_time'); "><?php echo $this->_var['lang']['msg_time']; ?></a><?php echo $this->_var['sort_msg_time']; ?></th>
-    <th><a href="javascript:listTable.sort('msg_status'); "><?php echo $this->_var['lang']['msg_status']; ?></a><?php echo $this->_var['sort_msg_status']; ?></th>
     <th><a href="javascript:listTable.sort('reply'); "><?php echo $this->_var['lang']['reply']; ?></a><?php echo $this->_var['sort_reply']; ?></th>
     <th><?php echo $this->_var['lang']['handler']; ?></th>
   </tr>
@@ -40,13 +39,8 @@
     <td><input type="checkbox" name="checkboxes[]" value="<?php echo $this->_var['msg']['msg_id']; ?>" /><?php echo $this->_var['msg']['msg_id']; ?></td>
     <td align="center"><?php echo $this->_var['msg']['user_name']; ?></td>
     <td align="left"><?php echo htmlspecialchars(sub_str($this->_var['msg']['msg_title'],40)); ?></td>
-    <td align="center"><?php echo $this->_var['msg']['msg_type']; ?><?php if ($this->_var['msg']['order_id']): ?><br><a href="order.php?act=info&order_id=<?php echo $this->_var['msg']['order_id']; ?>"><?php echo $this->_var['msg']['order_sn']; ?><?php endif; ?></a></td>
+    <td align="center"><?php echo $this->_var['msg']['msg_type']; ?></td>
     <td align="center"  nowrap="nowrap"><?php echo $this->_var['msg']['msg_time']; ?></td>
-    <?php if ($this->_var['msg']['msg_area'] == 0): ?>
-    <td align="center"><?php echo $this->_var['lang']['display']; ?></td>
-    <?php else: ?>
-    <td align="center"><?php if ($this->_var['msg']['msg_status'] == 0): ?><?php echo $this->_var['lang']['hidden']; ?><?php else: ?><?php echo $this->_var['lang']['display']; ?><?php endif; ?></td>
-    <?php endif; ?>
     <td align="center"><?php if ($this->_var['msg']['reply'] == 0): ?><?php echo $this->_var['lang']['unreplyed']; ?><?php else: ?><?php echo $this->_var['lang']['replyed']; ?><?php endif; ?></td>
     <td align="center">
       <a href="user_msg.php?act=view&id=<?php echo $this->_var['msg']['msg_id']; ?>&list_from=<?php echo $this->_var['list_from']; ?>" title="<?php echo $this->_var['lang']['view']; ?>">
@@ -67,8 +61,6 @@
       <select name="sel_action">
 	    <option value=""><?php echo $this->_var['lang']['select_please']; ?></option>
         <option value="remove"><?php echo $this->_var['lang']['delete']; ?></option>
-        <option value="allow"><?php echo $this->_var['lang']['allow']; ?></option>
-        <option value="deny"><?php echo $this->_var['lang']['forbid']; ?></option>
       </select>
       <input type="hidden" name="act" value="batch" />
       <input type="hidden" name="list_from" value="<?php echo $this->_var['list_from']; ?>" />

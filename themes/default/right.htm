@@ -22,6 +22,22 @@
     
     return true;
   }
+  
+  function vote_send(){
+	//TODO
+	$.messager.alert("提示","感谢您的参与，在您的帮助下，我们将做得更好，谢谢！");
+	return false;
+  }
+  
+  function gotoService(){
+	 $.messager.alert("提示","项目经理，胡伟：xxxxxxxxx");
+	 return false;
+  }
+  
+  function forgetPwd(){
+	$.messager.alert("提示","请联系您的上级管理员帮您重置密码");
+	return false;
+  }
 //-->
 </script>
 
@@ -65,7 +81,7 @@
 										
 											
                                             <input class="btn bold wd2" value="登 录" style="cursor:pointer;" id="btlogin" name="btlogin" tabindex="3" type="submit">
-											<a href="#" >忘记密码？</a>
+											<a href="javascript:forgetPwd();" >忘记密码？</a>
 											
                                         </div>
 										
@@ -84,26 +100,32 @@
 		   <div class="right_box">
 				<div class="right_title">在线调查</div>
 				<form id="searchForm">
-				<div class="right_ques" id="kkList"><span>您好！在使用校讯通门户网站过程中，您认为我们网站存在着那些不足？</span>
+				<div class="right_ques" id="kkList"><span>您好！在使用我爱我班网站过程中，您认为我们网站存在着那些不足？</span>
 							<label><input name="itemId" value="21" type="radio">设计风格</label>
 							<label><input name="itemId" value="22" type="radio">信息的及时和准确性</label>
 							<label><input name="itemId" value="23" type="radio">信息太少</label>
 							<label><input name="itemId" value="24" type="radio">使用不方便</label>
 							<label><input name="itemId" value="25" type="radio">其他</label>
 							<div class="right_button">
-					<input class="button_1" id="vote" value="投票" onclick="business.send();" type="button">
-					<input class="button_1" id="view" value="查看结果" onclick="business.view(1);" type="button">  
+					<input class="button_1" id="vote" value="投票" onclick="vote_send();" type="button">
 				  </div></div></form>
 			  </div>
 			  
 			  <div class="right_box">
 				<div class="right_title">常见问题</div>
 				<ul class="right_list">
-						  <li><a href="#">为什么我登录不了？</a></li>
-							<li><a href="#">收不到短信怎么办？</a></li>
-							<li><a href="#">家长手机为何收不到孩子的刷卡信息？</a></li>
-							<li><a href="#">家长的手机号码错了（变了），怎么修改？（资料修改问题）</a></li>
-						  </ul>
+				<?
+				$sql = "select * from ".$ecs->table('problems')." where is_active=1 order by problems_id desc limit 10";
+				$problems = $db->getAll($sql);
+
+					foreach($problems as $k=>$problem){
+						?>
+						<li><a href="problems.php?act=view&problems_id=<?=$problem[problems_id] ?>"><?=$problem[title] ?></a></li>
+						<?php
+					}
+				 ?>
+				 <li><a href="problems.php ?>">更多...</a></li>
+			   </ul>
 			  </div> 
 			  
 			 <div class="service"><a href="javascript:gotoService();"><img src="index_files/indexRight_data/service.jpg"></a></div>

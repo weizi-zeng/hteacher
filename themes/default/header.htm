@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>班主任系统——首页</title>
+<title>我爱我班——<?=$title ?></title>
 <link href="index_files/css.css" rel="stylesheet" type="text/css">
 <!--[if lte IE 6]>
 <script src="../mh/js/fj/DD_belatedPNG_0.0.8a-min.js" type="text/javascript"></script>
@@ -14,6 +14,90 @@
 <script type="text/javascript" src="index_files/base.js"></script>  
 <script type="text/javascript"src="index_files/tab.js" ></script>
  
+ 
+<link rel="shortcut icon" href="images/icon/favicon.ico" />
+
+<link href="resource/easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="resource/easyui/themes/icon.css" type="text/css" />
+
+<script src="resource/easyui/jquery.min.js" type="text/javascript"></script>
+<script src="resource/easyui/jquery.easyui.min.js" type="text/javascript"></script>
+<script src="resource/easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    
+    
+ <script type="text/javascript">
+ function add_favorite(a, title, url) {
+	 url = url || a.href;
+	 title = title || a.title;
+	 try{ // IE
+	 window.external.addFavorite(url, title);
+	 } catch(e) {
+	 try{ // Firefox
+	 window.sidebar.addPanel(title, url, "");
+	 } catch(e) {
+	 if (/Opera/.test(window.navigator.userAgent)) { // Opera
+	 a.rel = "sidebar";
+	 a.href = url;
+	 return true;
+	 }
+	 alert('加入收藏失败，请使用 Ctrl+D 进行添加');
+	 }
+	 }
+	 return false;
+	 }
+ 
+function set_homepage(a, url) {
+	 var tip = '您的浏览器不支持此操作\n请使用浏览器的“选项”或“设置”等功能设置首页';
+	 if (/360se/i.test(window.navigator.userAgent)) {
+	 alert(tip);
+	 return false;
+	 }
+	 url = url || a.href;
+	 try {
+	 a.style.behavior = 'url(#default#homepage)';
+	 a.setHomePage(url);
+	 } catch(e) {
+	 alert(tip);
+	 }
+	 return false;
+}
+	 
+
+function SetHome(obj,vrl){
+    try{
+            obj.style.behavior='url(#default#homepage)';obj.setHomePage(vrl);
+    }
+    catch(e){
+            if(window.netscape) {
+                    try {
+                            netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+                    }
+                    catch (e) {
+                            alert("此操作被浏览器拒绝！\n请在浏览器地址栏输入“about:config”并回车\n然后将 [signed.applets.codebase_principal_support]的值设置为'true',双击即可。");
+                    }
+                    var prefs = Components.classes['@mozilla.org/preferences-service;1'].getService(Components.interfaces.nsIPrefBranch);
+                    prefs.setCharPref('browser.startup.homepage',vrl);
+             }else{
+                 alert("您的浏览器不支持，请按照下面步骤操作：1.打开浏览器设置。2.点击设置网页。3.输入："+vrl+"点击确定。");
+             }             
+    }
+}
+
+$(function(){
+	var title = '<?=$title ?>';
+	$("#menus").find("a").each(function(i,e){
+		if($(e).text()==title) {
+			$(e).css("color","black");
+		}
+	});
+	
+	var msg = '<?=$msg ?>';
+	if(msg){
+		$.messager.alert("提示",msg);
+	}
+	
+});
+ </script>
 </head>
  
 <body>
@@ -31,15 +115,22 @@
     <div class="top_left">
     </div>
     <div class="top_right">
-		<a href="javascript:void(0)" onclick="setHomepage('http://www.baidu.com');"><img src="index_files/sfut_02.png"></a>
-		<a href="javascript:void(0)" onclick="addFav('http://www.baidu.com', '班主任系统');"><img src="index_files/sfut_01.png"></a>
+		<a href="javascript:void(0)" onclick="SetHome(this,window.location);"><img src="index_files/sfut_02.png"></a>
+		<a href="javascript:void(0)" onclick="add_favorite(this, '我爱我班', 'http://localhost:8089/hteacher');"><img src="index_files/sfut_01.png"></a>
 	</div>
   </div>
   
   <div class="banner"></div>
   
+ <div class="nav">
+   <div class="nav_1" id="menus">
+      <a href="index.php">首页</a>
+      <a href="introduction.php">系统介绍</a>
+      <a href="contact.php">联系我们</a>
+      <a href="problems.php">常见问题</a>
+      <a href="support.php">技术支持</a>
+    </div>
+  </div>
 
-  
-  
   
   

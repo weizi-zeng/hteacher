@@ -27,7 +27,10 @@ if (!defined('IN_ECS'))
     $purview['08_schoolAdmin_add']         = 'schoolAdmin_manage';
 //     $purview['09_classAdmin_list']        = 'classAdmin_manage';
 //     $purview['10_classAdmin_add']         = 'classAdmin_manage';
-
+    
+    $purview['01_problems_list']        = 'problems_manage';
+    $purview['02_problems_add']         = 'problems_manage';
+    
 //权限管理
     $purview['02_admin_list']           = array('admin_manage', 'admin_drop', 'allot_priv');
     $purview['03_admin_add']           = array('admin_manage');

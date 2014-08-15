@@ -77,7 +77,7 @@ if ($_REQUEST['act']=='insert')
 {
     $sql = "INSERT INTO " . $ecs->table('feedback') . "(parent_id, user_id, user_name, user_email, msg_title, msg_type, msg_content, msg_time, message_img, order_id)" .
             " VALUES (0, '$_POST[user_id]', '$_SESSION[admin_name]', ' ', ".
-            " '$_POST[msg_title]', 5, '$_POST[msg_content]', '" . gmtime() . "', '', '$_POST[order_id]')";
+            " '$_POST[msg_title]', 1, '$_POST[msg_content]', '" . gmtime() . "', '', '$_POST[order_id]')";
 
     $db->query($sql);
 
@@ -240,6 +240,7 @@ if ($_REQUEST['act'] == 'batch')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act']=='view')
 {
+	$smarty->assign('list_from',   $_REQUEST['list_from']);
     $smarty->assign('send_fail',   !empty($_REQUEST['send_ok']));
     $smarty->assign('msg',         get_feedback_detail(intval($_REQUEST['id'])));
     $smarty->assign('ur_here',     $_LANG['reply']);

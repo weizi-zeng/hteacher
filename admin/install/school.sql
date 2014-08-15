@@ -285,3 +285,18 @@ CREATE TABLE  `ht_admin_message` (
   KEY `sender_id` (`sender_id`,`receiver_id`),
   KEY `receiver_id` (`receiver_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ht_sms`;
+CREATE TABLE  `ht_sms` (
+  `sms_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content` varchar(512) NOT NULL,
+  `phones` varchar(1024) NOT NULL,
+  `status` smallint(2) unsigned NOT NULL DEFAULT '0',
+  `num` int(11) DEFAULT '0',
+  `class_code` varchar(20) NOT NULL,
+  `sended` datetime DEFAULT NULL,
+  `creator` varchar(40) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`sms_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
