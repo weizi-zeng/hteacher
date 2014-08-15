@@ -19,8 +19,7 @@
 				 
 				  <div class="left_box">
 				  
-				  
-						<!--banner-->
+						<!--banner hehe-->
 						<div id="bannerCareers"><img src="images/trailblazer.png" width="620px" alt=""></div>
 						<!--banner结束-->
 								
