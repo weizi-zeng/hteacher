@@ -39,14 +39,14 @@
                 pageSize: 15,
                 pageList: [2, 4, 5, 15, 30, 45, 60],
                 singleSelect: true,
-                nowwarp: false,  //折行
+                nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
                 columns: [[
 				  { field: 'score_id', title: 'ID', hidden: true },
 				  { field: 'exam_code', title: '考试编号', width: 150, sortable: true, align: 'center' },
-				  { field: 'exam_name', title: '考试项目', width: 150, sortable: true, align: 'center' },
+				  { field: 'prj_code', title: '考试项目', width: 150, sortable: true, align: 'center' },
                   { field: 'exam_subject', title: '考试科目', width: 150, sortable: true, align: 'center' },
                   { field: 'student_code', title: '学号', width: 120, sortable: true, align: 'center' },
                   { field: 'student_name', title: '学生', width: 120, sortable: true, align: 'center' },
@@ -88,8 +88,9 @@
         	$("#score_id").val(row.score_id);
         	$("#exam_code").val(row.exam_code);
         	$("#student_code").val(row.student_code);
-        	$("#score").val(row.score);
-        	$("#add_score").val(row.id_card);
+        	
+        	$("#score").numberbox("setValue",row.score);
+        	$("#add_score").numberbox("setValue",row.add_score);
         	
         	 $('#btn_edit_ok').show();
              me.edit_window.window('open');
@@ -107,8 +108,6 @@
                 url: me.actionUrl + '?act=ajax_save',
                 data: me.edit_form.serialize(),
                 success: function (r) {
-                	clearLoading();
-                	$("#save").linkbutton('enable');
                     if (r) {
                     	if(r.error==0){
                     		showInfo(r.content);
@@ -118,6 +117,10 @@
                     		showError(r.message);
                     	}
                     }
+                },
+                complete:function(){
+                	clearLoading();
+                	$("#save").linkbutton('enable');
                 }
             });
             showLoading(e);
@@ -195,12 +198,12 @@
     
     //根据考试项目进行导出
     function exportscoresbyexamname(){
-    	var exam_name = $("#search_exam_name").val();
-    	if(!exam_name){
+    	var prj_code = $("#search_prj_code").val();
+    	if(!prj_code){
     		showError('请选择考试项目!'); 
             return;
     	}
-    	window.open("score.php?act=exportbyexamname&order=asc&rows=2000&search_exam_name="+exam_name);
+    	window.open("score.php?act=exportbyexamname&order=asc&rows=2000&search_prj_code="+prj_code);
     }
     
     function exportscoresbyexamcode(){
@@ -218,6 +221,6 @@
     		showError('请选择学生学号!'); 
             return;
     	}
-    	var exam_name = $("#search_exam_name").val();
-    	window.open("score.php?act=exportbystudentcode&order=asc&rows=2000&search_student_code="+student_code+"&search_exam_name="+exam_name);
+    	var prj_code = $("#search_prj_code").val();
+    	window.open("score.php?act=exportbystudentcode&order=asc&rows=2000&search_student_code="+student_code+"&search_prj_code="+prj_code);
     }

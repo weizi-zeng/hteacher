@@ -82,22 +82,46 @@
     <div id="center" region="center" style="background: #eee; overflow-y: hidden">
         <div id="tabs" class="easyui-tabs" fit="true" border="false">
 
-            <div title="首页" iconCls="icon-code" style="padding: 20px; overflow: hidden; color:Black; display: block;">
-                <br />
-
-                <div id="p" class="easyui-panel" title="通知栏" data-options="collapsible:true" style="width:500px;height:200px;padding:10px;">
-                    <p style="font-size:14px;">通知内容：</p>
-                    <ul>
-                           <li>.....................</li>
-                    </ul>
-                </div>
-                <br />
-                <div id="Div1" class="easyui-panel" title="预警栏" data-options="collapsible:true" style="width:500px;height:200px;padding:10px;color:red;">
-                    <p style="font-size:14px;">预警内容：</p>
-                    <ul>
-                           <li>.....................</li>
-                    </ul>
-                </div>
+            <div title="首页" iconCls="icon-code" style="overflow: hidden; color:Black; display: block;">
+                
+                <div class="easyui-layout" data-options="fit:true,border:false">
+				    <div data-options="region:'center',border:false" style="width:600px;padding-left:20px;padding-top:20px;">
+				    	<div id="home-notice" class="easyui-panel" title="通知通告" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                    {foreach from=$notices item=notice}
+		                    	<li><a href="notice.php?act=view&notice_id={$notice.notice_id}" target="blank_">{$notice.title}——{$notice.created}</a></li>
+		                    {/foreach}
+		                    </ul>
+		                </div>
+		                <br/>
+		                <div id="home-notice" class="easyui-panel" title="短信消息" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                         {foreach from=$sms item=sms_item}
+		                    	<li><p>{$sms_item.content}——{$sms_item.created}</p></li>
+		                   		 {/foreach}
+		                    </ul>
+		                </div>
+				    </div>
+				    <div data-options="region:'west',border:false" style="width:600px;padding-left:20px;padding-top:20px;">
+				    	<div id="home-notice" class="easyui-panel" title="讨论区" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                           {foreach from=$forums item=forum}
+		                    	<li><a href="forum.php?act=view&forum_id={$forum.forum_id}" target="blank_">{$forum.title}——{$forum.created}</a></li>
+		                   		 {/foreach}
+		                    </ul>
+		                </div>
+		                <br/>
+		                <div id="home-notice" class="easyui-panel" title="意见箱" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                          {foreach from=$msg_list item=msg_item}
+		                    	<li><p>{$msg_item.msg_title}——{$msg_item.msg_time}</p>
+		                    		<p>{$msg_item.msg_reply}</p>
+		                    	</li>
+		                   		 {/foreach}
+		                    </ul>
+		                </div>
+				    </div>
+				</div>
             </div>
 
         </div>
@@ -140,8 +164,26 @@
             </div>
         </div>
     </div>
+    
     <div id="mm" class="easyui-menu" style="width: 150px;" title="多标签右键菜单">
-        <div id="mm-tabupdate">双击可关闭本页</div>
+        <div id="mm-tabupdate">
+            刷新</div>
+        <div id="mm-tabopen">
+            独立打开</div>
+        <div class="menu-sep">
+        </div>
+        <div id="mm-tabclose">
+            关闭</div>
+        <div id="mm-tabcloseall">
+            全部关闭</div>
+        <div id="mm-tabcloseother">
+            除此之外全部关闭</div>
+        <div class="menu-sep">
+        </div>
+        <div id="mm-tabcloseright">
+            当前页右侧全部关闭</div>
+        <div id="mm-tabcloseleft">
+            当前页左侧全部关闭</div>
     </div>
 </body>
 </html>

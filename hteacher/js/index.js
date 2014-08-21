@@ -7,7 +7,7 @@
 **********************************************************/
 
 
-var onlyOpenTitle = "主页"; //不允许关闭的标签的标题
+var onlyOpenTitle = "首页"; //不允许关闭的标签的标题
 var MENUDATA = '';
 var me = {
     win_changepwd: null,

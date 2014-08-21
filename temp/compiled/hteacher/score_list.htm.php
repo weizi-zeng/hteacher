@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>人员信息</title>
+    <title>考试成绩管理</title>
     
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/icon/favicon.ico" />
@@ -52,12 +52,12 @@
                     	
                         <td style="text-align: right; width:80px;">考试项目：</td>
                         <td style="text-align: left; width:130px;">
-                        	<select id="search_exam_name" name="search_exam_name" style="width:120px;">
+                        	<select id="search_prj_code" name="search_prj_code" style="width:120px;">
                         		<option value="">所有...</option>
-                        		<?php $_from = $this->_var['exam_names']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'exam_name');if (count($_from)):
-    foreach ($_from AS $this->_var['exam_name']):
+                        		<?php $_from = $this->_var['prjs']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'prj');if (count($_from)):
+    foreach ($_from AS $this->_var['prj']):
 ?>
-                        		<option value="<?php echo $this->_var['exam_name']; ?>"><?php echo $this->_var['exam_name']; ?></option>
+                        		<option value="<?php echo $this->_var['prj']['code']; ?>"><?php echo $this->_var['prj']['code']; ?></option>
                         		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
                         	</select>
                         </td>
@@ -139,11 +139,11 @@
                     </tr>
                     <tr>
                         <th style="text-align: right">分数：</th>
-                        <td><input id="score" name="score" type="text" class="easyui-numberbox" value="" data-options="requird:true,min:0,precision:2" maxlength="20" style="width: 150px" /></td>
+                        <td><input id="score" name="score" type="text" class="easyui-numberbox" requird="true" data-options="min:0,precision:2" maxlength="5" style="width: 150px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">附加分数：</th>
-                        <td><input id="add_score" name="add_score" type="text" class="easyui-numberbox" value="0" data-options="requird:true,min:0,precision:2"  maxlength="20" style="width: 150px" /></td>
+                        <td><input id="add_score" name="add_score" type="text" class="easyui-numberbox" value="0" data-options="min:0,precision:2"  maxlength="5" style="width: 150px" /></td>
                     </tr>
                 </table>
                 </form>

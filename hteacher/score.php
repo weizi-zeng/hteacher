@@ -54,13 +54,13 @@ elseif ($_REQUEST['act'] == 'import')
 		}
 		
 		$i=1;
-		$arr['exam_code'] = replace_dbquote($line_list[$i++]);//考试编号
-		$arr['student_code'] = replace_dbquote($line_list[$i++]);
+		$arr['exam_code'] = replace_quote($line_list[$i++]);//考试编号
+		$arr['student_code'] = replace_quote($line_list[$i++]);
 		
-		$score = replace_dbquote($line_list[$i++]);
+		$score = replace_quote($line_list[$i++]);
 		$arr['score'] = $score?intval($score):0;
 		
-		$add_score = replace_dbquote($line_list[$i++]);
+		$add_score = replace_quote($line_list[$i++]);
 		$arr['add_score'] = $add_score?intval($add_score):0;
 		
 		$arr['class_code'] = $class_code;
@@ -128,17 +128,17 @@ elseif ($_REQUEST['act'] == 'ajax_delete')
 /// 根据考试项目导出成绩
 elseif ($_REQUEST['act'] == 'exportbyexamname')
 {
-	$exam_name = empty($_REQUEST['search_exam_name']) ? '' : trim($_REQUEST['search_exam_name']);//考试名称
+	$prj_code = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);//考试名称
 	//获取这个项目所有的考试科目
-	$subjects = get_subjects_by_exam($class_code, $exam_name);
+	$subjects = get_subjects_by_exam($class_code, $prj_code);
 	
 	$content = "学号,姓名,";
 	foreach($subjects as $k=>$v){
-		$content .= $v["code"]."-".$v["subject"].",";
+		$content .= $v["code"].",";//"-".$v["subject"].
 	}
 	$content .= "总分\n";
 	
-	$list = get_scores_by_exam($class_code, $exam_name, "", "", " s.student_code");
+	$list = get_scores_by_exam($class_code, $prj_code, "", "", " s.student_code");
 	$students = array();
 	foreach ($list as $k=>$v)
 	{
@@ -170,7 +170,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamname')
 // 	print_r($students);echo '<br>';
 	
 	foreach($students as $k=>$v){
-		$content .= "s:\"".$v["student_code"]."\",".$v["student_name"].",";
+		$content .= "'".$v["student_code"]."',".$v["student_name"].",";
 		
 		$total = 0;
 		foreach($subjects as $sk=>$sv){
@@ -188,7 +188,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamname')
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
-	header("Content-Disposition: attachment; filename=".$exam_name.".csv");
+	header("Content-Disposition: attachment; filename=".$prj_code.".csv");
 	header("Content-Type: application/unknown");
 	die($file);
 	
@@ -205,7 +205,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamcode')
 	$list = get_scores_by_exam($class_code, "", $exam_code, "", " s.student_code");
 	
 	$subject = "";
-	$$exam_name = "";
+	$$prj_code = "";
 	$students = array();
 	foreach ($list as $k=>$v)
 	{
@@ -216,7 +216,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamcode')
 		$student[$v["exam_code"]]= $v["score"]+$v["add_score"]; //科目对于成绩
 		if($subject==""){
 			$subject = $v["exam_subject"];
-			$exam_name = $v["exam_name"];
+			$prj_code = $v["prj_code"];
 		}
 		
 		$students[$student["student_code"]] = $student;
@@ -226,7 +226,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamcode')
 	// 	print_r($students);echo '<br>';
 
 	foreach($students as $k=>$v){
-		$content .= "s:\"".$v["student_code"]."\",".$v["student_name"].",".$v[$exam_code]."\r\n";
+		$content .= "'".$v["student_code"]."',".$v["student_name"].",".$v[$exam_code]."\r\n";
 	}
 
 
@@ -234,7 +234,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamcode')
 
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 
-	header("Content-Disposition: attachment; filename=".$exam_name."_".$subject.".csv");
+	header("Content-Disposition: attachment; filename=".$prj_code."_".$subject.".csv");
 	header("Content-Type: application/unknown");
 	die($file);
 
@@ -245,15 +245,15 @@ elseif ($_REQUEST['act'] == 'exportbyexamcode')
 elseif ($_REQUEST['act'] == 'exportbystudentcode')
 {
 	$student_code = empty($_REQUEST['search_student_code']) ? '' : trim($_REQUEST['search_student_code']);//学生学号
-	$exam_name = empty($_REQUEST['search_exam_name']) ? '' : trim($_REQUEST['search_exam_name']);//学生学号
+	$prj_code = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);//学生学号
 
 	$content = "学号,姓名,考试项目,考试编号,考试科目,分数,附加分数\r\n";
 
-	$list = get_scores_by_exam($class_code, $exam_name, "", $student_code, " s.exam_code");
+	$list = get_scores_by_exam($class_code, $prj_code, "", $student_code, " s.exam_code");
 
 	foreach ($list as $k=>$v)
 	{
-		$content .= "s:\"".$v["student_code"]."\",".$v["student_name"].",".$v["exam_name"].",".$v["exam_code"].",".$v["exam_subject"].",".$v["score"].",".$v["add_score"]."\r\n";
+		$content .= "'".$v["student_code"]."',".$v["student_name"].",".$v["prj_code"].",".$v["exam_code"].",".$v["exam_subject"].",".$v["score"].",".$v["add_score"]."\r\n";
 	}
 	
 	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
@@ -281,13 +281,13 @@ function score_list()
 	if ($result === false)
 	{
 		/* 过滤条件 */
-		$filter['exam_name'] = empty($_REQUEST['search_exam_name']) ? '' : trim($_REQUEST['search_exam_name']);//考试名称
+		$filter['prj_code'] = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);//考试名称
 		$filter['exam_code'] = empty($_REQUEST['search_exam_code']) ? '' : trim($_REQUEST['search_exam_code']);//考试编码
 		$filter['student_code'] = empty($_REQUEST['search_student_code']) ? '' : trim($_REQUEST['search_student_code']);//学生学号
 		
 		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
 		{
-			$filter['exam_name'] = json_str_iconv($filter['exam_name']);
+			$filter['prj_code'] = json_str_iconv($filter['prj_code']);
 		}
 
 		$filter['sort']    = empty($_REQUEST['sort'])    ? 'score_id' : trim($_REQUEST['sort']);
@@ -296,9 +296,9 @@ function score_list()
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
 		
 		$ex_where = " WHERE s.class_code='".$_SESSION["class_code"]."' ";
-		if ($filter['exam_name'])
+		if ($filter['prj_code'])
 		{
-			$ex_where .= " AND  e.name='".$filter['exam_name']."'";
+			$ex_where .= " AND  e.prj_code='".$filter['prj_code']."'";
 		}
 		if ($filter['exam_code'])
 		{
@@ -316,7 +316,7 @@ function score_list()
 
 		/* 分页大小 */
 		$filter = page_and_size($filter);
-		$sql = "SELECT s.score_id, s.exam_code, e.name as exam_name,
+		$sql = "SELECT s.score_id, s.exam_code, e.prj_code as prj_code,
 		         	e.subject as exam_subject, s.student_code, s.score,
 		         	st.name as student_name, s.add_score, s.created ".
                 " FROM " . $GLOBALS['ecs']->table("score")  ." s 
@@ -327,7 +327,7 @@ function score_list()
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 // 		echo $sql;echo '<br>';
 		
-		$filter['exam_name'] = stripslashes($filter['exam_name']);
+		$filter['prj_code'] = stripslashes($filter['prj_code']);
 		$filter['exam_code'] = stripslashes($filter['exam_code']);
 		$filter['student_code'] = stripslashes($filter['student_code']);
 		

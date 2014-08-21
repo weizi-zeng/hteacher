@@ -39,14 +39,14 @@
                 pageSize: 15,
                 pageList: [2, 4, 5, 15, 30, 45, 60],
                 singleSelect: true,
-                nowwarp: false,  //折行
+                nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
                 columns: [[
 				  { field: 'guardian_id', title: 'ID', hidden: true },
                   { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
-                  { field: 'sex', title: '性别', width: 60, sortable: true, align: 'center', 
+                  { field: 'sexuality', title: '性别', width: 60, sortable: true, align: 'center', 
                 	  formatter: function (value, rowData, rowIndex) {
                 		  return value==1?"男":"女";
                 	  }
@@ -98,12 +98,22 @@
         	$("#guardian_id").val(row.guardian_id);
         	$("#name").val(row.name);
         	
-        	if(row.sex=="1"){
-        		$("input[name=sex][value=0]").removeProp("checked");
-        		$("input[name=sex][value=1]").prop("checked","checked");
+        	if(row.sexuality=="1"){
+        		$('[name="sexuality"]:radio').each(function() {   
+                    if (this.value == '1'){   
+                       this.checked = true;   
+                    }else {
+                       this.checked = false;
+                    }
+                 });
         	}else {
-        		$("input[name=sex][value=1]").removeProp("checked");
-        		$("input[name=sex][value=0]").prop("checked","checked");
+        		$('[name="sexuality"]:radio').each(function() {   
+                    if (this.value == '0'){   
+                       this.checked = true;   
+                    }else {
+                       this.checked = false;
+                    }
+                 });
         	}
         	
         	$('#birthday').datebox("setValue",row.birthday); 
@@ -119,13 +129,22 @@
         	$("#relationship").val(row.relationship);
         	
         	if(row.has_left=="1"){
-        		$("input[name=has_left][value=0]").removeProp("checked");
-        		$("input[name=has_left][value=1]").prop("checked","checked");
+        		$('[name="has_left"]:radio').each(function() {   
+                    if (this.value == '1'){   
+                       this.checked = true;   
+                    }else {
+                       this.checked = false;
+                    }
+                 });
         		
         	}else {
-        		$("input[name=has_left][value=1]").removeProp("checked");
-        		$("input[name=has_left][value=0]").prop("checked","checked");
-        		
+        		$('[name="has_left"]:radio').each(function() {   
+                    if (this.value == '0'){   
+                       this.checked = true;   
+                    }else {
+                       this.checked = false;
+                    }
+                 });
         	}
         	
         	 $('#btn_edit_ok').show();
@@ -144,8 +163,6 @@
                 url: me.actionUrl + '?act=ajax_save',
                 data: me.edit_form.serialize(),
                 success: function (r) {
-                	clearLoading();
-                	$("#save").linkbutton('enable');
                     if (r) {
                     	if(r.error==0){
                     		showInfo(r.content);
@@ -155,6 +172,10 @@
                     		showError(r.message);
                     	}
                     }
+                },
+                complete:function(){
+                	clearLoading();
+                	$("#save").linkbutton('enable');
                 }
             });
             showLoading(e);
@@ -168,8 +189,13 @@
     	$("#guardian_id").val("");
     	$("#name").val("");
     	
-    	$("input[name=sex][value=1]").removeProp("checked");
-		$("input[name=sex][value=0]").prop("checked","checked");
+    	$('[name="sexuality"]:radio').each(function() {   
+            if (this.value == '1'){   
+               this.checked = true;   
+            }else {
+               this.checked = false;
+            }
+         });
     	
 		$('#birthday').datebox("setValue",""); 
     	$("#national").val("");
@@ -183,8 +209,13 @@
     	$("#student_name").val("");
     	$("#relationship").val("");
     	
-    	$("input[name=has_left][value=0]").removeProp("checked");
-		$("input[name=has_left][value=1]").prop("checked","checked");
+    	$('[name="has_left"]:radio').each(function() {   
+            if (this.value == '0'){   
+               this.checked = true;   
+            }else {
+               this.checked = false;
+            }
+         });
         
         $('form').form('validate');
     }

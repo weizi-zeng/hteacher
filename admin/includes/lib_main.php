@@ -103,6 +103,24 @@ function admin_log($sn = '', $action, $content)
 }
 
 /**
+* 记录管理员的操作内容
+*
+* @access  public
+* @param   string      $sn         数据的唯一值
+* @param   string      $action     操作的类型
+* @param   string      $content    操作的内容
+* @return  void
+*/
+function admin_log_record($sn = '', $action, $sql)
+{
+	$log_info = addslashes($sn).":".addslashes($sql);
+
+	$sql = 'INSERT INTO ' . $GLOBALS['ecs']->table('admin_log') . ' (log_time, user_id, log_info, ip_address) ' .
+            " VALUES ('" . gmtime() . "', $_SESSION[admin_id], '" . stripslashes($log_info) . "', '" . real_ip() . "')";
+	$GLOBALS['db']->query($sql);
+}
+
+/**
  * 将通过表单提交过来的年月日变量合成为"2004-05-10"的格式。
  *
  * 此函数适用于通过smarty函数html_select_date生成的下拉日期。

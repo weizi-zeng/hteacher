@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>人员信息</title>
+    <title>监护人信息</title>
     
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/icon/favicon.ico" />
@@ -54,7 +54,7 @@
                         
                          <td style="text-align: right; width:80px;">电话：</td>
                         <td style="text-align: left; width:150px;">
-                            <input id="search_phone" name="search_phone" type="text" class="easyui-validatebox" data-options="required:false" maxlength="20" validType="telephone" style="width: 150px" />
+                            <input id="search_phone" name="search_phone" type="text" class="easyui-validatebox" maxlength="20" validType="telephone" style="width: 150px" />
                         </td>
                         
                         <td style="text-align: left; width:150px;">
@@ -71,7 +71,7 @@
     
     
     <div id="edit_window" class="easyui-window" closed="true" title="数据维护" style="width: 480px;
-        height: 360px; padding: 0px;" >
+        height: 420px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
                 <form id="edit_form" name="edit_form" method="post" style="padding-top:20px;">
@@ -88,8 +88,8 @@
                     <tr>    
                         <th style="text-align: right">性别：</th>
                         <td>
-                        <label><input type="radio" value="1" name="sex" style="width:20px;"/>男</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="0" name="sex" style="width:20px;"/>女</label>
+                        <label><input type="radio" value="1" name="sexuality" checked="true" style="width:20px;"/>男</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="0" name="sexuality" style="width:20px;"/>女</label>
                         </td>
                     </tr>
                     <tr>
@@ -138,7 +138,7 @@
                       <tr>
                         <th style="text-align: right">是否已离校：</th>
                         <td>
-                        <label><input type="radio" value="0" name="has_left" style="width:20px;"/>否</label>
+                        <label><input type="radio" value="0" name="has_left" checked="true" style="width:20px;"/>否</label>
                         &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="1" name="has_left" style="width:20px;"/>是</label>
                         </td>
                       </tr>

@@ -86,22 +86,54 @@
     <div id="center" region="center" style="background: #eee; overflow-y: hidden">
         <div id="tabs" class="easyui-tabs" fit="true" border="false">
 
-            <div title="首页" iconCls="icon-code" style="padding: 20px; overflow: hidden; color:Black; display: block;">
-                <br />
-
-                <div id="p" class="easyui-panel" title="通知栏" data-options="collapsible:true" style="width:500px;height:200px;padding:10px;">
-                    <p style="font-size:14px;">通知内容：</p>
-                    <ul>
-                           <li>.....................</li>
-                    </ul>
-                </div>
-                <br />
-                <div id="Div1" class="easyui-panel" title="预警栏" data-options="collapsible:true" style="width:500px;height:200px;padding:10px;color:red;">
-                    <p style="font-size:14px;">预警内容：</p>
-                    <ul>
-                           <li>.....................</li>
-                    </ul>
-                </div>
+            <div title="首页" iconCls="icon-code" style="overflow: hidden; color:Black; display: block;">
+                
+                <div class="easyui-layout" data-options="fit:true,border:false">
+				    <div data-options="region:'center',border:false" style="width:600px;padding-left:20px;padding-top:20px;">
+				    	<div id="home-notice" class="easyui-panel" title="通知通告" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                    <?php $_from = $this->_var['notices']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'notice');if (count($_from)):
+    foreach ($_from AS $this->_var['notice']):
+?>
+		                    	<li><a href="notice.php?act=view&notice_id=<?php echo $this->_var['notice']['notice_id']; ?>" target="blank_"><?php echo $this->_var['notice']['title']; ?>——<?php echo $this->_var['notice']['created']; ?></a></li>
+		                    <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                    </ul>
+		                </div>
+		                <br/>
+		                <div id="home-notice" class="easyui-panel" title="短信消息" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                         <?php $_from = $this->_var['sms']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'sms_item');if (count($_from)):
+    foreach ($_from AS $this->_var['sms_item']):
+?>
+		                    	<li><p><?php echo $this->_var['sms_item']['content']; ?>——<?php echo $this->_var['sms_item']['created']; ?></p></li>
+		                   		 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                    </ul>
+		                </div>
+				    </div>
+				    <div data-options="region:'west',border:false" style="width:600px;padding-left:20px;padding-top:20px;">
+				    	<div id="home-notice" class="easyui-panel" title="讨论区" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                           <?php $_from = $this->_var['forums']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'forum');if (count($_from)):
+    foreach ($_from AS $this->_var['forum']):
+?>
+		                    	<li><a href="forum.php?act=view&forum_id=<?php echo $this->_var['forum']['forum_id']; ?>" target="blank_"><?php echo $this->_var['forum']['title']; ?>——<?php echo $this->_var['forum']['created']; ?></a></li>
+		                   		 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                    </ul>
+		                </div>
+		                <br/>
+		                <div id="home-notice" class="easyui-panel" title="意见箱" data-options="collapsible:true" style="width:540px;">
+		                    <ul>
+		                          <?php $_from = $this->_var['msg_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'msg_item');if (count($_from)):
+    foreach ($_from AS $this->_var['msg_item']):
+?>
+		                    	<li><p><?php echo $this->_var['msg_item']['msg_title']; ?>——<?php echo $this->_var['msg_item']['msg_time']; ?></p>
+		                    		<p><?php echo $this->_var['msg_item']['msg_reply']; ?></p>
+		                    	</li>
+		                   		 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                    </ul>
+		                </div>
+				    </div>
+				</div>
             </div>
 
         </div>
@@ -144,8 +176,26 @@
             </div>
         </div>
     </div>
+    
     <div id="mm" class="easyui-menu" style="width: 150px;" title="多标签右键菜单">
-        <div id="mm-tabupdate">双击可关闭本页</div>
+        <div id="mm-tabupdate">
+            刷新</div>
+        <div id="mm-tabopen">
+            独立打开</div>
+        <div class="menu-sep">
+        </div>
+        <div id="mm-tabclose">
+            关闭</div>
+        <div id="mm-tabcloseall">
+            全部关闭</div>
+        <div id="mm-tabcloseother">
+            除此之外全部关闭</div>
+        <div class="menu-sep">
+        </div>
+        <div id="mm-tabcloseright">
+            当前页右侧全部关闭</div>
+        <div id="mm-tabcloseleft">
+            当前页左侧全部关闭</div>
     </div>
 </body>
 </html>

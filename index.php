@@ -1,15 +1,11 @@
 <?php 
+	define('IN_ECS', true);
+	require (dirname(__FILE__) . '/includes/sinit.php');
+	
+	$title = "首页";
+	$msg = "";
 	require_once 'themes/default/header.htm';
 ?>
-  <div class="nav">
-    <div class="nav_1">
-      <a id="first_menu1" href="index.php" style="color:black;">首页</a>
-      <a id="first_menu2" href="introduction.php">系统介绍</a>
-      <a id="first_menu3" href="contact.php">联系我们</a>
-      <a id="first_menu4" href="support.php">技术支持</a>
-    </div>
-  </div>
-  
   <div class="content" id="cont" style="overflow:hidden">
     <div class="left" style="overflow:hidden">
     	<div width="100%" width="674px">
@@ -22,7 +18,6 @@
 						<!--banner hehe-->
 						<div id="bannerCareers"><img src="images/trailblazer.png" width="620px" alt=""></div>
 						<!--banner结束-->
-								
 								
 						<!--主要内容部分容器开始-->
 						<div id="container">

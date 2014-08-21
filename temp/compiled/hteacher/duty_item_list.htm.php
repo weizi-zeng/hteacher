@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>人员信息</title>
+    <title>量化项目</title>
     
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/icon/favicon.ico" />
@@ -30,6 +30,9 @@
             <img src="images/noscript.gif" alt='抱歉，请开启脚本支持！' />
         </div>
     </noscript>
+    
+     <!-- 固定写法，用于加载ajax正在处理提示 -->
+    <div id="loadingDiv" style="display:none;"></div>
     
     <div title="数据列表" region="center" style="height:300px;" border="false">
     	<table id="dgData" style="height:400px"></table>
@@ -95,7 +98,7 @@
                 </form>
             </div>
             <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
-                <a id="btn_edit_ok" onclick="save();" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+                <a id="save" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
                 <a id="btn_edit_cancel" onclick="me.edit_window.window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
             </div>
         </div>

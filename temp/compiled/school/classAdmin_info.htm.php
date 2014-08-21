@@ -48,7 +48,7 @@
   </tr>
   
     <tr>
-   <td class="label">所属学校：</td>
+   <td class="label">所属班级 ：</td>
     <td>
       <select name="class_code">
         <?php $_from = $this->_var['class_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'list');if (count($_from)):

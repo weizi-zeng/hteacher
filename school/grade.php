@@ -124,7 +124,7 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
         /* 提交值 */
         $grade = array('name'   => trim($_POST['name']),
                            'code'   => trim($_POST['code'])
-                           );
+                     );
 
         /* 判断名称是否重复 */
         $sql = "SELECT grade_id
@@ -135,7 +135,9 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
             sys_msg("此年级编码“".$grade['code']."”已经存在");
         }
 
-        $db->autoExecute($ecs->table('grade'), $grade, 'INSERT');
+        $sql = "insert into ".$ecs->table('grade')." (name,code,created) values ('" . $grade['name'] . "','" . $grade['code'] . "', now()) ";
+        $db->query($sql);
+        
         $grade['grade_id'] = $db->insert_id();
 
         /* 记日志 */

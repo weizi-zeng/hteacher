@@ -75,11 +75,15 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 			$res = save_notice_attach($notice_id, $_FILES["file2"], $_SESSION[admin_name]);
 			if($res["error"]==0){
 				$res = save_notice_attach($notice_id, $_FILES["file3"], $_SESSION[admin_name]);
+				if($res["error"]==0){
+				}else {
+					$smarty->assign("error",$_FILES["file3"]["name"]."附件上传失败！".$res["msg"]);
+				}
 			}else {
-				$smarty->assign("error","附件上传失败！".$res["msg"]);
+				$smarty->assign("error",$_FILES["file2"]["name"]."附件上传失败！".$res["msg"]);
 			}
 		}else {
-			$smarty->assign("error","附件上传失败！".$res["msg"]);
+			$smarty->assign("error",$_FILES["file1"]["name"]."附件上传失败！".$res["msg"]);
 		}
 		
 		create_html_editor('FCKeditor1');

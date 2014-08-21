@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>人员信息</title>
+    <title>考试安排</title>
     
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/icon/favicon.ico" />
@@ -65,12 +65,12 @@
                         
                         <td style="text-align: right; width:80px;">考试项目：</td>
                         <td style="text-align: left; width:150px;">
-                        	<select id="search_name" name="search_name" style="width:120px;">
+                        	<select id="search_prj" name="search_prj" style="width:120px;">
                         		<option value="">所有...</option>
-                        		<?php $_from = $this->_var['exam_names']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'exam_name');if (count($_from)):
-    foreach ($_from AS $this->_var['exam_name']):
+                        		<?php $_from = $this->_var['prjs']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'prj');if (count($_from)):
+    foreach ($_from AS $this->_var['prj']):
 ?>
-                        		<option value="<?php echo $this->_var['exam_name']; ?>"><?php echo $this->_var['exam_name']; ?></option>
+                        		<option value="<?php echo $this->_var['prj']['code']; ?>"><?php echo $this->_var['prj']['code']; ?></option>
                         		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
                         	</select>
                         </td>
@@ -116,7 +116,7 @@
                 	<tr>
                         <th style="text-align: right">考试编号：</th>
                         <td style="width:70%">
-                        	<input id="code" name="code" value="2014030201" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" />
+                        	<input id="code" name="code" value="110302001数学" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" />
                         	<span style="color:red;">必须唯一</span>
                         </td>
                     </tr>
@@ -124,7 +124,13 @@
                     <tr>
                         <th style="text-align: right">考试项目：</th>
                         <td style="width:70%">
-                        	<input id="name" name="name" value="期末统考" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" />
+                        	<select id="prj_code" name="prj_code" style="width:120px;">
+                        		<?php $_from = $this->_var['prjs']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'prj');if (count($_from)):
+    foreach ($_from AS $this->_var['prj']):
+?>
+                        		<option value="<?php echo $this->_var['prj']['code']; ?>"><?php echo $this->_var['prj']['code']; ?></option>
+                        		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+                        	</select>
                         </td>
                     </tr>
                     <tr>
@@ -154,7 +160,7 @@
                     <tr> 
                         <th style="text-align: right">是否归档：</th>
                          <td>
-                        <label><input type="radio" value="0" name="closed" checked="checked" style="width:20px;"/>否</label>
+                        <label><input type="radio" value="0" name="closed" checked="true" style="width:20px;"/>否</label>
                         &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="1" name="closed" style="width:20px;"/>是</label>
                         </td>
                     </tr>
@@ -194,7 +200,7 @@
     
      	 <div id="student_toolbar" style="padding:5px;height:auto">
      		<div style="color:red;">不能发送带广告性质或者营销性质的短信，否则短信账号会被冻结</div>
-     		<div>短信内容不能超过140个字符，当前还可以输入<span style="color:red" id="tip">140</span>个字符</div>
+     		<div>短信内容不能超过512个字符，当前还可以输入<span style="color:red" id="tip">512</span>个字符</div>
 	     	 <div style="margin-bottom:5px">
 	     	 	短信内容：
 	     	 	<textarea rows="4" id="sms_content" onkeyup="check()" style="width:460px;" maxlength="140"></textarea>

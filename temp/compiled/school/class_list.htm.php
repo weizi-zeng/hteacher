@@ -40,7 +40,7 @@
     <td><?php echo $this->_var['class']['class_id']; ?></td>
     <td class="first-cell"><?php echo htmlspecialchars($this->_var['class']['code']); ?></td>
     <td><?php echo $this->_var['class']['name']; ?></td>
-    <td><?php echo $this->_var['class']['grade_name']; ?></td>
+    <td><?php echo $this->_var['class']['gradename']; ?></td>
     <td><span onclick="listTable.edit(this, 'edit_hteacher', <?php echo $this->_var['class']['class_id']; ?>)"><?php echo $this->_var['class']['hteacher']; ?></span></td>
     <td><span onclick="listTable.edit(this, 'edit_classroom', <?php echo $this->_var['class']['class_id']; ?>)"><?php echo $this->_var['class']['classroom']; ?></span></td>
     

@@ -24,12 +24,12 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	if($id==0){//insert
 		
 		$sql = "insert into ".$ecs->table("guardian")
-		." (name,sex,birthday,
+		." (name,sexuality,birthday,
 		national,id_card,phone,email,address,unit,class_code,
 		student_name,relationship,has_left,
 		created )
 		values 
-			('".$_REQUEST["name"]."','".$_REQUEST["sex"]."',
+			('".$_REQUEST["name"]."','".$_REQUEST["sexuality"]."',
 			'".$_REQUEST["birthday"]."','".$_REQUEST["national"]."',
 			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["email"]."',
 			'".$_REQUEST["address"]."','".$_REQUEST["unit"]."','".$_SESSION["class_code"]."',
@@ -48,7 +48,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	{
 		$sql = "update ".$ecs->table("guardian")
 		." set name='".$_REQUEST["name"]."',
-			sex='".$_REQUEST["sex"]."',
+			sexuality='".$_REQUEST["sexuality"]."',
 			birthday='".$_REQUEST["birthday"]."',
 			national='".$_REQUEST["national"]."',
 			id_card='".$_REQUEST["id_card"]."',

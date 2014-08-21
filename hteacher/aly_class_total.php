@@ -8,7 +8,7 @@ define('IN_ECS', true);
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>人员信息</title>
+    <title>班级总分成绩分析</title>
     
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/icon/favicon.ico" />
@@ -27,13 +27,13 @@ define('IN_ECS', true);
     <script type="text/javascript">
 
 		function getGraph(){
-			var exam_name = $("#search_exam_name").val();
-			if(!exam_name){
+			var prj_code = $("#search_prj_code").val();
+			if(!prj_code){
 				showError('请选择考试项目!'); 
 				return; 
 			}
 			
-			var htm = '<iframe src="graph.php?act=class_total&exam_name='+exam_name+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
+			var htm = '<iframe src="graph.php?act=class_total&prj_code='+prj_code+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
 			$("#graph_load").html(htm);
 		}
     
@@ -53,15 +53,15 @@ define('IN_ECS', true);
                     <tr>
                     	<td style="text-align: right; width:80px;">考试项目：</td>
                         <td style="text-align: left; width:230px;">
-                        	<select id="search_exam_name" style="width:220px;">
+                        	<select id="search_prj_code" style="width:220px;">
                         		<option value="">所有...</option>
                         		<?php 
                         		require(dirname(__FILE__) . '/includes/init.php');
-                        		$exam = get_exam_name($class_code);
+                        		$exam = get_exam_prjs($class_code);
                         		
                         			foreach($exam as $k=>$v){
                         				?>
-                        				<option value="<?=$v["name"]?>"><?=$v["name"]?></option>
+                        				<option value="<?=$v["code"]?>"><?=$v["code"]?></option>
                         				<?php 
                         			}
                         		?>

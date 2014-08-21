@@ -50,12 +50,14 @@
     <td width="20%"><?php echo $this->_var['lang']['online_users']; ?></td>
     <td width="30%"><strong><?php echo $this->_var['online_users']; ?></strong></td>
   </tr>
+  <!-- 
   <tr>
     <td><a href="user_msg.php?act=list_all"><?php echo $this->_var['lang']['new_feedback']; ?></a></td>
     <td><strong><?php echo $this->_var['feedback_number']; ?></strong></td>
     <td><a href="comment_manage.php?act=list"><?php echo $this->_var['lang']['new_comments']; ?></a></td>
     <td><strong><?php echo $this->_var['comment_number']; ?></strong></td>
   </tr>
+   -->
 </table>
 </div>
 <!-- end access statistics -->

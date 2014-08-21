@@ -47,6 +47,9 @@
         </div>
     </noscript>
     
+     <!-- 固定写法，用于加载ajax正在处理提示 -->
+    <div id="loadingDiv" style="display:none;"></div>
+    
    <div style="border:4px solid #fcf8f7; background-color:#fff; padding:20px 15px;max-width:1200px;">
    	
    		<div>

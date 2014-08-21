@@ -3,8 +3,8 @@
             edit_form: null,
             edit_window: null,
             search_form: null,
-            idFiled: 'student_id',
-            actionUrl: 'student.php'
+            idFiled: 'prj_id',
+            actionUrl: 'exam_prj.php'
         };
         //页面加载
         $(function () {
@@ -18,7 +18,6 @@
             me.edit_form = me.edit_window.find('#edit_form');
             me.search_form = $('#search_form');
             me.dgData = $('#dgData');
-            $("#birthday").datebox();
             $('#save').click(function(e){
             	if ($(this).hasClass("l-btn-disabled")) {
                     return;
@@ -31,42 +30,29 @@
         function loadGrid() {
             me.dgData.datagrid({
                 url: me.actionUrl + '?act=ajax_list', //me.actionUrl + '?Method=List', 
-                method: 'get',
-                fitColumns: false, 
+                method: 'post',
+                fitColumns: true, 
                 remoteSort: false,  //列少设为true,列多设为false
                 autoRowHeight: false,
+                singleSelect:true,
                 pagination: true,
                 pageSize: 15,
                 pageList: [2, 4, 5, 15, 30, 45, 60],
-                singleSelect: true,
                 nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
                 columns: [[
-				  { field: 'student_id', title: 'ID', hidden: true },
-				  { field: 'code', title: '学号', width: 80, sortable: true, align: 'center' },
-                  { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
-                  { field: 'sexuality', title: '性别', width: 60, sortable: true, align: 'center', 
-                	  formatter: function (value, rowData, rowIndex) {
-                		  return value==1?"男":"女";
-                	  }
-                  },
-                  { field: 'birthday', title: '出生年月', width: 120, sortable: true, align: 'center' },
-                  { field: 'national', title: '名族', width: 60, sortable: true, align: 'center' },
-                  { field: 'id_card', title: '身份证', width: 150, sortable: true, align: 'center' },
-                  { field: 'phone', title: '电话', width: 120, sortable: true, align: 'center' },
-                  { field: 'email', title: '邮箱', width: 200, sortable: true, align: 'center' },
-                  { field: 'address', title: '住址', width: 300, sortable: true, align: 'center' },
-                  { field: 'has_left', title: '是否已离校', width: 120, sortable: true, align: 'center',
+				  { field: 'prj_id', title: 'ID', hidden: true },
+				  { field: 'code', title: '项目编号', width: 120, sortable: true, align: 'center' },
+                  { field: 'name', title: '项目名称', width: 120, sortable: true, align: 'center' },
+                  { field: 'sdate', title: '考试开始日期', width: 120, sortable: true, align: 'center' },
+                  { field: 'edate', title: '考试结束日期', width: 120, sortable: true, align: 'center' },
+                  { field: 'closed', title: '是否归档', width: 120, sortable: true, align: 'center',
                 	  formatter: function (value, rowData, rowIndex) {
                 		  return value==1?"是":"否";
                 	  },
                   },
-                  { field: 'guardian_name', title: '监护人', width: 80, sortable: true, align: 'center' },
-                  { field: 'guardian_phone', title: '监护人电话', width: 120, sortable: true, align: 'center' },
-                  { field: 'guardian_relation', title: '与监护人关系', width: 120, sortable: true, align: 'center' },
-                  
                   { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
                   ]],
                   
@@ -86,62 +72,37 @@
         clear();
         $('#btn_edit_ok').show();
         me.edit_window.window('open');
-        $('#name')[0].focus();
     }
     
     //修改
     function update() {
         var rows = me.dgData.datagrid('getSelections');
         if (rows.length > 0) {
+        	if(rows.length >1){
+        		showError('请选择一条记录进行操作!'); 
+        		return;
+        	}
         	var row = rows[0];
         	
-        	$("#student_id").val(row.student_id);
+        	$("#prj_id").val(row.prj_id);
         	$("#code").val(row.code);
         	$("#name").val(row.name);
         	
-        	if(row.sexuality=="1"){
-        		$('[name="sexuality"]:radio').each(function() {   
+        	$("#sdate").datebox("setValue",row.sdate);
+        	$("#edate").datebox("setValue",row.edate);
+        	
+        	if(row.closed=="1"){
+        		$('[name="closed"]:radio').each(function() {   
                     if (this.value == '1'){   
-                       this.checked = true;   
+                       this.checked = true;
                     }else {
                        this.checked = false;
                     }
                  });
         	}else {
-        		$('[name="sexuality"]:radio').each(function() {   
+        		$('[name="closed"]:radio').each(function() {   
                     if (this.value == '0'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}
-        	
-        	$('#birthday').datebox("setValue",row.birthday); 
-        	$("#national").val(row.national);
-        	$("#id_card").val(row.id_card);
-           
-        	$("#phone").val(row.phone);
-        	$("#email").val(row.email);
-        	$("#address").val(row.address);
-        	
-        	$("#guardian_name").val(row.guardian_name);
-        	$("#guardian_relation").val(row.guardian_relation);
-        	$("#guardian_phone").val(row.guardian_phone);
-        	
-        	if(row.has_left=="1"){
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '1'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        		
-        	}else {
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '0'){   
-                       this.checked = true;   
+                       this.checked = true;
                     }else {
                        this.checked = false;
                     }
@@ -187,27 +148,15 @@
     //清空界面数据
     function clear() {
     	
-    	$("#student_id").val("");
-    	$("#code").val("");
-    	$("#name").val("");
-    	
-		$('#birthday').datebox("setValue",""); 
-    	$("#national").val("");
-    	$("#id_card").val("");
-    	
-    	$("#phone").val("");
-    	$("#email").val("");
-    	$("#address").val("");
-    	
-    	$("#guardian_name").val("");
-    	$("#guardian_relation").val("");
-    	$("#guardian_phone").val("");
+    	$("#prj_id").val("");
+    	$("#sdate").val("");
+    	$("#sdate").val("");
         
         $('form').form('validate');
     }
 
      //数据删除
-    function deleteStudent() {
+    function deleteexam_prj() {
         var ids = "";
         var rows = me.dgData.datagrid('getSelections'); 
         if (rows.length == 0) { 
@@ -228,11 +177,11 @@
             return;
         }
         var name=rows[0]["name"];
-        $.messager.confirm('提示信息', '确认要删除选择项？【'+rows[0]["code"]+ ','+ name + '】', function (isClickedOk) {
+        $.messager.confirm('提示信息', '确认要删除选择项？【'+ids+ ','+ name + '】', function (isClickedOk) {
             if (isClickedOk) {
                 $.ajax({
                     url: me.actionUrl+"?act=ajax_delete",
-                    data: { "student_id": ids },
+                    data: { "prj_id": ids },
                     success: function (r) {
                     	 if (r) {
                          	if(r.error==0){
@@ -249,25 +198,24 @@
     }
     
     
-    function searchStudents(){
+    function searchexam_prjs(){
     	$('#dgData').datagrid('reload');
     }
     
-    function importStudents(){
-    	$('#import_window').window('open');
+    //获取当前选中的ids
+    function getIds(){
+    	var selects = $('#dgData').datagrid('getSelections');
+    	if(selects.length==0){
+    		showError("请选择记录进行操作");
+    		return false;
+    	}
+    	var ids = '';
+    	for(var i=0;i<selects.length;i++){
+    		ids += selects[i].prj_id;
+    		if(i<selects.length-1){
+    			ids += ",";
+    		}
+    	}
+    	
+    	return ids;
     }
-    
-    function importStudents_import(){
-    	$('#import_form').submit();
-    }
-    
-    function exportStudents(){
-    	window.open("student.php?act=export&order=asc&rows=1000");
-    }
-    
-    //下载模板
-    function template(){
-    	window.location.href='./templates/studentTemplate.csv';
-    }
-    
-    

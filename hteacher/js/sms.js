@@ -32,7 +32,7 @@
                 pageSize: 100,
                 pageList: [20,30,40,50,60,70,80,90,100],
                 singleSelect: false,
-                nowwarp: false,  //折行
+                nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,

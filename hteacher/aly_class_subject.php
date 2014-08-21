@@ -8,7 +8,7 @@ define('IN_ECS', true);
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>人员信息</title>
+    <title>班级单科成绩分析</title>
     
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/icon/favicon.ico" />
@@ -53,7 +53,7 @@ define('IN_ECS', true);
                     <tr>
                     	<td style="text-align: right; width:80px;">考试编号：</td>
                         <td style="text-align: left; width:230px;">
-                        	<select id="search_exam_code" name="search_exam_code" style="width:220px;">
+                        	<select id="search_exam_code" name="search_exam_code" style="width:320px;">
                         		<option value="">所有...</option>
                         		<?php 
                         		require(dirname(__FILE__) . '/includes/init.php');
@@ -61,7 +61,7 @@ define('IN_ECS', true);
                         		
                         			foreach($exam as $k=>$v){
                         				?>
-                        				<option value="<?=$v["code"]?>"><?=$v["code"]."-".$v["subject"]."-".$v["name"]?></option>
+                        				<option value="<?=$v["code"]?>"><?=$v["code"]."-".$v["subject"]."-".$v["prj_code"]?></option>
                         				<?php 
                         			}
                         		?>

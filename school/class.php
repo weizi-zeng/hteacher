@@ -326,22 +326,22 @@ function get_class_list()
         $filter['sort_by']    = empty($_REQUEST['sort_by'])    ? 'class_id' : trim($_REQUEST['sort_by']);
         $filter['sort_order'] = empty($_REQUEST['sort_order']) ? 'DESC'     : trim($_REQUEST['sort_order']);
 
-        $ex_where = ' WHERE removed=0  ';
+        $ex_where = ' WHERE c.removed=0  ';
         if ($filter['keywords'])
         {
-            $ex_where .= " AND name LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
+            $ex_where .= " AND c.name LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
         }
         if ($filter['code'])
         {
-        	$ex_where .= " AND code LIKE '%" . mysql_like_quote($filter['code']) ."%'";
+        	$ex_where .= " AND c.code LIKE '%" . mysql_like_quote($filter['code']) ."%'";
         }
 
-        $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('class') . $ex_where);
+        $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('class') ." c ". $ex_where);
 
         /* 分页大小 */
         $filter = page_and_size($filter);
-        $sql = "SELECT * ".
-                " FROM " . $GLOBALS['ecs']->table('class') . $ex_where .
+        $sql = "SELECT c.*, g.name as gradename ".
+                " FROM " . $GLOBALS['ecs']->table('class')." c left join ".$GLOBALS['ecs']->table('grade')." g on g.grade_id=c.grade " . $ex_where .
                 " ORDER by " . $filter['sort_by'] . ' ' . $filter['sort_order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 

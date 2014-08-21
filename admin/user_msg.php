@@ -261,6 +261,9 @@ elseif ($_REQUEST['act']=='action')
                     "'".$_SESSION['admin_name']."', '".$_POST['user_email']."', ".
                     "'".$_REQUEST['msg_id']."', '".$_POST['msg_content']."') ";
         $db->query($sql);
+        
+        $sql = "update ".$ecs->table('feedback')." set msg_status=2 where msg_id=".$_REQUEST['msg_id'];//msg_status=2 表示已经回复
+        $db->query($sql);
     }
     else
     {

@@ -22,6 +22,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 {
 	$admin["admin_name"] = $_SESSION["admin_name"];
+	
 	$admin["school"] = get_school_name($_SESSION["school_code"]);
 	$admin["class"] = get_class_name($_SESSION["class_code"]);
 	$smarty->assign('admin', $admin);
@@ -29,7 +30,7 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	$menus = get_menus_by_status($_SESSION["status_id"]);//区分角色
 	$smarty->assign('menus', $menus);
 	
-	$status = get_status($admin["status_id"]);
+	$status = get_status($_SESSION["status_id"]);
 	$smarty->assign('status', $status);
 	
 	/*
@@ -38,8 +39,34 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 		短信信息
 		班级相册
 	 */
+	//通知通告
+	$sql = "select * from ".$ecs->table("notice")." order by notice_id desc limit 10";
+	$notices = $db->getAll($sql);
+	$smarty->assign('notices', $notices);
 	
+	//意见箱回复
+	$feedbackTable = "hteacher.ht_feedback";
+	$sql = "select * from ".$feedbackTable." where parent_id = '0' and user_id='".$_SESSION["admin_id"]."' and msg_status=2 order by msg_id desc limit 10";
+	$msg_list = $db->getAll($sql);
+	foreach ($msg_list AS $key => $value)
+	{
+		$reply = $db->getOne("select msg_content  from ".$feedbackTable. " where parent_id=".$value["msg_id"]." limit 1");
+		$msg_list[$key]['msg_status'] = $reply?1:0;
+		$msg_list[$key]['msg_reply'] = $reply;
+		$msg_list[$key]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['msg_time']);
+		$msg_list[$key]['msg_type'] = $GLOBALS['_LANG']['type'][$value['msg_type']];
+	}
+	$smarty->assign('msg_list', $msg_list);
 	
+	//短信
+	$sql = "select * from ".$ecs->table("sms")." order by sms_id desc limit 10";
+	$sms = $db->getAll($sql);
+	$smarty->assign('sms', $sms);
+	
+	//讨论信息
+	$sql = "select * from ".$ecs->table("forum")." where parent_id=0 and is_active=1 order by forum_id desc limit 10";
+	$forums = $db->getAll($sql);
+	$smarty->assign('forums', $forums);
 	
     $smarty->display('index.htm');
 }
@@ -529,9 +556,10 @@ function get_menus_by_status($status){
 				array(id=>"21", title=>"通知通告", url=>"notice.php?act=list")
 			)),
 			array(id=>"3", title=>"成绩管理",submenus=>array(
+				array(id=>"30", title=>"考试项目", url=>"exam_prj.php?act=list"),
 				array(id=>"31", title=>"考试安排", url=>"exam.php?act=list"),
 				array(id=>"32", title=>"考试成绩", url=>"score.php?act=list"),
-				array(id=>"33", title=>"成绩发布", url=>"score.php?act=list")
+				array(id=>"33", title=>"成绩发布", url=>"score_publish.php?act=list")
 			)),
 			array(id=>"4", title=>"成绩分析",submenus=>array(
 				array(id=>"41", title=>"班级单科成绩分析", url=>"aly_class_subject.php?act=list"),
@@ -540,7 +568,7 @@ function get_menus_by_status($status){
 				array(id=>"44", title=>"个人历史名次分析", url=>"aly_history_rank.php?act=list")
 			)),
 			array(id=>"5", title=>"量化管理",submenus=>array(
-				array(id=>"51", title=>"项目设置", url=>"duty_item.php?act=list"),
+				array(id=>"51", title=>"量化项目", url=>"duty_item.php?act=list"),
 				array(id=>"52", title=>"值日记录", url=>"duty.php?act=list"),
 				array(id=>"53", title=>"量化分析", url=>"aly_duty.php?act=list")
 			)),

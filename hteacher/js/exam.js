@@ -39,14 +39,14 @@
                 pagination: true,
                 pageSize: 15,
                 pageList: [2, 4, 5, 15, 30, 45, 60],
-                nowwarp: false,  //折行
+                nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
                 columns: [[
 				  { field: 'exam_id', title: 'ID', hidden: true },
 				  { field: 'code', title: '考试编号', width: 120, sortable: true, align: 'center' },
-                  { field: 'name', title: '考试项目', width: 120, sortable: true, align: 'center' },
+                  { field: 'prj_code', title: '考试项目', width: 120, sortable: true, align: 'center' },
                   { field: 'subject', title: '考试科目', width: 120, sortable: true, align: 'center' },
                   { field: 'teacher', title: '监考老师', width: 120, sortable: true, align: 'center' },
                   { field: 'examdate', title: '考试日期', width: 120, sortable: true, align: 'center' },
@@ -92,7 +92,7 @@
         	
         	$("#exam_id").val(row.exam_id);
         	$("#code").val(row.code);
-        	$("#name").val(row.name);
+        	$("#prj_code").val(row.prj_code);
         	
         	$("#examdate").datebox("setValue",row.examdate);
            
@@ -104,12 +104,21 @@
         	$("#classroom").val(row.classroom);
 
         	if(row.closed=="1"){
-        		$("input[name=closed][value=0]").removeProp("checked");
-        		$("input[name=closed][value=1]").prop("checked","checked");
-        		
+        		$('[name="closed"]:radio').each(function() {   
+                    if (this.value == '1'){   
+                       this.checked = true;
+                    }else {
+                       this.checked = false;
+                    }
+                 });
         	}else {
-        		$("input[name=closed][value=1]").removeProp("checked");
-        		$("input[name=closed][value=0]").prop("checked","checked");
+        		$('[name="closed"]:radio').each(function() {   
+                    if (this.value == '0'){   
+                       this.checked = true;
+                    }else {
+                       this.checked = false;
+                    }
+                 });
         	}
         	
         	 $('#btn_edit_ok').show();
@@ -129,8 +138,6 @@
                 data: me.edit_form.serialize(),
                 success: function (r) {
                     if (r) {
-                    	clearLoading();
-                    	$("#save").linkbutton('enable');
                     	if(r.error==0){
                     		showInfo(r.content);
                     		me.dgData.datagrid('reload');
@@ -139,6 +146,10 @@
                     		showError(r.message);
                     	}
                     }
+                },
+                complete:function(){
+                	clearLoading();
+                	$("#save").linkbutton('enable');
                 }
             });
             showLoading(e);
@@ -181,7 +192,7 @@
             showError('选择的记录ID为空!');
             return;
         }
-        var name=rows[0]["name"];
+        var name=rows[0]["prj_code"];
         $.messager.confirm('提示信息', '确认要删除选择项？【'+ids+ ','+ name + '】', function (isClickedOk) {
             if (isClickedOk) {
                 $.ajax({
@@ -241,17 +252,17 @@
     
     //发布公告
     function publicexam(){
-    	var exam_name = $('#search_name').val();
+    	var exam_name = $('#search_prj').val();
     	if(!exam_name){
     		showError("请选择考试项目！");
     		return;
     	}
-    	window.location.href='exam.php?act=publish&exam_name='+exam_name;
+    	window.location.href='exam.php?act=publish&prj_code='+exam_name;
     }
     
     //短信通知
     function sendexam(){
-    	var exam_name = $('#search_name').val();
+    	var exam_name = $('#search_prj').val();
     	if(!exam_name){
     		showError("请选择考试项目！");
     		return;
@@ -272,7 +283,7 @@
     
     //设置短信内容
     function setSmsContent(exam_name){
-    	$.post(me.actionUrl+"?act=getSmsContent", {"exam_name":exam_name}, function(r){
+    	$.post(me.actionUrl+"?act=getSmsContent", {"prj_code":exam_name}, function(r){
     		if(r.error==0){
     			$('#sms_content').val(r.msg);
     		}else {
@@ -294,7 +305,7 @@
             pageSize: 100,
             pageList: [20,30,40,50,60,70,80,90,100],
             singleSelect: false,
-            nowwarp: false,  //折行
+            nowrap: false,  //折行
             border: false,
             sortName: "code",
             idField: "code",

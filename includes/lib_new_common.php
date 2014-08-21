@@ -136,7 +136,7 @@ function class_list($sort_by="", $sort_order="")
 	$sort_by = $sort_by==""?"class_id":trim($sort_by);
 	$sort_order = $sort_order==""?"desc":trim($sort_order);
 
-	$sql = "select * from ".$GLOBALS['ecs']->table('class') ." order by ".$sort_by." ".$sort_order;
+	$sql = "select * from ".$GLOBALS['ecs']->table('class') ." where removed=0 and is_active=1 and has_left=0 order by ".$sort_by." ".$sort_order;
 	$row = $GLOBALS['db']->getAll($sql);
 	return $row;
 }
@@ -218,29 +218,14 @@ function get_subjects($class_code)
 	return $GLOBALS['db']->getAll($sql);
 }
 
-/**
-* 根据班级代码获取所有考试
-*
-* @access  public
-* @param
-*
-* @return void
-*/
-function get_exam_name($class_code)
-{
-	$sql = "SELECT distinct name ".
-                " FROM ".$GLOBALS['ecs']->table("exam")." " .
-                " WHERE class_code= '" . $class_code."'";
-
-	return $GLOBALS['db']->getAll($sql);
-}
 
 /**
  * 处理掉双引号
  * Enter description here ...
  */
-function replace_dbquote($data){
-	return str_replace('"', '', trim($data));
+function replace_quote($data){
+	$date_1 = str_replace('"', '', trim($data));
+	return str_replace("'", "", $date_1);
 }
 
 
@@ -251,7 +236,7 @@ function replace_dbquote($data){
 function get_subjects_by_exam($class_code, $exam_name){
 	$sql = "SELECT code, subject ".
 	                " FROM ".$GLOBALS['ecs']->table("exam")." " .
-	                " WHERE class_code= '" . $class_code."' and name='".$exam_name."' order by subject ";
+	                " WHERE class_code= '" . $class_code."' and prj_code='".$exam_name."' order by subject ";
 	
 	return $GLOBALS['db']->getAll($sql);
 }
@@ -261,7 +246,7 @@ function get_scores_by_exam($class_code, $exam_name="", $exam_code="", $student_
 	$ex_where = " WHERE s.class_code='".$class_code."' ";
 	if ($exam_name)
 	{
-		$ex_where .= " AND  e.name='".$exam_name."'";
+		$ex_where .= " AND  e.prj_code='".$exam_name."'";
 	}
 	if ($exam_code)
 	{
@@ -280,7 +265,7 @@ function get_scores_by_exam($class_code, $exam_name="", $exam_code="", $student_
 		$ex_where .= " order by ".$order_by;
 	}
 	
-	$sql = "SELECT s.score_id, s.exam_code, e.name as exam_name,
+	$sql = "SELECT s.score_id, s.exam_code, e.prj_code as prj_code,
 			         	e.subject as exam_subject, s.student_code, s.score,
 			         	st.name as student_name, s.add_score, s.created ".
 	                " FROM " . $GLOBALS['ecs']->table("score")  ." s 
@@ -307,6 +292,23 @@ function get_duty_items($class_code)
                 " WHERE class_code= '" . $class_code."'";
 	return $GLOBALS['db']->getAll($sql);
 }
+
+/**
+* 根据班级代码获取所有值日项目
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_exam_prjs($class_code)
+{
+	$sql = "SELECT * ".
+                " FROM ".$GLOBALS['ecs']->table("exam_prj")." " .
+                " WHERE class_code= '" . $class_code."'";
+	return $GLOBALS['db']->getAll($sql);
+}
+
 
 /**
  * 获取所有量化数据
@@ -363,21 +365,13 @@ function set_params(){
 	$exams = get_exams($_SESSION["class_code"]);
 	$smarty->assign("exams", $exams);
 
-	$exam_names = array();//项目
+	//考试项目
+	$prjs = get_exam_prjs($_SESSION["class_code"]);
+	$smarty->assign("prjs", $prjs);
+	
 	$exam_codes = array();
 	$exam_subjects = array();//科目
 	foreach($exams as $k=>$v){
-		$isExist = false;
-		foreach($exam_names as $name){
-			if($name==$v["name"]){
-				$isExist = true;
-				break;
-			}
-		}
-		if(!$isExist){
-			$exam_names[] = $v["name"];
-		}
-		
 		
 		$isExist = false;
 		foreach($exam_subjects as $name){
@@ -393,7 +387,6 @@ function set_params(){
 		$exam_codes[] = $v["code"];
 	}
 
-	$smarty->assign("exam_names", $exam_names);
 	$smarty->assign("exam_codes", $exam_codes);
 	$smarty->assign("exam_subjects", $exam_subjects);
 }

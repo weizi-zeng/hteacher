@@ -39,7 +39,7 @@
                 pagination: true,
                 pageSize: 15,
                 pageList: [2, 4, 5, 15, 30, 45, 60],
-                nowwarp: false,  //折行
+                nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
@@ -85,8 +85,6 @@
                 data: me.edit_form.serialize(),
                 success: function (r) {
                     if (r) {
-                    	clearLoading();
-                    	$("#save").linkbutton('enable');
                     	if(r.error==0){
                     		showInfo(r.content);
                     		me.dgData.datagrid('reload');
@@ -95,6 +93,10 @@
                     		showError(r.message);
                     	}
                     }
+                },
+                complete:function(){
+                	clearLoading();
+                	$("#save").linkbutton('enable');
                 }
             });
             showLoading(e);

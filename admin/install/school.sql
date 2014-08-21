@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS `ht_class`;
 DROP TABLE IF EXISTS `ht_grade`;
 DROP TABLE IF EXISTS `ht_teacher`;
 DROP TABLE IF EXISTS `ht_person`;
-
+DROP TABLE IF EXISTS `ht_notice_attach`;
 
 -- --------------------------------------------------------
 --
@@ -26,7 +26,7 @@ CREATE TABLE `ht_person` (
   `class_code` varchar(20) NOT NULL,
   `iden` varchar(45) DEFAULT NULL COMMENT '身份',
   `id_card` varchar(45) DEFAULT NULL COMMENT '身份证',
-  `sex` tinyint(1) unsigned DEFAULT NULL,
+  `sexuality` tinyint(1) unsigned DEFAULT NULL,
   `bthday` date DEFAULT NULL,
   `nation` varchar(45) DEFAULT NULL,
   `tel` varchar(45) DEFAULT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE  `ht_teacher` (
   `teacher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(45) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
-  `sex` smallint(1) unsigned DEFAULT '1',
+  `sexuality` smallint(1) unsigned DEFAULT '1',
   `birthday` date DEFAULT NULL,
   `national` varchar(45) DEFAULT NULL,
   `id_card` varchar(45) DEFAULT NULL,
@@ -83,23 +83,21 @@ CREATE TABLE  `ht_grade` (
 -- 表的结构 `ht_class`
 --
 CREATE TABLE  `ht_class` (
-  `class_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `class_id` int(10) unsigned NOT NULL auto_increment,
   `code` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `is_active` tinyint(1) unsigned DEFAULT '0',
+  `is_active` tinyint(1) unsigned default '1',
   `classroom` varchar(45) NOT NULL,
-  `hteacher` int(10) unsigned NOT NULL,
-  `has_left` tinyint(1) unsigned DEFAULT '0',
-  `removed` tinyint(1) unsigned DEFAULT '0',
+  `hteacher` varchar(45) NOT NULL,
+  `has_left` tinyint(1) unsigned default '0',
+  `removed` tinyint(1) unsigned default '0',
   `grade` int(10) unsigned NOT NULL,
   `created` datetime NOT NULL,
-  PRIMARY KEY (`class_id`) USING BTREE,
+  PRIMARY KEY  (`class_id`),
   UNIQUE KEY `Index_2` (`code`),
-  KEY `FK_ht_class_teacher` (`hteacher`),
   KEY `FK_ht_class_grade` (`grade`),
-  CONSTRAINT `FK_ht_class_teacher` FOREIGN KEY (`hteacher`) REFERENCES `ht_teacher` (`teacher_id`),
   CONSTRAINT `FK_ht_class_grade` FOREIGN KEY (`grade`) REFERENCES `ht_grade` (`grade_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 --
@@ -109,20 +107,20 @@ CREATE TABLE  `ht_guardian` (
   `guardian_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(45) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
-  `sex` smallint(1) unsigned DEFAULT '1',
+  `sexuality` smallint(1) unsigned DEFAULT '1',
   `birthday` date DEFAULT NULL,
   `national` varchar(45) DEFAULT NULL,
   `id_card` varchar(45) DEFAULT NULL,
   `phone` varchar(45) NOT NULL,
   `email` varchar(45) DEFAULT NULL,
   `address` varchar(256) DEFAULT NULL,
-  `uint` varchar(45) DEFAULT NULL,
+  `unit` varchar(45) DEFAULT NULL,
   `student_id` int(10) unsigned DEFAULT NULL,
   `student_name` varchar(45) DEFAULT NULL,
   `relationship` varchar(45) DEFAULT NULL,
   `class_code` varchar(45) NOT NULL,
   `has_left` smallint(1) unsigned DEFAULT '0',
-  `is_actiove` smallint(1) unsigned DEFAULT '1',
+  `is_active` smallint(1) unsigned DEFAULT '1',
   `created` datetime NOT NULL,
   PRIMARY KEY (`guardian_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -132,27 +130,29 @@ CREATE TABLE  `ht_guardian` (
 -- 表的结构 `ht_student`
 --
 CREATE TABLE  `ht_student` (
-  `student_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(45) DEFAULT NULL,
+  `student_id` int(10) unsigned NOT NULL auto_increment,
+  `code` varchar(20) NOT NULL,
   `name` varchar(45) NOT NULL,
-  `sex` smallint(1) unsigned DEFAULT '1',
-  `birthday` date DEFAULT NULL,
-  `national` varchar(20) DEFAULT NULL,
-  `id_card` varchar(45) DEFAULT NULL,
-  `phone` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `address` varchar(256) DEFAULT NULL,
+  `sexuality` smallint(1) unsigned default '1',
+  `birthday` date default NULL,
+  `national` varchar(20) default NULL,
+  `id_card` varchar(45) default NULL,
+  `phone` varchar(45) default NULL,
+  `email` varchar(45) default NULL,
+  `address` varchar(256) default NULL,
   `class_code` varchar(45) NOT NULL,
-  `guardian_id` int(10) unsigned DEFAULT NULL,
-  `guardian_name` varchar(45) DEFAULT NULL,
-  `guardian_relation` varchar(45) DEFAULT NULL,
-  `guardian_phone` varchar(45) DEFAULT NULL,
-  `license` varchar(45) DEFAULT '',
-  `has_left` smallint(1) unsigned DEFAULT '0',
-  `is_active` smallint(1) unsigned DEFAULT '1',
+  `guardian_id` int(10) unsigned default NULL,
+  `guardian_name` varchar(45) default NULL,
+  `guardian_relation` varchar(45) default NULL,
+  `guardian_phone` varchar(45) default NULL,
+  `license` varchar(45) default '',
+  `has_left` smallint(1) unsigned default '0',
+  `is_active` smallint(1) unsigned default '1',
   `created` datetime NOT NULL,
-  PRIMARY KEY (`student_id`)
+  PRIMARY KEY  (`student_id`),
+  UNIQUE KEY `Index_2` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 CREATE TABLE  `ht_course` (
   `course_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -166,39 +166,10 @@ CREATE TABLE  `ht_course` (
   `stime` time NOT NULL,
   `etime` time NOT NULL,
   `classroom` varchar(45) NOT NULL,
-  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `created` datetime NOT NULL,
-  PRIMARY KEY (`course_id`) USING BTREE
+  PRIMARY KEY (`course_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE  `ht_exam` (
-  `exam_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(45) DEFAULT NULL,
-  `name` varchar(45) NOT NULL,
-  `class_code` varchar(45) NOT NULL,
-  `subject` varchar(45) NOT NULL,
-  `teacher` varchar(45) NOT NULL,
-  `examdate` date NOT NULL,
-  `stime` time NOT NULL,
-  `etime` time NOT NULL,
-  `classroom` varchar(45) NOT NULL,
-  `closed` smallint(1) DEFAULT '0',
-  `created` varchar(45) NOT NULL,
-  PRIMARY KEY (`exam_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-CREATE TABLE  `ht_score` (
-  `score_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `class_code` varchar(20) NOT NULL,
-  `exam_id` int(10) unsigned NOT NULL,
-  `student_code` varchar(20) NOT NULL,
-  `score` float NOT NULL,
-  `add_score` float NOT NULL,
-  `created` date NOT NULL,
-  PRIMARY KEY (`score_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 
 CREATE TABLE  `ht_album` (
@@ -224,15 +195,30 @@ CREATE TABLE  `ht_log` (
 
 
 CREATE TABLE  `ht_notice` (
-  `notice_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) DEFAULT NULL,
-  `class` int(10) unsigned NOT NULL,
-  `notice` varchar(45) NOT NULL,
-  `auther` varchar(45) DEFAULT NULL,
+  `notice_id` int(10) unsigned NOT NULL auto_increment,
+  `type` smallint(1) unsigned default '0',
+  `urgency` smallint(2) default '3',
+  `class_code` varchar(20) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `author` varchar(45) default NULL,
+  `is_active` smallint(1) default '1',
   `created` datetime NOT NULL,
-  PRIMARY KEY (`notice_id`)
+  PRIMARY KEY  (`notice_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+CREATE TABLE  `ht_notice_attach` (
+  `attach_id` int(10) unsigned NOT NULL auto_increment,
+  `notice_id` int(10) unsigned NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `path` varchar(45) NOT NULL,
+  `size` varchar(45) NOT NULL,
+  `type` varchar(45) NOT NULL,
+  `uploader` varchar(45) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`attach_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE  `ht_message` (
   `message_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -299,4 +285,90 @@ CREATE TABLE  `ht_sms` (
   `creator` varchar(40) NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY (`sms_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_forum`;
+CREATE TABLE  `ht_forum` (
+  `forum_id` int(10) unsigned NOT NULL auto_increment,
+  `parent_id` int(11) default '0',
+  `flow` int(11) default '0',
+  `title` varchar(45) default NULL,
+  `genus` smallint(2) default '0',
+  `content` varchar(1024) NOT NULL,
+  `is_active` smallint(1) default '1',
+  `class_code` varchar(20) NOT NULL,
+  `creator` varchar(45) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`forum_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_exam_prj`;
+CREATE TABLE  `ht_exam_prj` (
+  `prj_id` int(10) unsigned NOT NULL auto_increment,
+  `code` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `sdate` date default NULL,
+  `edate` date default NULL,
+  `class_code` varchar(20) NOT NULL,
+  `closed` smallint(1) unsigned default '0',
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`prj_id`),
+  UNIQUE KEY `Index_2` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE  `ht_exam` (
+  `exam_id` int(10) unsigned NOT NULL auto_increment,
+  `code` varchar(45) default NULL,
+  `prj_code` varchar(45) NOT NULL,
+  `class_code` varchar(45) NOT NULL,
+  `subject` varchar(45) NOT NULL,
+  `teacher` varchar(45) NOT NULL,
+  `examdate` date NOT NULL,
+  `stime` time NOT NULL,
+  `etime` time NOT NULL,
+  `classroom` varchar(45) NOT NULL,
+  `closed` smallint(1) default '0',
+  `created` varchar(45) NOT NULL,
+  PRIMARY KEY  (`exam_id`),
+  KEY `FK_ht_exam_1` (`prj_code`),
+  CONSTRAINT `FK_ht_exam_1` FOREIGN KEY (`prj_code`) REFERENCES `ht_exam_prj` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE  `ht_score` (
+  `score_id` int(10) unsigned NOT NULL auto_increment,
+  `class_code` varchar(20) NOT NULL,
+  `exam_code` varchar(45) NOT NULL,
+  `student_code` varchar(20) NOT NULL,
+  `score` float NOT NULL,
+  `add_score` float default '0',
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`score_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ht_duty_item`;
+CREATE TABLE  `ht_duty_item` (
+  `duty_item_id` int(10) unsigned NOT NULL auto_increment,
+  `code` varchar(20) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `genus` smallint(1) unsigned NOT NULL default '0',
+  `score` int(10) default '0',
+  `class_code` varchar(20) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`duty_item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_duty`;
+CREATE TABLE  `ht_duty` (
+  `duty_id` int(10) unsigned NOT NULL auto_increment,
+  `student_code` varchar(20) NOT NULL,
+  `duty_item` varchar(45) NOT NULL,
+  `score` int(11) NOT NULL default '0',
+  `genus` smallint(1) unsigned default '0',
+  `date_` date default NULL,
+  `desc_` varchar(245) default NULL,
+  `class_code` varchar(20) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`duty_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

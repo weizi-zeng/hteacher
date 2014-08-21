@@ -86,8 +86,6 @@
                 url: me.actionUrl + '?act=ajax_save',
                 data: me.edit_form.serialize(),
                 success: function (r) {
-                	clearLoading();
-                	$("#save").linkbutton('enable');
                     if (r) {
                     	if(r.error==0){
                     		showInfo(r.content);
@@ -97,6 +95,10 @@
                     		showError(r.message);
                     	}
                     }
+                },
+                complete:function(){
+                	clearLoading();
+                	$("#save").linkbutton('enable');
                 }
             });
             showLoading(e);

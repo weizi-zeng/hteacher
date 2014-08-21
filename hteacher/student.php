@@ -53,21 +53,21 @@ elseif ($_REQUEST['act'] == 'import')
 		}
 		
 		$i=1;
-		$arr['code'] = trim($line_list[$i++]);//学号
+		$arr['code'] = replace_quote($line_list[$i++]);//学号
 		$arr['name'] = trim($line_list[$i++]);//学生信息
-		$arr['sex'] = trim($line_list[$i++])=="男"?"1":"0";
-		$arr['birthday'] = replace_dbquote($line_list[$i++]);
-		$arr['id_card'] = replace_dbquote($line_list[$i++]);
+		$arr['sexuality'] = trim($line_list[$i++])=="男"?"1":"0";
+		$arr['birthday'] = replace_quote($line_list[$i++]);
+		$arr['id_card'] = replace_quote($line_list[$i++]);
 		$arr['national'] = trim($line_list[$i++]);
 		$arr['address'] = trim($line_list[$i++]);
-		$arr['phone'] = replace_dbquote($line_list[$i++]);
+		$arr['phone'] = replace_quote($line_list[$i++]);
 		$arr['email'] = trim($line_list[$i++]);
 		
 		$arr['guardian_name'] = trim($line_list[$i++]);//监护人信息
-		$arr['guardian_sex'] = trim($line_list[$i++])=="男"?"1":"0";
-		$arr['guardian_birthday'] = replace_dbquote($line_list[$i++]);
-		$arr['guardian_id_card'] = replace_dbquote($line_list[$i++]);
-		$arr['guardian_phone'] = replace_dbquote($line_list[$i++]);
+		$arr['guardian_sexuality'] = trim($line_list[$i++])=="男"?"1":"0";
+		$arr['guardian_birthday'] = replace_quote($line_list[$i++]);
+		$arr['guardian_id_card'] = replace_quote($line_list[$i++]);
+		$arr['guardian_phone'] = replace_quote($line_list[$i++]);
 		$arr['guardian_email'] = trim($line_list[$i++]);
 		$arr['guardian_unit'] = trim($line_list[$i++]);
 		$arr['guardian_relation'] = trim($line_list[$i++]);
@@ -89,12 +89,12 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	if($id==0){//insert
 		
 		$sql = "insert into ".$ecs->table("student")
-		." (code,name,sex,birthday,
+		." (code,name,sexuality,birthday,
 		national,id_card,phone,email,address,class_code,
 		guardian_name,guardian_relation,guardian_phone,has_left,
 		created )
 		values 
-			('".$_REQUEST["code"]."','".$_REQUEST["name"]."','".$_REQUEST["sex"]."',
+			('".$_REQUEST["code"]."','".$_REQUEST["name"]."','".$_REQUEST["sexuality"]."',
 			'".$_REQUEST["birthday"]."','".$_REQUEST["national"]."',
 			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["email"]."',
 			'".$_REQUEST["address"]."','".$_SESSION["class_code"]."',
@@ -103,7 +103,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 		
 		$db->query($sql);
 		
-		admin_log(addslashes($_REQUEST["name"]), 'add', 'student');
+		admin_log(addslashes($_REQUEST["name"]), 'add', $sql);
 		
 		make_json_result("添加“".$_REQUEST["name"]."”成功！");
 		
@@ -114,7 +114,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 		$sql = "update ".$ecs->table("student")
 		." set name='".$_REQUEST["name"]."',
 			code='".$_REQUEST["code"]."',
-			sex='".$_REQUEST["sex"]."',
+			sexuality='".$_REQUEST["sexuality"]."',
 			birthday='".$_REQUEST["birthday"]."',
 			national='".$_REQUEST["national"]."',
 			id_card='".$_REQUEST["id_card"]."',
@@ -129,7 +129,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 		
 		$db->query($sql);
 		
-		admin_log(addslashes($_REQUEST["name"]), 'update', 'student');
+		admin_log(addslashes($_REQUEST["name"]), 'update', $sql);
 		
 		make_json_result("修改“".$_REQUEST["name"]."”成功！");
 		
@@ -157,9 +157,9 @@ elseif ($_REQUEST['act'] == 'export')
 	
 	foreach ($list["rows"] as $k=>$v)
 	{
-		$sex = $v["sex"]==1?"男":"女";
+		$sexuality = $v["sexuality"]==1?"男":"女";
 		$has_left = $v["has_left"]==1?"是":"否";
-		$content .= $v["student_id"] . ",".$v["code"]. ",".$v["name"]. ",".$sex. ",".$v["birthday"]. ",".$v["national"]. ",".$v["id_card"]. ",".$v["phone"]. ",".$v["email"]. ",".$v["address"]. ",".$has_left. ",".$v["guardian_name"]. ",".$v["guardian_phone"] . ",".$v["guardian_relation"]. ",".$v["created"] . "\n";
+		$content .= $v["student_id"] . ",'".$v["code"]. "',".$v["name"]. ",".$sexuality. ",".$v["birthday"]. ",".$v["national"]. ",'".$v["id_card"]. "','".$v["phone"]. "',".$v["email"]. ",".$v["address"]. ",".$has_left. ",".$v["guardian_name"]. ",'".$v["guardian_phone"] . "',".$v["guardian_relation"]. ",".$v["created"] . "\n";
 	}
 	
 	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
@@ -249,10 +249,10 @@ function insert_datas($students_list){
 	
 	foreach ($students_list as $k=>$v){
 		$sql = "insert into ".$GLOBALS['ecs']->table("guardian")
-		." (name,sex,birthday,national,id_card,phone,email,
+		." (name,sexuality,birthday,national,id_card,phone,email,
 		address,unit,relationship,class_code,student_name,created)
 					values
-	   ('".$v["guardian_name"]."','".$v["guardian_sex"]."',
+	   ('".$v["guardian_name"]."','".$v["guardian_sexuality"]."',
 		'".$v["guardian_birthday"]."','".$v["national"]."',
 		'".$v["guardian_id_card"]."','".$v["guardian_phone"]."',
 		'".$v["guardian_email"]."',
@@ -268,12 +268,12 @@ function insert_datas($students_list){
 		
 		
 		$sql = "insert into ".$GLOBALS['ecs']->table("student")
-		." (code, name,sex,birthday,national,id_card,
+		." (code, name,sexuality,birthday,national,id_card,
 		phone,email,address,class_code,guardian_id,
 		guardian_name,guardian_phone,guardian_relation,
 		created)
 				values 
-		('".$v["code"]."','".$v["name"]."','".$v["sex"]."',
+		('".$v["code"]."','".$v["name"]."','".$v["sexuality"]."',
 		'".$v["birthday"]."','".$v["national"]."',
 		'".$v["id_card"]."','".$v["phone"]."',
 		'".$v["email"]."',

@@ -19,7 +19,7 @@ if ($_REQUEST['act'] == 'class_subject')
 		$datay[] = $v["score"] + $v["add_score"];
 	}
 	
-	$title = $class_code."班，".$list[0]["exam_name"]."-".$list[0]["exam_subject"]."成绩柱形图";
+	$title = $class_code."班，".$list[0]["prj_code"]."-".$list[0]["exam_subject"]."成绩柱形图";
 	
 	
 	require (ROOT_PATH.'data/jpgraph/jpgraph_bar.php');
@@ -76,9 +76,9 @@ if ($_REQUEST['act'] == 'class_subject')
 //班级单科成绩柱形图
 elseif ($_REQUEST['act'] == 'class_total')
 {
-	$exam_name = empty($_REQUEST['exam_name']) ? '' : trim($_REQUEST['exam_name']);//考试编码
+	$prj_code = empty($_REQUEST['prj_code']) ? '' : trim($_REQUEST['prj_code']);//考试编码
 
-	$list = get_scores_by_exam($class_code, $exam_name, "", "", " s.student_code");
+	$list = get_scores_by_exam($class_code, $prj_code, "", "", " s.student_code");
 	
 	$students = array();
 	foreach($list as $k=>$v){
@@ -94,7 +94,7 @@ elseif ($_REQUEST['act'] == 'class_total')
 		$datay[] = $v;
 	}
 
-	$title = $class_code."班，".$list[0]["exam_name"]."总成绩柱形图";
+	$title = $class_code."班，".$list[0]["prj_code"]."总成绩柱形图";
 
 
 	require (ROOT_PATH.'data/jpgraph/jpgraph_bar.php');
@@ -158,7 +158,7 @@ else if ($_REQUEST['act'] == 'history_score')//学生历次考试成绩走势图
 	
 	$subject_scores = array();
 	foreach($list as $k=>$v){
-		$subject_scores[$v["exam_name"]][$v["exam_subject"]] = $v["score"] + $v["add_score"];
+		$subject_scores[$v["prj_code"]][$v["exam_subject"]] = $v["score"] + $v["add_score"];
 	}
 	
 	$X = array();//横轴
@@ -240,11 +240,10 @@ else if ($_REQUEST['act'] == 'history_rank')//学生历次考试排名走势图
 	$exam_rank = array();
 	foreach($exams as $k=>$e){
 		$list = get_scores_by_exam($class_code, "", $e["code"], "");
-		$exam_rank[$e["name"]][$e["subject"]][] = get_rank($student_code, $list);
+		$exam_rank[$e["prj_code"]][$e["subject"]][] = get_rank($student_code, $list);
 	}
 	
 // 	print_r($exam_rank);echo '<br>';
-	
 	
 	$title = $student_code."-".$list[0]["student_name"]."同学历次考试名次走势图";
 
@@ -253,18 +252,10 @@ else if ($_REQUEST['act'] == 'history_rank')//学生历次考试排名走势图
 	$datas = array();
 	foreach($exam_rank as $k=>$v){
 		$X[] = iconv("UTF-8","GB2312//IGNORE",$k);
-// 		$X[] = $k;
-
 		foreach($v as $sk=>$sv){
 			$datas[$sk][] = $sv[0];
 		}
-
-		// 		print_r($v);echo '<br>';
 	}
-// 		print_r($X);echo '<br>';
-// 		print_r($datas);echo '<br>';
-
-// 		die("test");
 
 	require (ROOT_PATH.'data/jpgraph/jpgraph_line.php');
 	require (ROOT_PATH.'data/jpgraph/jpgraph_scatter.php');
