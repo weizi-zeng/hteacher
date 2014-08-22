@@ -299,9 +299,11 @@ CREATE TABLE  `ht_forum` (
   `is_active` smallint(1) default '1',
   `class_code` varchar(20) NOT NULL,
   `creator` varchar(45) NOT NULL,
+  `user_id` int(10) NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY  (`forum_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 DROP TABLE IF EXISTS `ht_exam_prj`;
 CREATE TABLE  `ht_exam_prj` (

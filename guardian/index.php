@@ -26,6 +26,7 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	$admin["school"] = get_school_name($_SESSION["school_code"]);
 	$admin["class"] = get_class_name($_SESSION["class_code"]);
 	$smarty->assign('admin', $admin);
+	$smarty->assign('student_id', $_SESSION["admin_id"]);
 	
 	$menus = get_menus_by_status($_SESSION["status_id"]);//区分角色
 	$smarty->assign('menus', $menus);
@@ -59,7 +60,7 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	$smarty->assign('msg_list', $msg_list);
 	
 	//短信
-	$sql = "select * from ".$ecs->table("sms")." order by sms_id desc limit 10";
+	$sql = "select * from ".$ecs->table("sms")." where phones like '%".$_SESSION["phone"]."%' order by sms_id desc limit 10";
 	$sms = $db->getAll($sql);
 	$smarty->assign('sms', $sms);
 	
@@ -102,6 +103,32 @@ elseif ($_REQUEST['act'] == 'top')
 
     $smarty->display('top.htm');
 }
+
+/*------------------------------------------------------ */
+//-- 修改密码
+/*------------------------------------------------------ */
+
+elseif ($_REQUEST['act'] == 'ChangePassword')
+{
+	$id  = !empty($_REQUEST['student_id']) ? intval($_REQUEST['student_id']) : 0;
+	$OldPassword  = !empty($_REQUEST['OldPassword']) ? trim($_REQUEST['OldPassword']) : '';
+	$NewPassword  = !empty($_REQUEST['NewPassword']) ? trim($_REQUEST['NewPassword']) : '';
+	$NewPasswordRe  = !empty($_REQUEST['NewPasswordRe']) ? trim($_REQUEST['NewPasswordRe']) : '';
+	
+	$sql = "select 1 from ".$ecs->table('student')." where student_id=$id and password='".md5($OldPassword)."'";
+// 	echo $sql;
+	$isExist = $db->getOne($sql);
+	if($isExist){
+		$sql = "update ".$ecs->table('student')." set password='".md5($NewPassword)."' where student_id=".$id;
+		$db->query($sql);
+		make_json(array("isOk"=>1,"message"=>""));
+		
+	}else {
+		make_json(array("isOk"=>0,"message"=>"旧密码有误！"));
+	}
+	
+}
+
 
 /*------------------------------------------------------ */
 //-- 计算器

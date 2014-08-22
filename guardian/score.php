@@ -244,8 +244,8 @@ elseif ($_REQUEST['act'] == 'exportbyexamcode')
 /// 根据学生学号导出成绩
 elseif ($_REQUEST['act'] == 'exportbystudentcode')
 {
-	$student_code = empty($_REQUEST['search_student_code']) ? '' : trim($_REQUEST['search_student_code']);//学生学号
-	$prj_code = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);//学生学号
+	$student_code = $_SESSION["student_code"];//学生学号
+	$prj_code = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);
 
 	$content = "学号,姓名,考试项目,考试编号,考试科目,分数,附加分数\r\n";
 
@@ -283,7 +283,6 @@ function score_list()
 		/* 过滤条件 */
 		$filter['prj_code'] = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);//考试名称
 		$filter['exam_code'] = empty($_REQUEST['search_exam_code']) ? '' : trim($_REQUEST['search_exam_code']);//考试编码
-		$filter['student_code'] = empty($_REQUEST['search_student_code']) ? '' : trim($_REQUEST['search_student_code']);//学生学号
 		
 		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
 		{
@@ -295,7 +294,7 @@ function score_list()
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
 		
-		$ex_where = " WHERE s.class_code='".$_SESSION["class_code"]."' ";
+		$ex_where = " WHERE s.class_code='".$_SESSION["class_code"]."' and s.student_code='".$_SESSION["student_code"]."' ";
 		if ($filter['prj_code'])
 		{
 			$ex_where .= " AND  e.prj_code='".$filter['prj_code']."'";
@@ -303,10 +302,6 @@ function score_list()
 		if ($filter['exam_code'])
 		{
 			$ex_where .= " AND s.exam_code = '" . mysql_like_quote($filter['exam_code']) ."'";
-		}
-		if ($filter['student_code'])
-		{
-			$ex_where .= " AND s.student_code = '" . mysql_like_quote($filter['student_code']) ."'";
 		}
 		
 		$sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table("score") ." s 

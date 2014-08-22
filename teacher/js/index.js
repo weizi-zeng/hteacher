@@ -32,8 +32,11 @@ function pageInit() {
         me.win_changepwd.window('open');
     });
 
-    $('#btnEp').click(function () {
-        changePwd();
+    $('#btnEp').click(function (e) {
+    	if ($(this).hasClass("l-btn-disabled")) {
+            return;
+        }
+        changePwd(e);
     });
 
     $('#btnCancel').click(function () {
@@ -50,26 +53,32 @@ function logOut(){
 	});
 }
 
-//修改密码<a href="ashx/ashLogin.ashx">ashx/ashLogin.ashx</a>
-function changePwd() {
+function changePwd(e) {
     if (me.win_changepwd_form.form('validate')) {
         $.ajax({
-            url: '../login/ashx/ashLogin.ashx?Method=ChangePassword',
+            url: 'index.php?act=ChangePassword',
             data: me.win_changepwd_form.serialize(),
             success: function (returnData) {
                 if (returnData) {
                     if (returnData.isOk == 1) {
-                        showInfo('密码修改成功！'); //<br>您的新密码为：' + me.win_changepwd_form.find("#NewPassword").val());
+                        showInfo('密码修改成功！建议重新登陆系统！'); //<br>您的新密码为：' + me.win_changepwd_form.find("#NewPassword").val());
                         me.win_changepwd_form.form('clear');
                         me.win_changepwd.window('close');
                     } else {
                         showError(returnData.message);
                     }
                 }
+            },
+            complete:function(){
+            	clearLoading();
+            	$("#btnEp").linkbutton('enable');
             }
         });
+        showLoading(e);
+    	$("#btnEp").linkbutton('disable');
     }
 }
+
 
 
 

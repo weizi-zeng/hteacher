@@ -148,7 +148,7 @@ function sys_joindate($prefix)
  * @param   string  $last_time      最后登录时间
  * @return  void
  */
-function set_admin_session($user_id, $username, $action_list, $role_id=0, $status_id=0, $school_code='super', $class_code='super')
+function set_admin_session($user_id, $username, $action_list, $role_id=0, $status_id=0, $school_code='super', $class_code='super', $student_code='', $phone='')
 {
     $_SESSION['admin_id']    = $user_id;
     $_SESSION['admin_name']  = $username;
@@ -157,6 +157,8 @@ function set_admin_session($user_id, $username, $action_list, $role_id=0, $statu
     $_SESSION['school_code']  = $school_code; //学校代码
     $_SESSION['status_id'] = $status_id;	//身份
     $_SESSION['class_code']  = $class_code; //班级代码
+    $_SESSION['student_code']  = $student_code; //班级代码
+    $_SESSION['phone']  = $phone; //班级代码
 }
 
 /**

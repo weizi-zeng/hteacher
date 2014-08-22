@@ -139,7 +139,6 @@ function duty_list()
 	if ($result === false)
 	{
 		/* 过滤条件 */
-		$filter['student_code'] = empty($_REQUEST['search_student_code']) ? '' : trim($_REQUEST['search_student_code']);//编号
 		$filter['name'] = empty($_REQUEST['search_name']) ? '' : trim($_REQUEST['search_name']);//名称
 		$filter['sdate'] = empty($_REQUEST['search_sdate']) ? '' : trim($_REQUEST['search_sdate']);//起始日期
 		$filter['edate'] = empty($_REQUEST['search_edate']) ? '' : trim($_REQUEST['search_edate']);//截止日期
@@ -154,11 +153,7 @@ function duty_list()
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
 		
-		$ex_where = " WHERE d.class_code='".$_SESSION["class_code"]."' ";
-		if ($filter['student_code'])
-		{
-			$ex_where .= " AND d.student_code = '" . mysql_like_quote($filter['student_code']) ."'";
-		}
+		$ex_where = " WHERE d.class_code='".$_SESSION["class_code"]."' and d.student_code = '".$_SESSION["student_code"]."' ";
 		if ($filter['name'])
 		{
 			$ex_where .= " AND d.duty_item like '" . mysql_like_quote($filter['name']) ."%'";

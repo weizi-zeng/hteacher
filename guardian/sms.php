@@ -56,7 +56,7 @@ switch ($action)
 		exit;
 		
 	case 'ajax_list':
-		$list = sms_list($class_code);
+		$list = sms_list($class_code, $_SESSION["phone"]);
 		make_json($list);
 		exit;
 		
@@ -70,7 +70,7 @@ switch ($action)
 /**
  *  返回短信列表数据
  */
-function sms_list($class_code)
+function sms_list($class_code, $phone)
 {
 	$result = get_filter();
 	if ($result === false)
@@ -88,14 +88,10 @@ function sms_list($class_code)
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '20'     : trim($_REQUEST['rows']);
 		
-		$ex_where = " WHERE class_code='".$class_code."' ";
+		$ex_where = " WHERE class_code='".$class_code."' and phones like '%$phone%'";
 		if ($filter['keywords'])
 		{
 			$ex_where .= " AND content LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
-		}
-		if ($filter['phones'])
-		{
-			$ex_where .= " AND phones LIKE '%" . mysql_like_quote($filter['phones']) ."%'";
 		}
 		
 		$filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS["ecs"]->table("sms") . $ex_where);

@@ -216,11 +216,6 @@
     }
     
     function exportscoresbystudentcode(){
-    	var student_code = $("#search_student_code").val();
-    	if(!student_code){
-    		showError('请选择学生学号!'); 
-            return;
-    	}
     	var prj_code = $("#search_prj_code").val();
-    	window.open("score.php?act=exportbystudentcode&order=asc&rows=2000&search_student_code="+student_code+"&search_prj_code="+prj_code);
+    	window.open("score.php?act=exportbystudentcode&order=asc&rows=2000&search_prj_code="+prj_code);
     }

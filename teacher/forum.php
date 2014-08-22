@@ -6,6 +6,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'list')
 {
+	$smarty->assign("user_id",$_SESSION["admin_id"]);
 	$smarty->display('forum_list.htm');
 	exit;
 }
@@ -36,10 +37,10 @@ elseif ($_REQUEST['act'] == 'view')
 elseif ($_REQUEST['act'] == 'ajax_save')
 {
 	$sql = "insert into ".$ecs->table("forum")
-	." (title,content,class_code,creator,created )
+	." (title,content,class_code,creator,user_id,created )
 	values 
 		('".$_REQUEST["title"]."','".$_REQUEST["content"]."','".$_SESSION["class_code"]."',
-		'".$_SESSION["admin_name"]."',
+		'".$_SESSION["admin_name"]."','".$_SESSION["admin_id"]."',
 		now())";
 	
 	$db->query($sql);
@@ -59,10 +60,10 @@ elseif ($_REQUEST['act'] == 'reply')
 		$flow = $db->getOne($sql);
 		
 		$sql = "insert into ".$ecs->table("forum")
-		." (parent_id, flow, title,content,class_code,creator,created )
+		." (parent_id, flow, title,content,class_code,creator,user_id,created )
 		values 
 			('".$id."','".(++$flow)."','".$_REQUEST["title"]."','".$_REQUEST["content"]."','".$_SESSION["class_code"]."',
-			'".$_SESSION["admin_name"]."',
+			'".$_SESSION["admin_name"]."','".$_SESSION["admin_id"]."',
 			now())";
 
 		$db->query($sql);

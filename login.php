@@ -173,7 +173,7 @@ if ($_REQUEST['act'] == 'signin')
 	$row = array();
 	if($_REQUEST['status']=='guardian'){//如果是监护人登陆，走监护人登陆逻辑
 		
-		$guardian = getGuardianByUsername($_POST['username']);
+		$guardian = getGuardianByUsername($_REQUEST['username']);
 		if($guardian){
 			if($guardian["has_left"]){//已经离校
 				login_display("此账户相关人已经毕业离校");
@@ -183,7 +183,7 @@ if ($_REQUEST['act'] == 'signin')
 			if($guardian["license"]){
 				if($guardian["is_active"]){
 					
-					if($guardian["password"]==md5($_POST['password'])){
+					if($guardian["password"]==md5($_REQUEST['password'])){
 						$row = $guardian;//进行正常登陆
 						$row['status_id']= 4;
 						$row['user_id'] = $guardian["student_id"];
@@ -191,7 +191,8 @@ if ($_REQUEST['act'] == 'signin')
 						$row['school_code']= $guardian["school_code"];
 						$row['class_code']= $guardian["class_code"];
 						$row['password']= md5($guardian["password"]);
-						
+						$row['student_code']= $guardian["code"];
+						$row['cellphone']= $guardian["guardian_phone"];
 					}else {
 						login_display("密码错误");
 					}
@@ -265,7 +266,7 @@ if ($_REQUEST['act'] == 'signin')
 	$row['school_code'] = str_replace("_school", "", $row['school_code']);
 	//将用户信息记录到session
 	set_admin_session($row['user_id'], $row['user_name'], $row['action_list'],
-	$row['role_id'], $row['status_id'],$row['school_code'],$row['class_code']);
+	$row['role_id'], $row['status_id'],$row['school_code'],$row['class_code'],$row['student_code'], $row['cellphone']);
 	
 	if (isset($_POST['remember']))
 	{
@@ -275,6 +276,8 @@ if ($_REQUEST['act'] == 'signin')
 		setcookie('ECSCP[status_id]',   $row['status_id'],                            $time);
 		setcookie('ECSCP[school_code]',   $row['school_code'],                            $time);
 		setcookie('ECSCP[class_code]',   $row['class_code'],                            $time);
+		setcookie('ECSCP[student_code]',   $row['student_code'],                            $time);
+		setcookie('ECSCP[phone]',   $row['cellphone'],                            $time);
 	}
 	
 	/**
@@ -294,7 +297,7 @@ if ($_REQUEST['act'] == 'signin')
 	
 	}else if($row['status_id']==2){
 		//班级管理系统
-		ecs_header("Location: hteacher/index.php?act=signin\n");
+		ecs_header("Location: teacher/index.php?act=signin\n");
 	
 	}else{
 		//监护人系统
@@ -321,6 +324,8 @@ if ($_REQUEST['act'] == 'register')
 	}
 	
 	$guardian = getGuardianById($_POST['student_id'], $_POST['school_code']);
+	$guardian["school_code"] = $_POST['school_code'];
+	
 	//检验注册码
 	$res = validateRegCode($_POST['regCode']);
 	if($res["error"]>0){
@@ -331,7 +336,7 @@ if ($_REQUEST['act'] == 'register')
 	//进行注册
 	register_system($guardian, $_POST['school_code'], $_POST['regCode'], $_POST['password']);
 	
-	ecs_header("Location: login.php?act=signin&username".$guardian["guardian_phone"]."=&password=".$_POST['password']."&status=guardian\n");
+	ecs_header("Location: login.php?act=signin&username=".$guardian["guardian_phone"]."&password=".$_POST['password']."&status=guardian\n");
 	exit;
 }
 
@@ -402,7 +407,7 @@ function register_display($guardian, $warn){
 	}else {
 		$guardian["sex"]="女";
 	}
-// 	print_r($guardian);
+// 	echo "guardian:"; print_r($guardian);
 	$GLOBALS['smarty']->assign('warn',     $warn);
 	$GLOBALS['smarty']->assign('guardian',     $guardian);
 	$GLOBALS['smarty']->display('register.htm');

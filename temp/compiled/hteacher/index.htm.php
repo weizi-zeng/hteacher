@@ -49,7 +49,7 @@
         </div>
 
         <div class="userInfo">
-       		欢迎您——<?php echo $this->_var['admin']['school']; ?>,<?php echo $this->_var['admin']['class']; ?>,<?php echo $this->_var['admin']['admin_name']; ?>管理员！
+       		欢迎您——<?php echo $this->_var['admin']['school']; ?>,<?php echo $this->_var['admin']['class']; ?>,监护人<?php echo $this->_var['admin']['admin_name']; ?>！
         </div>
     </div>
 
@@ -139,7 +139,7 @@
         </div>
     </div>
     
-    <div id="win_changepwd" class="easyui-window" closed="true" title="修改密码" icon="icon-save" style="width: 350px; height: 200px; padding: 5px; background: #fafafa;">
+    <div id="win_changepwd" class="easyui-window" closed="true" title="修改密码" icon="icon-save" style="width: 350px; height: 220px; padding: 5px; background: #fafafa;">
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
                 <form id="win_changepwd_form" name="win_changepwd_form" method="post">
@@ -165,13 +165,15 @@
                             确认密码：
                         </td>
                         <td>
+                        	<input type="hidden" name="student_id" value="<?php echo $this->_var['student_id']; ?>"/>
                             <input id="NewPasswordRe" name="NewPasswordRe" type="password" class="easyui-validatebox" required="true" validtype="equalTo['#NewPassword']" />
                         </td>
                     </tr>
                 </table>
                 </form>
             </div>
-            <div region="south" border="false" style="text-align: center; height: 30px; line-height: 30px;">
+            <div region="south" border="false" style="text-align: center; height: 40px; line-height: 38px;">
+                
                 <a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">确定</a> <a id="btnCancel" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)">关闭</a>
             </div>
         </div>

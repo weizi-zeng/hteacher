@@ -165,10 +165,10 @@ if (!file_exists('../temp/caches'))
     @chmod('../temp/caches', 0777);
 }
 
-if (!file_exists('../temp/compiled/school'))
+if (!file_exists('../temp/compiled/'.TEACHER_PATH))
 {
-    @mkdir('../temp/compiled/school', 0777);
-    @chmod('../temp/compiled/school', 0777);
+    @mkdir('../temp/compiled/'.TEACHER_PATH, 0777);
+    @chmod('../temp/compiled/'.TEACHER_PATH, 0777);
 }
 
 clearstatcache();
@@ -179,7 +179,7 @@ require(ROOT_PATH . 'includes/cls_template.php');
 $smarty = new cls_template;
 
 $smarty->template_dir  = ROOT_PATH . TEACHER_PATH . '/templates';
-$smarty->compile_dir   = ROOT_PATH . 'temp/compiled/hteacher';
+$smarty->compile_dir   = ROOT_PATH . 'temp/compiled/'.TEACHER_PATH;
 if ((DEBUG_MODE & 2) == 2)
 {
     $smarty->force_compile = true;

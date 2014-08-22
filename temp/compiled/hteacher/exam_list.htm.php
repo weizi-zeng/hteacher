@@ -38,15 +38,6 @@
     	<table id="dgData" style="height:400px"></table>
     
      	<div id="toolbar" style="padding:5px;height:auto">
-     	 <div style="margin-bottom:5px">
-            <a href="javascript:void(0)" onclick="add();" class="easyui-linkbutton" iconCls="icon-add" >新增</a>
-            <a href="javascript:void(0)" onclick="update();" class="easyui-linkbutton" iconCls="icon-edit" >修改</a>
-            <a href="javascript:void(0)" onclick="deleteexam();" class="easyui-linkbutton" iconCls="icon-remove" >删除</a>
-            
-            <a href="javascript:void(0)" onclick="importexams();" class="easyui-linkbutton" iconCls="icon-application_put" >导入</a>
-            <a href="javascript:void(0)" onclick="template();" class="easyui-linkbutton" iconCls="icon-arrow_down" >下载模板</a>
-            
-         </div>
     	 <div style="height:40px;margin-bottom:5px;" >
           <form id="search_form" method="post">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
@@ -89,8 +80,6 @@
                         
                         <td style="text-align: left; width:450px;">
                         	 <a href="javascript:void(0)" onclick="searchexams();" class="easyui-linkbutton" icon="icon-search">查找</a>
-                        	 <a href="javascript:void(0)" onclick="publicexam();" class="easyui-linkbutton" iconCls="icon-application_view_list" >发布考试</a>
-           					 <a href="javascript:void(0)" onclick="sendexam();" class="easyui-linkbutton" iconCls="icon-note_go" >短信通知</a>
                         </td>
                         <td>&nbsp;</td>
                     </tr>

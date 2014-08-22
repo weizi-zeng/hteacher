@@ -46,8 +46,6 @@
     
      	<div id="toolbar" style="padding:5px;height:auto">
      	 <div style="margin-bottom:5px">
-            <a href="javascript:void(0)" onclick="add();" class="easyui-linkbutton" iconCls="icon-add" >新增</a>
-            <a href="javascript:void(0)" onclick="deletenotice();" class="easyui-linkbutton" iconCls="icon-remove" >删除</a>
             <a href="javascript:void(0)" onclick="checknotices();" class="easyui-linkbutton" iconCls="icon-view" >查看</a>
          </div>
     	 <div style="height:40px;margin-bottom:5px;" >

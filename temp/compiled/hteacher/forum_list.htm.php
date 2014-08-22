@@ -2,7 +2,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>人员信息</title>
+    <title>讨论区</title>
     
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="images/icon/favicon.ico" />
@@ -41,6 +41,7 @@
      	 <div style="margin-bottom:5px">
             <a href="javascript:void(0)" onclick="add();" class="easyui-linkbutton" iconCls="icon-add" >新增</a>
             <a href="javascript:void(0)" onclick="deleteforum();" class="easyui-linkbutton" iconCls="icon-remove" >删除</a>
+            <input type="hidden" id="user_id" value="<?php echo $this->_var['user_id']; ?>"/>
          </div>
     	 <div style="height:40px;margin-bottom:5px;" >
           <form id="search_form" method="post">
