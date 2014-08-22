@@ -166,88 +166,176 @@ if ($_REQUEST['act'] == 'signin')
 		}
 	}
 
-	$_POST['username'] = isset($_POST['username']) ? trim($_POST['username']) : '';
-	$_POST['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
-
-	$sql="SELECT `ec_salt` FROM ". $ecs->table('admin_user') ."WHERE user_name = '" . $_POST['username']."'";
+	$_REQUEST['username'] = isset($_REQUEST['username']) ? trim($_REQUEST['username']) : '';
+	$_REQUEST['password'] = isset($_REQUEST['password']) ? trim($_REQUEST['password']) : '';
+	$_REQUEST['status'] = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : 'admin';
 	
-	$ec_salt =$db->getOne($sql);
-	if(!empty($ec_salt))
-	{
-		/* 检查密码是否正确 */
-		$sql = "SELECT * ".
-            " FROM " . $ecs->table('admin_user') .
-            " WHERE user_name = '" . $_POST['username']. "' AND password = '" . md5(md5($_POST['password']).$ec_salt) . "'";
-	}
-	else
-	{
-		/* 检查密码是否正确 */
-		$sql = "SELECT * ".
-            " FROM " . $ecs->table('admin_user') .
-            " WHERE user_name = '" . $_POST['username']. "' AND password = '" . md5($_POST['password']) . "'";
-	}
-	$row = $db->getRow($sql);
-	
-	if ($row)// 登录成功
-	{
-		if(!$row["is_active"])
-		{
-			login_display("此用户已经被注销，请联系超级管理员激活");
+	$row = array();
+	if($_REQUEST['status']=='guardian'){//如果是监护人登陆，走监护人登陆逻辑
+		
+		$guardian = getGuardianByUsername($_POST['username']);
+		if($guardian){
+			if($guardian["has_left"]){//已经离校
+				login_display("此账户相关人已经毕业离校");
+				exit;
+			}
+			
+			if($guardian["license"]){
+				if($guardian["is_active"]){
+					
+					if($guardian["password"]==md5($_POST['password'])){
+						$row = $guardian;//进行正常登陆
+						$row['status_id']= 4;
+						$row['user_id'] = $guardian["student_id"];
+						$row['user_name']= $guardian["guardian_name"];
+						$row['school_code']= $guardian["school_code"];
+						$row['class_code']= $guardian["class_code"];
+						$row['password']= md5($guardian["password"]);
+						
+					}else {
+						login_display("密码错误");
+					}
+				
+				}else {
+					login_display("此账户未激活");
+				}
+			}else {
+				//调转到注册页面
+				$warn = "请确认上面的信息正确无误，然后输入注册码，进行注册；<br/>若信息有误，请找管理员确认之后再进行注册！";
+				register_display($guardian, $warn);
+			}
+			
+		}else {
+			login_display("账户不正确");
 		}
 		
-		//将用户信息记录到session
-		set_admin_session($row['user_id'], $row['user_name'], $row['action_list'],
-		 $row['role_id'], $row['status_id'],$row['school_code'],$row['class_code']);
+	}else {
 		
-		if(empty($row['ec_salt']))
+		
+		//管理员正常登陆逻辑， 包括班主任（班级管理员）
+		
+		$sql="SELECT `ec_salt` FROM ". $ecs->table('admin_user') ."WHERE user_name = '" . $_POST['username']."'";
+		
+		$ec_salt =$db->getOne($sql);
+		if(!empty($ec_salt))
 		{
-			$ec_salt=rand(1,9999);
-			$new_possword=md5(md5($_POST['password']).$ec_salt);
+			/* 检查密码是否正确 */
+			$sql = "SELECT * ".
+	            " FROM " . $ecs->table('admin_user') .
+	            " WHERE user_name = '" . $_POST['username']. "' AND password = '" . md5(md5($_POST['password']).$ec_salt) . "'";
+		}
+		else
+		{
+			/* 检查密码是否正确 */
+			$sql = "SELECT * ".
+	            " FROM " . $ecs->table('admin_user') .
+	            " WHERE user_name = '" . $_POST['username']. "' AND password = '" . md5($_POST['password']) . "'";
+		}
+		$row = $db->getRow($sql);
+		
+		if ($row)// 登录成功
+		{
+			if(!$row["is_active"])
+			{
+				login_display("此用户已经被注销，请联系超级管理员激活");
+			}
+			
+			if(empty($row['ec_salt']))
+			{
+				$ec_salt=rand(1,9999);
+				$new_possword=md5(md5($_POST['password']).$ec_salt);
+				$db->query("UPDATE " .$ecs->table('admin_user').
+			                 " SET ec_salt='" . $ec_salt . "', password='" .$new_possword . "'".
+			                 " WHERE user_id='$_SESSION[admin_id]'");
+			}
+	
+			// 更新最后登录时间和IP
 			$db->query("UPDATE " .$ecs->table('admin_user').
-		                 " SET ec_salt='" . $ec_salt . "', password='" .$new_possword . "'".
-		                 " WHERE user_id='$_SESSION[admin_id]'");
+	                 " SET last_login='" . gmtime() . "', last_ip='" . real_ip() . "'".
+	                 " WHERE user_id='$_SESSION[admin_id]'");
+	
 		}
-
-		// 更新最后登录时间和IP
-		$db->query("UPDATE " .$ecs->table('admin_user').
-                 " SET last_login='" . gmtime() . "', last_ip='" . real_ip() . "'".
-                 " WHERE user_id='$_SESSION[admin_id]'");
-
-		if (isset($_POST['remember']))
+		else
 		{
-			$time = gmtime() + 3600 * 24 * 365;
-			setcookie('ECSCP[admin_id]',   $row['user_id'],                            $time);
-			setcookie('ECSCP[admin_pass]', md5($row['password'] . $_CFG['hash_code']), $time);
-			setcookie('ECSCP[status_id]',   $row['status_id'],                            $time);
-			setcookie('ECSCP[school_code]',   $row['school_code'],                            $time);
-			setcookie('ECSCP[class_code]',   $row['class_code'],                            $time);
+			login_display("账户或密码不正确");
 		}
+	
+	}
+	
+	$row['school_code'] = str_replace("_school", "", $row['school_code']);
+	//将用户信息记录到session
+	set_admin_session($row['user_id'], $row['user_name'], $row['action_list'],
+	$row['role_id'], $row['status_id'],$row['school_code'],$row['class_code']);
+	
+	if (isset($_POST['remember']))
+	{
+		$time = gmtime() + 3600 * 24 * 365;
+		setcookie('ECSCP[admin_id]',   $row['user_id'],                            $time);
+		setcookie('ECSCP[admin_pass]', md5($row['password'] . $_CFG['hash_code']), $time);
+		setcookie('ECSCP[status_id]',   $row['status_id'],                            $time);
+		setcookie('ECSCP[school_code]',   $row['school_code'],                            $time);
+		setcookie('ECSCP[class_code]',   $row['class_code'],                            $time);
+	}
+	
+	/**
+	 * status_id=0 : 超级管理员
+	 * status_id=1 : 学校管理员
+	 * status_id=2 : 班级管理员
+	 * status_id=3 : 教师
+	 * status_id=4 : 监护人
+	 */
+	if($row['status_id']==0){
+		//超级管理员系统
+		ecs_header("Location: admin/index.php?act=signin\n");
+	
+	}else if($row['status_id']==1){
+		//学校管理系统
+		ecs_header("Location: school/index.php?act=signin\n");
+	
+	}else if($row['status_id']==2){
+		//班级管理系统
+		ecs_header("Location: hteacher/index.php?act=signin\n");
+	
+	}else{
+		//监护人系统
+		ecs_header("Location: guardian/index.php?act=signin\n");
+	
+	}
+	exit;
+	
+}
 
-		/**
-		* status_id=0 : 超级管理员
-		* status_id=1 : 学校管理员
-		* status_id=2 : 班级管理员
-		* status_id=3 : 教师
-		* status_id=4 : 监护人
-		*/
-		if($row['status_id']==0){//超级管理员系统
-			ecs_header("Location: admin/index.php?act=signin\n");
-			
-		}else if($row['status_id']==1){//学校管理系统
-			ecs_header("Location: school/index.php?act=signin\n");
-			
-		}else {//班级管理系统
-			ecs_header("Location: hteacher/index.php?act=signin\n");
-			
-		}
-		
+
+/*------------------------------------------------------ */
+//-- 监护人注册
+/*------------------------------------------------------ */
+if ($_REQUEST['act'] == 'register')
+{
+	$_POST['regCode'] = isset($_POST['regCode']) ? trim($_POST['regCode']) : '';
+	$_POST['school_code'] = isset($_POST['school_code']) ? trim($_POST['school_code']) : '';
+	$_POST['password'] = isset($_POST['password']) ? trim($_POST['password']) : '';
+	$_POST['student_id'] = isset($_POST['student_id']) ? intval($_POST['student_id']) : 0;
+	
+	if(!$_POST['school_code'] || !$_POST['student_id']){
+		login_display("会话失效");
+	}
+	
+	$guardian = getGuardianById($_POST['student_id'], $_POST['school_code']);
+	//检验注册码
+	$res = validateRegCode($_POST['regCode']);
+	if($res["error"]>0){
+		register_display($guardian, $res["msg"]);
 		exit;
 	}
-	else
-	{
-		login_display("账户或密码不正确");
-	}
+	
+	//进行注册
+	register_system($guardian, $_POST['school_code'], $_POST['regCode'], $_POST['password']);
+	
+	ecs_header("Location: login.php?act=signin&username".$guardian["guardian_phone"]."=&password=".$_POST['password']."&status=guardian\n");
+	exit;
 }
+
+
 
 /*------------------------------------------------------ */
 //-- 退出登录
@@ -303,4 +391,92 @@ function login_display($msg_detail='')
 	exit;
 }
 
+/**
+ * 用户注册
+ * Enter description here ...
+ */
+function register_display($guardian, $warn){
+	//展示注册界面
+	if($guardian["sexuality"]==1){
+		$guardian["sex"]="男";
+	}else {
+		$guardian["sex"]="女";
+	}
+// 	print_r($guardian);
+	$GLOBALS['smarty']->assign('warn',     $warn);
+	$GLOBALS['smarty']->assign('guardian',     $guardian);
+	$GLOBALS['smarty']->display('register.htm');
+	exit;
+}
+
+/**
+* 通过电话号码获取监护人的信息
+*/
+function getGuardianByUsername($username){
+	$sql = "show databases like '%_school' ";
+	$rows = $GLOBALS['db']->getAll($sql);
+
+	$res = false;
+	if(count($rows)>0){
+		foreach($rows as $row){
+			foreach($row as $s){
+				$sql = "select * from ".$s.".ht_student where guardian_phone='".$username."' or guardian_name='".$username."' limit 1";
+				$res = $GLOBALS['db']->getRow($sql);
+				if($res){
+					$res["school_code"] = $s;
+					return $res;
+				}
+			}
+		}
+	}
+	return $res;
+}
+
+/**
+ * 检验校验码
+ * 1、是否正确
+ * 2、是否有效
+ */
+function validateRegCode($regCode){
+	$res = array("error"=>0,"msg"=>$regCode);
+	$table = "hteacher.ht_license";
+	$sql = "select * from ".$table." where license='".$regCode."'";
+	$license = $GLOBALS["db"]->getRow($sql);
+	if($license){
+		if($license["removed"]){
+			return array("error"=>1,"msg"=>"您的注册码已经被废弃！");
+		}
+		if($license["is_active"]){
+			return array("error"=>1,"msg"=>"您的注册码已经被使用！");
+		}
+		
+		$today = date("Y-m-d");
+		if($license["sdate"]>$today){
+			return array("error"=>1,"msg"=>"您的注册码要到".$license["sdate"]."才能生效！");
+		}
+		if($license["edate"]<$today){
+			return array("error"=>1,"msg"=>"您的注册码在".$license["edate"]."已经失效！");
+		}
+	}else {
+		return array("error"=>1,"msg"=>"您的注册码不正确！");
+	}
+	return $res;
+}
+
+//通过ID获取监护人信息
+function getGuardianById($id, $school){
+	$table = $school.".ht_student";
+	$sql = "select * from ".$table." where student_id='".$id."'";
+	return $GLOBALS["db"]->getRow($sql);
+}
+
+//注册用户信息
+function register_system($guardian,$school,$regCode,$password){
+	$table = $school.".ht_student";
+	$sql = "update ".$table." set license='$regCode',password='".md5($password)."', is_active=1 where student_id=".$guardian['student_id'];
+	$GLOBALS["db"]->query($sql);
+	
+	$sql = "update hteacher.ht_license set is_active=1, regtime=now() where license='$regCode'";
+	$GLOBALS["db"]->query($sql);
+}
 ?>

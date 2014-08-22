@@ -31,7 +31,7 @@ if (__FILE__ == '')
 include('../data/config.php');
 
 /* 取得当前ecshop所在的根目录 */
-define('ROOT_PATH', str_replace(HTEACHER_PATH . '/includes/init.php', '', str_replace('\\', '/', __FILE__)));
+define('ROOT_PATH', str_replace(GURADIAN_PATH . '/includes/init.php', '', str_replace('\\', '/', __FILE__)));
 
 if (defined('DEBUG_MODE') == false)
 {
@@ -178,7 +178,7 @@ clearstatcache();
 require(ROOT_PATH . 'includes/cls_template.php');
 $smarty = new cls_template;
 
-$smarty->template_dir  = ROOT_PATH . HTEACHER_PATH . '/templates';
+$smarty->template_dir  = ROOT_PATH . GURADIAN_PATH . '/templates';
 $smarty->compile_dir   = ROOT_PATH . 'temp/compiled/hteacher';
 if ((DEBUG_MODE & 2) == 2)
 {
@@ -258,7 +258,7 @@ if (!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0)
         }
         else
         {
-//         	die("HTTP_REFERER4");
+        	die("HTTP_REFERER4");
             ecs_header("Location: ../login.php\n");
         }
 
@@ -269,7 +269,7 @@ if (!isset($_SESSION['admin_id']) || intval($_SESSION['admin_id']) <= 0)
 
 if ($_REQUEST['act'] != 'signin' )
 {
-    $admin_path = preg_replace('/:\d+/', '', $ecs->url()) . HTEACHER_PATH;
+    $admin_path = preg_replace('/:\d+/', '', $ecs->url()) . GURADIAN_PATH;
     
     if (!empty($_SERVER['HTTP_REFERER']) &&
         strpos(preg_replace('/:\d+/', '', $_SERVER['HTTP_REFERER']), $admin_path) === false)

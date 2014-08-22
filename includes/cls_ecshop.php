@@ -128,19 +128,23 @@ class ECS
     function url()
     {
     	$curr = dirname(PHP_SELF);
+    	
     	if(strpos(PHP_SELF, ADMIN_PATH . '/') !== false){
     		$curr = preg_replace('/(.*)(' . ADMIN_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF));
     		
     	}else if(strpos(PHP_SELF, SCHOOL_PATH . '/') !== false){
     		$curr = preg_replace('/(.*)(' . SCHOOL_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF));
     		
-    	}else if(strpos(PHP_SELF, HTEACHER_PATH . '/') !== false){
-    		$curr = preg_replace('/(.*)(' . HTEACHER_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF));
+    	}else if(strpos(PHP_SELF, GURADIAN_PATH . '/') !== false){
+    		$curr = preg_replace('/(.*)(' . GURADIAN_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF));
+    		
+    	}else if(strpos(PHP_SELF, TEACHER_PATH . '/') !== false){
+    		$curr = preg_replace('/(.*)(' . TEACHER_PATH . ')(\/?)(.)*/i', '\1', dirname(PHP_SELF));
     		
     	}
     	
         $root = str_replace('\\', '/', $curr);
-
+        
         if (substr($root, -1) != '/')
         {
             $root .= '/';

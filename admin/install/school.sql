@@ -131,7 +131,7 @@ CREATE TABLE  `ht_guardian` (
 --
 CREATE TABLE  `ht_student` (
   `student_id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(20) NOT NULL,
+  `code` varchar(45) default NULL,
   `name` varchar(45) NOT NULL,
   `sexuality` smallint(1) unsigned default '1',
   `birthday` date default NULL,
@@ -145,6 +145,7 @@ CREATE TABLE  `ht_student` (
   `guardian_name` varchar(45) default NULL,
   `guardian_relation` varchar(45) default NULL,
   `guardian_phone` varchar(45) default NULL,
+  `password` varchar(32) default '',
   `license` varchar(45) default '',
   `has_left` smallint(1) unsigned default '0',
   `is_active` smallint(1) unsigned default '1',

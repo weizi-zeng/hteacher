@@ -48,8 +48,7 @@
       <div id="login">
 			<form method="post" action="login.php?act=signin" name='theForm' onsubmit="return validate()">
 			
-			
-				<div style=" margin:10px 0 20px -20px; padding-top:40px;">
+				<div style=" margin:10px 0 20px -20px; padding-top:15px;">
 						
 						<div class="return_message" style="display:none" id="infobarNoCookie">
                             <div class="re_mes_t txt_alert">
@@ -58,7 +57,18 @@
                         </div>
                         
                         <div class="loginPanel" style="background:none">
-										
+										<div style="height:25px;margin-bottom:8px;">
+                                        <label for="uin" class="column">
+                                           身　份：
+                                        </label>
+                                        <select id="status" name="status" class="txt text" style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
+                                        	<option value="admin">管理员</option>
+                                        	<option value="guardian">监护人</option>
+                                        </select>
+                                        </div>
+                                        <div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div>
+                                        
+                                        
                                         <div style="height:25px;">
                                         <label for="uin" class="column">
                                             帐　号：

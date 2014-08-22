@@ -28,7 +28,9 @@ define('ADMIN_PATH','admin');
 
 define('SCHOOL_PATH','school');
 
-define('HTEACHER_PATH','hteacher');
+define('TEACHER_PATH','teacher');
+
+define('GURADIAN_PATH','guardian');
 
 define('AUTH_KEY', 'this is a key');
 

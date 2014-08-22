@@ -40,7 +40,14 @@ if (window.parent != window)
       <table>
       <tr><td colspan="2" text-align="center"><div style="color:red;" >{$msg_detail}</div></td></tr>
       <tr>
-        <td>用户名</td>
+        <td>身份</td>
+        <td><select id="status" name="status" style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
+           	<option value="admin">管理员</option>
+           	<option value="guardian">监护人</option>
+           </select></td>
+      </tr>
+      <tr>
+        <td>账号</td>
         <td><input type="text" name="username" id="username"/></td>
       </tr>
       <tr>

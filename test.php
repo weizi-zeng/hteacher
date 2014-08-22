@@ -2,15 +2,15 @@
 
 define('IN_ECS',true);
 
-phpinfo();
+require(dirname(__FILE__) . '/includes/init.php');
 
-// require(dirname(__FILE__) . '/includes/init.php');
-// require(ROOT_PATH . '/includes/cls_sms.php');
+$today = date("Y-m-d");
 
-// $sms = new sms();
+$sdate = "2014-08-30";
 
-// $re = $sms->getBalance();
 
-// print_r($re);
+print_r($today>$sdate);
+
+
 
 ?>
