@@ -131,7 +131,7 @@ CREATE TABLE  `ht_guardian` (
 --
 CREATE TABLE  `ht_student` (
   `student_id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(45) default NULL,
+  `code` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `sexuality` smallint(1) unsigned default '1',
   `birthday` date default NULL,
@@ -150,8 +150,7 @@ CREATE TABLE  `ht_student` (
   `has_left` smallint(1) unsigned default '0',
   `is_active` smallint(1) unsigned default '1',
   `created` datetime NOT NULL,
-  PRIMARY KEY  (`student_id`),
-  UNIQUE KEY `Index_2` (`code`)
+  PRIMARY KEY  (`student_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -315,8 +314,7 @@ CREATE TABLE  `ht_exam_prj` (
   `class_code` varchar(20) NOT NULL,
   `closed` smallint(1) unsigned default '0',
   `created` datetime NOT NULL,
-  PRIMARY KEY  (`prj_id`),
-  UNIQUE KEY `Index_2` (`code`)
+  PRIMARY KEY  (`prj_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

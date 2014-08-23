@@ -41,7 +41,7 @@ class sms
 	var $scode  	= "GBK//IGNORE";
 	var $dcode  	= "UTF-8";
 	
-	var $suf		="【长沙开拓者】";
+	var $suf		="【我爱我班】";
 	
 	function __construct()
 	{

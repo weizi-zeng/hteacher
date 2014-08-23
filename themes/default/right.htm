@@ -9,7 +9,7 @@
     var username = document.getElementById("username");
     if(!username.value){
     	document.getElementById("username").focus();
-    	document.getElementById("warn").innerHTML = "用户名不能为空！";
+    	document.getElementById("warn").innerHTML = "帐号不能为空！";
     	return false;
     }
     
@@ -38,6 +38,14 @@
 	$.messager.alert("提示","请联系您的上级管理员帮您重置密码");
 	return false;
   }
+  
+  function showRegBtn(o){
+	  if(o.value=='guardian'){
+		  $("#btreg").show();
+	  }else {
+		  $("#btreg").hide();
+	  }
+  }
 //-->
 </script>
 
@@ -48,7 +56,7 @@
       <div id="login">
 			<form method="post" action="login.php?act=signin" name='theForm' onsubmit="return validate()">
 			
-				<div style=" margin:10px 0 20px -20px; padding-top:15px;">
+				<div style=" margin:10px 0 20px -20px; padding-top:11px;">
 						
 						<div class="return_message" style="display:none" id="infobarNoCookie">
                             <div class="re_mes_t txt_alert">
@@ -61,7 +69,7 @@
                                         <label for="uin" class="column">
                                            身　份：
                                         </label>
-                                        <select id="status" name="status" class="txt text" style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
+                                        <select id="status" name="status" onchange="showRegBtn(this);" class="txt text" style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
                                         	<option value="admin">管理员</option>
                                         	<option value="guardian">监护人</option>
                                         </select>
@@ -89,10 +97,11 @@
 										
                                         <div style="padding:16px 0 0 60px;clear:both; overflow:hidden;">
 										
-											
                                             <input class="btn bold wd2" value="登 录" style="cursor:pointer;" id="btlogin" name="btlogin" tabindex="3" type="submit">
+                                            <input class="btn bold wd2" value="注 册" style="cursor:pointer;display:none;" id="btreg" name="btreg" tabindex="3" type="submit">
+                                            <!-- 
 											<a href="javascript:forgetPwd();" >忘记密码？</a>
-											
+											 -->
                                         </div>
 										
                                         <div style="margin:10px 0 10px 60px;color:#6076a0;clear:left;">

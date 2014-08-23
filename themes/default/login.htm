@@ -3,6 +3,8 @@
 <head>
 <title>管理员登录</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="index_files/jquery.js"></script>
+
 {literal}
 <style type="text/css">
 body {
@@ -26,6 +28,15 @@ if (window.parent != window)
 {
   window.top.location.href = location.href;
 }
+
+function showRegBtn(o){
+	  if(o.value=='guardian'){
+		  $("#btreg").show();
+	  }else {
+		  $("#btreg").hide();
+	  }
+}
+
 {/literal}
 //-->
 </script>
@@ -41,7 +52,7 @@ if (window.parent != window)
       <tr><td colspan="2" text-align="center"><div style="color:red;" >{$msg_detail}</div></td></tr>
       <tr>
         <td>身份</td>
-        <td><select id="status" name="status" style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
+        <td><select id="status" name="status" onchange="showRegBtn(this);"  style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
            	<option value="admin">管理员</option>
            	<option value="guardian">监护人</option>
            </select></td>
@@ -68,7 +79,10 @@ if (window.parent != window)
       {/if}
       <tr><td colspan="2"><input type="checkbox" value="1" name="remember" id="remember" /><label for="remember">记住账户密码</label></td></tr>
       <tr><td colspan="2"><div style="color:red;" id="warn"></div></td></tr>
-      <tr><td>&nbsp;</td><td><input type="submit" value="登录管理中心" class="button" /></td></tr>
+      <tr><td>&nbsp;</td><td>
+      <input type="submit" value="登录管理中心" class="button" />
+      <input type="submit" value="监护人注册" class="button" style="display:none;" id="btreg"/>
+      </td></tr>
       <tr>
         <td colspan="2" align="left">
         &raquo; <a href="./index.php" style="color:white">返回主页面</a>

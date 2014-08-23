@@ -200,7 +200,7 @@
     	$("#address").val("");
     	
     	$("#guardian_name").val("");
-    	$("#guardian_relation").val("");
+//    	$("#guardian_relation").val("");
     	$("#guardian_phone").val("");
         
         $('form').form('validate');
