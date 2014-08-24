@@ -25,8 +25,7 @@
 			
 						<div id="containerM1">
 						<!--<p>&nbsp;</p>-->
-						<p>长沙开拓者</p>
-						<p>开拓新天地！</p>
+						<p>让我们对孩子的关注更快捷！更清晰！</p>
 						</div>
 
 						<div id="containerB"><img src="images/container_b.gif" alt="主要内容部分容器下边框"></div>
