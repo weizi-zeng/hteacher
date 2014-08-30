@@ -27,13 +27,13 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 		." (name,sexuality,birthday,
 		national,id_card,phone,email,address,
 		title,is_header,level,class_code,
-		has_left,created )
+		created )
 		values 
 			('".$_REQUEST["name"]."','".$_REQUEST["sexuality"]."',
 			'".$_REQUEST["birthday"]."','".$_REQUEST["national"]."',
 			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["email"]."',
 			'".$_REQUEST["address"]."','".$_REQUEST["title"]."','".$_REQUEST["is_header"]."',
-			'".$_REQUEST["level"]."','".$_SESSION["class_code"]."','".$_REQUEST["has_left"]."',
+			'".$_REQUEST["level"]."','".$_SESSION["class_code"]."',
 			now())";
 		
 		$db->query($sql);
@@ -57,8 +57,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 			address='".$_REQUEST["address"]."',
 			title='".$_REQUEST["title"]."',
 			is_header='".$_REQUEST["is_header"]."',
-			level='".$_REQUEST["level"]."',
-			has_left='".$_REQUEST["has_left"]."' 
+			level='".$_REQUEST["level"]."'
 			where teacher_id=".$id;
 		
 		$db->query($sql);

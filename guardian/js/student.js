@@ -53,7 +53,7 @@
                 	  }
                   },
                   { field: 'birthday', title: '出生年月', width: 120, sortable: true, align: 'center' },
-                  { field: 'national', title: '名族', width: 60, sortable: true, align: 'center' },
+                  { field: 'national', title: '民族', width: 60, sortable: true, align: 'center' },
                   { field: 'id_card', title: '身份证', width: 150, sortable: true, align: 'center' },
                   { field: 'phone', title: '电话', width: 120, sortable: true, align: 'center' },
                   { field: 'email', title: '邮箱', width: 200, sortable: true, align: 'center' },

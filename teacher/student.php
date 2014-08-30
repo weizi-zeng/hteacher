@@ -88,6 +88,13 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	$id    = !empty($_REQUEST['student_id'])        ? intval($_REQUEST['student_id'])      : 0;
 	if($id==0){//insert
 		
+		$sql = "select * from ".$ecs->table("student")." where code='".$_REQUEST["code"]."'";
+		$s = $db->getRow($sql);
+		if($s){
+			make_json_result("添加失败！学号“".$_REQUEST["code"]."”已被“".$s["name"]."”同学占用!");
+			exit;
+		}
+		
 		$sql = "insert into ".$ecs->table("student")
 		." (code,name,sexuality,birthday,
 		national,id_card,phone,email,address,class_code,
@@ -111,6 +118,13 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	
 	else //update
 	{
+		$sql = "select * from ".$ecs->table("student")." where code='".$_REQUEST["code"]."' and student_id!=".$id;
+		$s = $db->getRow($sql);
+		if($s){
+			make_json_result("修改失败！学号“".$_REQUEST["code"]."”已被“".$s["name"]."”同学占用!");
+			exit;
+		}
+		
 		$sql = "update ".$ecs->table("student")
 		." set name='".$_REQUEST["name"]."',
 			code='".$_REQUEST["code"]."',
@@ -153,7 +167,7 @@ elseif ($_REQUEST['act'] == 'export')
 {
 	$list = student_list();
 	
-	$content = "序号,学号,姓名,性别,出生年月,名族,身份证,电话,邮箱,住址,是否已离校,监护人,监护人电话,与监护人关系,创建日期\n";
+	$content = "序号,学号,姓名,性别,出生年月,民族,身份证,电话,邮箱,住址,是否已离校,监护人,监护人电话,与监护人关系,创建日期\n";
 	
 	foreach ($list["rows"] as $k=>$v)
 	{

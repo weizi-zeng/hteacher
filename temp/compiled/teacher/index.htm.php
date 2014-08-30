@@ -89,39 +89,45 @@
             <div title="首页" iconCls="icon-code" style="overflow: hidden; color:Black; display: block;">
                 
                 <div class="easyui-layout" data-options="fit:true,border:false">
-				    <div data-options="region:'center',border:false" style="width:600px;padding-left:20px;padding-top:20px;">
-				    	<div id="home-notice" class="easyui-panel" title="通知通告" data-options="collapsible:true" style="width:540px;">
+				    <div data-options="region:'center',border:false" style="width:540px;padding-left:20px;padding-top:20px;">
+				    	<div id="home-notice" class="easyui-panel" title="通知通告" data-options="collapsible:true" style="width:500px;height:240px;">
 		                    <ul>
 		                    <?php $_from = $this->_var['notices']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'notice');if (count($_from)):
     foreach ($_from AS $this->_var['notice']):
 ?>
 		                    	<li><a href="notice.php?act=view&notice_id=<?php echo $this->_var['notice']['notice_id']; ?>" target="blank_"><?php echo $this->_var['notice']['title']; ?>——<?php echo $this->_var['notice']['created']; ?></a></li>
-		                    <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                     <?php endforeach; else: ?>
+		                     	<li>目前还没有数据</li>
+		                    <?php endif; unset($_from); ?><?php $this->pop_vars();; ?>
 		                    </ul>
 		                </div>
 		                <br/>
-		                <div id="home-notice" class="easyui-panel" title="短信消息" data-options="collapsible:true" style="width:540px;">
+		                <div id="home-notice" class="easyui-panel" title="短信消息" data-options="collapsible:true" style="width:500px;height:240px;">
 		                    <ul>
 		                         <?php $_from = $this->_var['sms']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'sms_item');if (count($_from)):
     foreach ($_from AS $this->_var['sms_item']):
 ?>
 		                    	<li><p><?php echo $this->_var['sms_item']['content']; ?>——<?php echo $this->_var['sms_item']['created']; ?></p></li>
-		                   		 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                    	<?php endforeach; else: ?>
+		                     	<li>目前还没有数据</li>
+		                   		 <?php endif; unset($_from); ?><?php $this->pop_vars();; ?>
 		                    </ul>
 		                </div>
 				    </div>
-				    <div data-options="region:'west',border:false" style="width:600px;padding-left:20px;padding-top:20px;">
-				    	<div id="home-notice" class="easyui-panel" title="讨论区" data-options="collapsible:true" style="width:540px;">
+				    <div data-options="region:'west',border:false" style="width:540px;padding-left:20px;padding-top:20px;">
+				    	<div id="home-notice" class="easyui-panel" title="讨论区" data-options="collapsible:true" style="width:500px;height:240px;">
 		                    <ul>
 		                           <?php $_from = $this->_var['forums']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'forum');if (count($_from)):
     foreach ($_from AS $this->_var['forum']):
 ?>
 		                    	<li><a href="forum.php?act=view&forum_id=<?php echo $this->_var['forum']['forum_id']; ?>" target="blank_"><?php echo $this->_var['forum']['title']; ?>——<?php echo $this->_var['forum']['created']; ?></a></li>
-		                   		 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                   		<?php endforeach; else: ?>
+		                     	<li>目前还没有数据</li>
+		                   		 <?php endif; unset($_from); ?><?php $this->pop_vars();; ?>
 		                    </ul>
 		                </div>
 		                <br/>
-		                <div id="home-notice" class="easyui-panel" title="意见箱" data-options="collapsible:true" style="width:540px;">
+		                <div id="home-notice" class="easyui-panel" title="意见箱" data-options="collapsible:true" style="width:500px;height:240px;">
 		                    <ul>
 		                          <?php $_from = $this->_var['msg_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'msg_item');if (count($_from)):
     foreach ($_from AS $this->_var['msg_item']):
@@ -129,7 +135,9 @@
 		                    	<li><p><?php echo $this->_var['msg_item']['msg_title']; ?>——<?php echo $this->_var['msg_item']['msg_time']; ?></p>
 		                    		<p><?php echo $this->_var['msg_item']['msg_reply']; ?></p>
 		                    	</li>
-		                   		 <?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+		                   		<?php endforeach; else: ?>
+		                     	<li>目前还没有数据</li>
+		                   		 <?php endif; unset($_from); ?><?php $this->pop_vars();; ?>
 		                    </ul>
 		                </div>
 				    </div>

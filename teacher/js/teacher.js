@@ -52,7 +52,7 @@
                 	  }
                   },
                   { field: 'birthday', title: '出生年月', width: 120, sortable: true, align: 'center' },
-                  { field: 'national', title: '名族', width: 60, sortable: true, align: 'center' },
+                  { field: 'national', title: '民族', width: 60, sortable: true, align: 'center' },
                   { field: 'id_card', title: '身份证', width: 150, sortable: true, align: 'center' },
                   { field: 'phone', title: '电话', width: 120, sortable: true, align: 'center' },
                   { field: 'email', title: '邮箱', width: 200, sortable: true, align: 'center' },
@@ -64,11 +64,6 @@
                 	  },
                   },
                   { field: 'level', title: '教师级别', width: 120, sortable: true, align: 'center' },
-                  { field: 'has_left', title: '是否已离校', width: 120, sortable: true, align: 'center',
-                	  formatter: function (value, rowData, rowIndex) {
-                		  return value==1?"是":"否";
-                	  },
-                  },
                   { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
                   ]],
                   
@@ -149,25 +144,6 @@
         	
         	$("#level").val(row.level);
         	
-        	if(row.has_left=="1"){
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '1'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        		
-        	}else {
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '0'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}
-        	
         	 $('#btn_edit_ok').show();
              me.edit_window.window('open');
              
@@ -233,14 +209,6 @@
         
     	$("#level").val("");
     	
-    	$('[name="has_left"]:radio').each(function() {   
-            if (this.value == '0'){   
-               this.checked = true;   
-            }else {
-               this.checked = false;
-            }
-         });
-        
         $('form').form('validate');
     }
 

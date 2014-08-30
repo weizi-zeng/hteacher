@@ -52,18 +52,13 @@
                 	  }
                   },
                   { field: 'birthday', title: '出生年月', width: 120, sortable: true, align: 'center' },
-                  { field: 'national', title: '名族', width: 60, sortable: true, align: 'center' },
+                  { field: 'national', title: '民族', width: 60, sortable: true, align: 'center' },
                   { field: 'id_card', title: '身份证', width: 150, sortable: true, align: 'center' },
                   { field: 'phone', title: '电话', width: 120, sortable: true, align: 'center' },
                   { field: 'email', title: '邮箱', width: 200, sortable: true, align: 'center' },
                   { field: 'address', title: '住址', width: 300, sortable: true, align: 'center' },
                   { field: 'unit', title: '所在单位', width: 220, sortable: true, align: 'center' },
                   
-                  { field: 'has_left', title: '是否已离校', width: 120, sortable: true, align: 'center',
-                	  formatter: function (value, rowData, rowIndex) {
-                		  return value==1?"是":"否";
-                	  },
-                  },
                   { field: 'student_name', title: '相关学生', width: 80, sortable: true, align: 'center' },
                   { field: 'relationship', title: '与学生关系', width: 120, sortable: true, align: 'center' },
                   
@@ -128,24 +123,6 @@
         	$("#student_name").val(row.student_name);
         	$("#relationship").val(row.relationship);
         	
-        	if(row.has_left=="1"){
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '1'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        		
-        	}else {
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '0'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}
         	
         	 $('#btn_edit_ok').show();
              me.edit_window.window('open');
@@ -209,13 +186,6 @@
     	$("#student_name").val("");
     	$("#relationship").val("");
     	
-    	$('[name="has_left"]:radio').each(function() {   
-            if (this.value == '0'){   
-               this.checked = true;   
-            }else {
-               this.checked = false;
-            }
-         });
         
         $('form').form('validate');
     }

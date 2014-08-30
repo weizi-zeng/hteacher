@@ -205,7 +205,7 @@ input[type=checkbox]
 }
 .datagrid-cell
 {
-    overflow:visible;
+    overflow:auto;
 }
 
 .clear

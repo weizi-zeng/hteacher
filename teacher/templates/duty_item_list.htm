@@ -91,8 +91,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <th style="text-align: right">参考打分：</th>
-                        <td><input id="score" name="score" value="0" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" /></td>
+                        <th style="text-align: right">分值：</th>
+                        <td><input id="score" name="score" value="0" class="easyui-validatebox" maxlength="20" style="width: 170px" /></td>
                     </tr>
                 </table>
                 </form>

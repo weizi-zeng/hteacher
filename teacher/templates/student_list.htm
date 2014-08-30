@@ -104,7 +104,7 @@
                         <td><input id="birthday" name="birthday" type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
-                        <th style="text-align: right">名族：</th>
+                        <th style="text-align: right">民族：</th>
                         <td><input id="national" name="national" value="汉族" type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
@@ -130,7 +130,9 @@
                     </tr>
                     <tr> 
                         <th style="text-align: right">监护人电话：</th>
-                        <td><input id="guardian_phone" name="guardian_phone" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 150px" /></td>
+                        <td><input id="guardian_phone" name="guardian_phone" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 150px" />
+                        	<a class="easyui-tooltip" icon="icon-help" title="该项为必输项，请填手机号码，这是监护人注册与短信通知的唯一号码"  ><span >重要</span></a>
+                        </td>
                     </tr>
                     <tr>
                         <th style="text-align: right">与监护人关系：</th>
@@ -140,6 +142,7 @@
                         		<option value="父女">父女</option>
                         		<option value="母子">母子</option>
                         		<option value="母女">母女</option>
+                        		<option value="其他">其他</option>
                         	</select>
                         </td>
                     </tr>

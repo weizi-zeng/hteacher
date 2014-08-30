@@ -61,7 +61,7 @@
                     <tr>
                    		<td style="text-align: right; width:80px;">学生学号：</td>
                         <td style="text-align: left; width:150px;">
-                        	<select id="search_student_code" name="search_student_code" style="width:120px;">
+                        	<select id="search_student_code" name="search_student_code" style="width:110px;">
                         		<option value="">所有...</option>
                         		<?php $_from = $this->_var['students']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'student');if (count($_from)):
     foreach ($_from AS $this->_var['student']):
@@ -73,7 +73,7 @@
                         
                         <td style="text-align: right; width:80px;">量化项目：</td>
                         <td style="text-align: left; width:150px;">
-                        	<select id="search_name" name="search_name" style="width:120px;">
+                        	<select id="search_name" name="search_name" style="width:110px;">
                         		<option value="">所有...</option>
                         		<?php $_from = $this->_var['duty_items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'it');if (count($_from)):
     foreach ($_from AS $this->_var['it']):
@@ -84,13 +84,13 @@
                         </td>
                         
                         <td style="text-align: right; width:80px;">起始日期：</td>
-                        <td style="text-align: left; width:150px;">
-                            <input id="search_sdate" name="search_sdate" class="easyui-datebox" data-options="required:false"  maxlength="20" style="width: 170px" />
+                        <td style="text-align: left; width:120px;">
+                            <input id="search_sdate" name="search_sdate" class="easyui-datebox" data-options="required:false"  maxlength="20" style="width: 110px" />
                         </td>
                         
                         <td style="text-align: right; width:80px;">截止日期：</td>
-                        <td style="text-align: left; width:150px;">
-                            <input id="search_edate" name="search_edate" class="easyui-datebox" data-options="required:false"  maxlength="20" style="width: 170px" />
+                        <td style="text-align: left; width:120px;">
+                            <input id="search_edate" name="search_edate" class="easyui-datebox" data-options="required:false"  maxlength="20" style="width: 110px" />
                         </td>
                         
                         <td style="text-align: left; width:150px;">
@@ -149,7 +149,7 @@
                     </tr>
                     <tr>
                         <th style="text-align: right">事发日期：</th>
-                        <td><input id="date_" name="date_" class="easyui-datebox" data-options="required:true"  maxlength="20" style="width: 120px" /></td>
+                        <td><input id="date_" name="date_" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
                     </tr>
                     <tr> 
                         <th style="text-align: right">备注描述：</th>

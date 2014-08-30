@@ -331,9 +331,7 @@ CREATE TABLE  `ht_exam` (
   `classroom` varchar(45) NOT NULL,
   `closed` smallint(1) default '0',
   `created` varchar(45) NOT NULL,
-  PRIMARY KEY  (`exam_id`),
-  KEY `FK_ht_exam_1` (`prj_code`),
-  CONSTRAINT `FK_ht_exam_1` FOREIGN KEY (`prj_code`) REFERENCES `ht_exam_prj` (`code`)
+  PRIMARY KEY  (`exam_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE  `ht_score` (

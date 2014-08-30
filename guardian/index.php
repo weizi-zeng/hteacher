@@ -41,7 +41,7 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 		班级相册
 	 */
 	//通知通告
-	$sql = "select * from ".$ecs->table("notice")." order by notice_id desc limit 10";
+	$sql = "select * from ".$ecs->table("notice")." where class_code='".$_SESSION["class_code"]."'  order by notice_id desc limit 10";
 	$notices = $db->getAll($sql);
 	$smarty->assign('notices', $notices);
 	

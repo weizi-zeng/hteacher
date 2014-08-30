@@ -94,6 +94,11 @@ elseif ($_REQUEST['act'] == 'insert')
     	sys_msg("学校编号不能为空！", 1);
     }
     
+    $sql = "select * from ". $ecs->table('school')." where code='".$_POST['code']."'" ;
+    if($db->getRow($sql)){
+    	sys_msg("学校编号“".$_POST['code']."”已经存在！", 1);
+    }
+    
     $schoolname = empty($_POST['name']) ? '' : trim($_POST['name']);
     $type = empty($_POST['type']) ? '' : trim($_POST['type']);
     $address = empty($_POST['address']) ? '' : trim($_POST['address']);

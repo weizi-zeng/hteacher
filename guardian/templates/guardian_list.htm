@@ -39,32 +39,8 @@
     
      	<div id="toolbar" style="padding:5px;height:auto">
      	 <div style="margin-bottom:5px">
-            <a href="javascript:void(0)" onclick="add();" class="easyui-linkbutton" iconCls="icon-add" >新增</a>
             <a href="javascript:void(0)" onclick="update();" class="easyui-linkbutton" iconCls="icon-edit" >修改</a>
-            <a href="javascript:void(0)" onclick="deleteguardian();" class="easyui-linkbutton" iconCls="icon-remove" >删除</a>
          </div>
-    	 <div style="height:40px;margin-bottom:5px;" >
-          <form id="search_form" method="post">
-                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
-                    <tr>
-                        <td style="text-align: right; width:80px;">姓名：</td>
-                        <td style="text-align: left; width:150px;">
-                            <input id="search_name" name="search_name" style="width: 150px;" />
-                        </td>
-                        
-                         <td style="text-align: right; width:80px;">电话：</td>
-                        <td style="text-align: left; width:150px;">
-                            <input id="search_phone" name="search_phone" type="text" class="easyui-validatebox" maxlength="20" validType="telephone" style="width: 150px" />
-                        </td>
-                        
-                        <td style="text-align: left; width:150px;">
-                        	<a href="javascript:void(0)" onclick="searchguardians();" class="easyui-linkbutton" icon="icon-search">查找</a>
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                </table>
-           </form>
-     	</div>
      </div>
         
     </div>
@@ -97,7 +73,7 @@
                         <td><input id="birthday" name="birthday" type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
-                        <th style="text-align: right">名族：</th>
+                        <th style="text-align: right">民族：</th>
                         <td><input id="national" name="national" value="汉族" type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
@@ -110,7 +86,7 @@
                     </tr>
                     <tr> 
                         <th style="text-align: right">邮箱：</th>
-                        <td><input id="email" name="email" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="email" style="width: 200px" /></td>
+                        <td><input id="email" name="email" type="text" class="easyui-validatebox" maxlength="20" validType="email" style="width: 200px" /></td>
                     </tr>
                      <tr>
                         <th style="text-align: right">地址：</th>
@@ -118,7 +94,7 @@
                       </tr>
                       <tr>
                         <th style="text-align: right">所在单位：</th>
-                        <td><input id="unit" name="unit" type="text" class="easyui-validatebox" data-options="required:true" maxlength="60" style="width: 200px" /></td>
+                        <td><input id="unit" name="unit" type="text" class="easyui-validatebox" maxlength="60" style="width: 200px" /></td>
                       </tr>
                     <tr>
                         <th style="text-align: right">相关学生：</th>
@@ -132,16 +108,10 @@
                         		<option value="父女">父女</option>
                         		<option value="母子">母子</option>
                         		<option value="母女">母女</option>
+                        		<option value="其他">其他</option>
                         	</select>
                         </td>
                     </tr>
-                      <tr>
-                        <th style="text-align: right">是否已离校：</th>
-                        <td>
-                        <label><input type="radio" value="0" name="has_left" checked="true" style="width:20px;"/>否</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="1" name="has_left" style="width:20px;"/>是</label>
-                        </td>
-                      </tr>
                 </table>
                 </form>
             </div>

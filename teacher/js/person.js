@@ -53,7 +53,7 @@
                 	  }
                   },
                   { field: 'iden', title: '身份', width: 60, sortable: true, align: 'center' },
-                  { field: 'nation', title: '名族', width: 60, sortable: true, align: 'center' },
+                  { field: 'nation', title: '民族', width: 60, sortable: true, align: 'center' },
                   { field: 'id_card', title: '身份证', width: 150, sortable: true, align: 'center' },
                   { field: 'bthday', title: '出生年月', width: 120, sortable: true, align: 'center' },
                   { field: 'tel', title: '电话', width: 120, sortable: true, align: 'center' },

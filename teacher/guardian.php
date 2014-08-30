@@ -26,14 +26,14 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 		$sql = "insert into ".$ecs->table("guardian")
 		." (name,sexuality,birthday,
 		national,id_card,phone,email,address,unit,class_code,
-		student_name,relationship,has_left,
+		student_name,relationship,
 		created )
 		values 
 			('".$_REQUEST["name"]."','".$_REQUEST["sexuality"]."',
 			'".$_REQUEST["birthday"]."','".$_REQUEST["national"]."',
 			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["email"]."',
 			'".$_REQUEST["address"]."','".$_REQUEST["unit"]."','".$_SESSION["class_code"]."',
-			'".$_REQUEST["student_name"]."','".$_REQUEST["relationship"]."','".$_REQUEST["has_left"]."',
+			'".$_REQUEST["student_name"]."','".$_REQUEST["relationship"]."',
 			now())";
 		
 		$db->query($sql);
@@ -57,8 +57,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 			address='".$_REQUEST["address"]."',
 			unit='".$_REQUEST["unit"]."',
 			student_name='".$_REQUEST["student_name"]."',
-			relationship='".$_REQUEST["relationship"]."',
-			has_left='".$_REQUEST["has_left"]."' 
+			relationship='".$_REQUEST["relationship"]."'
 			where guardian_id=".$id;
 		
 		$db->query($sql);

@@ -92,7 +92,7 @@
                         <td><input id="birthday" name="birthday" type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
-                        <th style="text-align: right">名族：</th>
+                        <th style="text-align: right">民族：</th>
                         <td><input id="national" name="national" value="汉族" type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
