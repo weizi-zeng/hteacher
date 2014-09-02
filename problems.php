@@ -2,7 +2,7 @@
 	define('IN_ECS', true);
 	require (dirname(__FILE__) . '/includes/sinit.php');
 
-	$title = "常见问题";
+	$title = "系统相关";
 	$msg = "";
 	require_once 'themes/default/header.htm';
 	
@@ -78,7 +78,7 @@
 								}else {
 									?>
 									<div >
-									<div style="font-size: 14px;padding: 0 15px;font-weight: bold;">常见问题</div>
+									<div style="font-size: 14px;padding: 0 15px;font-weight: bold;">系统相关</div>
 										<ul class="right_list">
 										<?
 										$sql = "select * from ".$ecs->table('problems')." where is_active=1 order by problems_id desc";

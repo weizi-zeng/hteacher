@@ -104,7 +104,7 @@ elseif ($_REQUEST['act'] == 'insert')
     
             if (!$is_only)
 		    {
-		    	sys_msg(sprintf("账户已存在", stripslashes($_POST['user_name'])), 1);
+		    	sys_msg(sprintf("账号已存在", stripslashes($_POST['user_name'])), 1);
 		    }
     }
     
@@ -187,7 +187,7 @@ elseif ($_REQUEST['act'] == 'update')
     
             if (!$is_only)
 		    {
-		    	sys_msg(sprintf("账户已存在", stripslashes($_REQUEST['user_name'])), 1);
+		    	sys_msg(sprintf("账号已存在", stripslashes($_REQUEST['user_name'])), 1);
 		    }
     }
     

@@ -219,7 +219,7 @@ define('FROM_P',                    1); //用商城消费积分兑换
 define('TO_R',                      2); //兑换到商城等级积分
 define('FROM_R',                    3); //用商城等级积分兑换
 
-/* 支付宝商家账户 */
+/* 支付宝商家账号 */
 define('ALIPAY_AUTH', 'gh0bis45h89m5mwcoe85us4qrwispes0');
 define('ALIPAY_ID', '2088002052150939');
 

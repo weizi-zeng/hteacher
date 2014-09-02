@@ -29,6 +29,17 @@
   
   <script type="text/javascript">
 		function submsg(o){
+			if(!$("#e_mail").val()){
+				$.messager.alert('Warning',"邮箱不能为空！");
+				$("#e_mail").focus();
+				return false;
+			}
+			if(!$("#content").val()){
+				$.messager.alert('Warning',"内容不能为空！");
+				$("#content").focus();
+				return false;
+			}
+			
 			if ($("#subMsg_form").form('validate')) {
 				return true;
 			}
@@ -76,7 +87,8 @@
 								  <tr>
 									<td width="20%" align="right" class="tab_list2">您的邮箱</td>
 									<td width="80%" class="tab_list3">
-									  <input type="text" name="e_mail" id="e_mail" class="easyui-validatebox" data-options="required:true,validType:'email'"/>
+									  <input type="text" name="e_mail" id="e_mail" class="easyui-validatebox" data-options="validType:'email'"/>
+									  <span style="color:red;">*</span>
 									</td>
 								  </tr>
 								  <tr>
@@ -88,7 +100,8 @@
 								  <tr>
 									<td align="right" class="tab_list2">留言内容</td>
 									<td class="tab_list3">
-									  <textarea name="content" id="content" cols="45" rows="10"  class="easyui-validatebox" data-options="required:true"></textarea>
+									  <textarea name="content" id="content" cols="45" rows="10"></textarea>
+									  <span style="color:red;">*</span>
 									</td>
 								  </tr>
 								  <tr>

@@ -37,6 +37,41 @@ function showRegBtn(o){
 	  }
 }
 
+//登陆
+function login(o){
+	  var username = document.getElementById("username");
+	    if(!username.value){
+	    	document.getElementById("username").focus();
+	    	document.getElementById("warn").innerHTML = "帐号不能为空！";
+	    	return false;
+	    }
+	    
+	    var password = document.getElementById("password");
+	    if(!password.value){
+	    	document.getElementById("password").focus();
+	    	document.getElementById("warn").innerHTML = "密码不能为空！";
+	    	return false;
+	    }
+	    
+	    $("#act").val("signin");
+	    //提交到后台
+	  	$("#theForm").submit();
+}
+
+	//注册
+	function register(o){
+	  var username = document.getElementById("username");
+	    if(!username.value){
+	    	document.getElementById("username").focus();
+	    	document.getElementById("warn").innerHTML = "请输入您在学校预留的手机号码。";
+	    	return false;
+	    }
+	    $("#act").val("toReg");
+	    //提交到后台
+	  	$("#theForm").submit();
+	}
+
+	
 {/literal}
 //-->
 </script>
@@ -44,7 +79,7 @@ function showRegBtn(o){
 <body style="background: #91DBFE">
 
 <div class="login">
-<form method="post" action="login.php?act=signin" name='theForm' onsubmit="return validate()">
+<form method="post" action="login.php" name='theForm' id='theForm'>
   <table cellspacing="0" cellpadding="0" style="padding-top: 200px" align="center">
   <tr>
     <td>
@@ -53,17 +88,17 @@ function showRegBtn(o){
       <tr>
         <td>身份</td>
         <td><select id="status" name="status" onchange="showRegBtn(this);"  style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
-           	<option value="admin">管理员</option>
-           	<option value="guardian">监护人</option>
+           	<option value="guardian">亲爱的家长</option>
+            <option value="admin">辛勤的老师</option>
            </select></td>
       </tr>
       <tr>
         <td>账号</td>
-        <td><input type="text" name="username" id="username"/></td>
+        <td><input type="text" name="username" id="username" style="width:153px;"/></td>
       </tr>
       <tr>
         <td>密码</td>
-        <td><input type="password" name="password" id="password"/></td>
+        <td><input type="password" name="password" id="password" style="width:153px;"/></td>
       </tr>
       {if $gd_version > 0}
       <tr>
@@ -77,17 +112,16 @@ function showRegBtn(o){
       </td>
       </tr>
       {/if}
-      <tr><td colspan="2"><input type="checkbox" value="1" name="remember" id="remember" /><label for="remember">记住账户密码</label></td></tr>
+      <tr><td colspan="2"><input type="checkbox" value="1" name="remember" id="remember" /><label for="remember">记住账号密码</label></td></tr>
       <tr><td colspan="2"><div style="color:red;" id="warn"></div></td></tr>
       <tr><td>&nbsp;</td><td>
-      <input type="submit" value="登录管理中心" class="button" />
-      <input type="submit" value="监护人注册" class="button" style="display:none;" id="btreg"/>
+      <input type="button" value="登录" class="button" onclick="login(this);"/>
+      <input type="button" value="注册" class="button" id="btreg" onclick="register(this);" />
+      <input type="hidden" name="act" id="act"/>
       </td></tr>
       <tr>
         <td colspan="2" align="left">
         &raquo; <a href="./index.php" style="color:white">返回主页面</a>
-    <!--   &raquo; <a href="get_password.php?act=forget_pwd" style="color:white">忘记密码？</a>
-        &raquo; <a href="register.php" style="color:white">申请注册</a>   -->  
         </td>
       </tr>
       </table>

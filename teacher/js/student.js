@@ -47,6 +47,7 @@
 				  { field: 'student_id', title: 'ID', hidden: true },
 				  { field: 'code', title: '学号', width: 80, sortable: true, align: 'center' },
                   { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
+                  { field: 'dorm', title: '宿舍', width: 80, sortable: true, align: 'center' },
                   { field: 'sexuality', title: '性别', width: 60, sortable: true, align: 'center', 
                 	  formatter: function (value, rowData, rowIndex) {
                 		  return value==1?"男":"女";
@@ -56,6 +57,7 @@
                   { field: 'national', title: '民族', width: 60, sortable: true, align: 'center' },
                   { field: 'id_card', title: '身份证', width: 150, sortable: true, align: 'center' },
                   { field: 'phone', title: '电话', width: 120, sortable: true, align: 'center' },
+                  { field: 'qq', title: 'QQ', width: 120, sortable: true, align: 'center' },
                   { field: 'email', title: '邮箱', width: 200, sortable: true, align: 'center' },
                   { field: 'address', title: '住址', width: 300, sortable: true, align: 'center' },
                   { field: 'has_left', title: '是否已离校', width: 120, sortable: true, align: 'center',
@@ -98,7 +100,7 @@
         	$("#student_id").val(row.student_id);
         	$("#code").val(row.code);
         	$("#name").val(row.name);
-        	
+        	$("#dorm").val(row.dorm);
         	if(row.sexuality=="1"){
         		$('[name="sexuality"]:radio').each(function() {   
                     if (this.value == '1'){   
@@ -122,6 +124,7 @@
         	$("#id_card").val(row.id_card);
            
         	$("#phone").val(row.phone);
+        	$("#qq").val(row.qq);
         	$("#email").val(row.email);
         	$("#address").val(row.address);
         	

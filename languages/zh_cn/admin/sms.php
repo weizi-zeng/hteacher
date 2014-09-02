@@ -104,8 +104,8 @@ $_LANG['api_errors']['send'][1] = '用户名密码不正确。';
 $_LANG['api_errors']['send'][2] = '短信内容过长。';
 $_LANG['api_errors']['send'][3] = '发送日期应大于当前时间。';
 $_LANG['api_errors']['send'][4] = '错误的号码。';
-$_LANG['api_errors']['send'][5] = '账户余额不足。';
-$_LANG['api_errors']['send'][6] = '账户已被停用。';
+$_LANG['api_errors']['send'][5] = '账号余额不足。';
+$_LANG['api_errors']['send'][6] = '账号已被停用。';
 $_LANG['api_errors']['send'][7] = '接口错误。';
 //--历史记录
 $_LANG['api_errors']['get_history'][1] = '用户名密码不正确。';

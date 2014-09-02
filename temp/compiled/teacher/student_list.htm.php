@@ -74,7 +74,7 @@
     
     
     <div id="edit_window" class="easyui-window" closed="true" title="数据维护" style="width: 480px;
-        height: 440px; padding: 0px;" >
+        height: 480px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
                 <form id="edit_form" name="edit_form" method="post" style="padding-top:20px;">
@@ -86,11 +86,15 @@
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                 	<tr>
                         <th style="text-align: right">学号：</th>
-                        <td style="width:70%"><input id="code" name="code" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /><span style="color:red;">必须唯一</span></td>
+                        <td style="width:70%"><input id="code" name="code" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 200px" /><span style="color:red;">必须唯一</span></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">姓名：</th>
-                        <td style="width:70%"><input id="name" name="name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /></td>
+                        <td style="width:70%"><input id="name" name="name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 200px" /></td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">宿舍：</th>
+                        <td style="width:70%"><input id="dorm" name="dorm" type="text" maxlength="10" style="width: 200px" /></td>
                     </tr>
                     <tr>    
                         <th style="text-align: right">性别：</th>
@@ -101,11 +105,11 @@
                     </tr>
                     <tr>
                         <th style="text-align: right">生日：</th>
-                        <td><input id="birthday" name="birthday" type="text" maxlength="20" style="width: 150px" /></td>
+                        <td><input id="birthday" name="birthday" type="text" maxlength="20" style="width: 200px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">民族：</th>
-                        <td><input id="national" name="national" value="汉族" type="text" maxlength="20" style="width: 150px" /></td>
+                        <td><input id="national" name="national" value="汉族" type="text" maxlength="20" style="width: 200px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">身份证：</th>
@@ -113,7 +117,11 @@
                     </tr>
                     <tr> 
                         <th style="text-align: right">电话：</th>
-                        <td><input id="phone" name="phone" type="text" class="easyui-validatebox" maxlength="20" validType="telephone" style="width: 150px" /></td>
+                        <td><input id="phone" name="phone" type="text" class="easyui-validatebox" maxlength="20" validType="telephone" style="width: 200px" /></td>
+                    </tr>
+                    <tr> 
+                        <th style="text-align: right">QQ：</th>
+                        <td><input id="phone" name="qq" type="text" class="easyui-numberbox" maxlength="20" style="width: 200px" /></td>
                     </tr>
                     <tr> 
                         <th style="text-align: right">邮箱：</th>
@@ -121,16 +129,16 @@
                     </tr>
                      <tr>
                         <th style="text-align: right">地址：</th>
-                        <td><input id="address" name="address" type="text" class="easyui-validatebox" data-options="required:true" maxlength="60" style="width: 200px" /></td>
+                        <td><input id="address" name="address" type="text" class="easyui-validatebox" maxlength="60" style="width: 200px" /></td>
                       </tr>
                       
                     <tr>
                         <th style="text-align: right">监护人姓名：</th>
-                        <td style="width:70%"><input id="guardian_name" name="guardian_name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /></td>
+                        <td style="width:70%"><input id="guardian_name" name="guardian_name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 200px" /></td>
                     </tr>
                     <tr> 
                         <th style="text-align: right">监护人电话：</th>
-                        <td><input id="guardian_phone" name="guardian_phone" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 150px" />
+                        <td><input id="guardian_phone" name="guardian_phone" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 200px" />
                         	<a class="easyui-tooltip" icon="icon-help" title="该项为必输项，请填手机号码，这是监护人注册与短信通知的唯一号码"  ><span >重要</span></a>
                         </td>
                     </tr>

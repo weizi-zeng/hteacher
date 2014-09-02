@@ -2,7 +2,7 @@
 	define('IN_ECS', true);
 	require (dirname(__FILE__) . '/includes/sinit.php');
 
-	$title = "系统介绍";
+	$title = "教育园地";
 	$msg = "";
 	require_once 'themes/default/header.htm';
 ?>

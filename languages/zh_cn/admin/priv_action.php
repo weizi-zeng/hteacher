@@ -60,7 +60,7 @@ $_LANG['users_drop'] = '会员删除';
 $_LANG['user_rank'] = '会员等级管理';
 $_LANG['feedback_priv'] = '会员留言管理';
 $_LANG['surplus_manage'] = '会员余额管理';
-$_LANG['account_manage'] = '会员账户管理';
+$_LANG['account_manage'] = '会员账号管理';
 
 //权限管理部分的权限
 $_LANG['admin_manage'] = '管理员添加/编辑';

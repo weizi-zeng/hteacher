@@ -12,32 +12,8 @@ DROP TABLE IF EXISTS `ht_guardian`;
 DROP TABLE IF EXISTS `ht_class`;
 DROP TABLE IF EXISTS `ht_grade`;
 DROP TABLE IF EXISTS `ht_teacher`;
-DROP TABLE IF EXISTS `ht_person`;
 DROP TABLE IF EXISTS `ht_notice_attach`;
 
--- --------------------------------------------------------
---
--- 表的结构 `ht_person`
---
-CREATE TABLE `ht_person` (
-  `person_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `is_active` tinyint(1) unsigned DEFAULT '1',
-  `class_code` varchar(20) NOT NULL,
-  `iden` varchar(45) DEFAULT NULL COMMENT '身份',
-  `id_card` varchar(45) DEFAULT NULL COMMENT '身份证',
-  `sexuality` tinyint(1) unsigned DEFAULT NULL,
-  `bthday` date DEFAULT NULL,
-  `nation` varchar(45) DEFAULT NULL,
-  `tel` varchar(45) DEFAULT NULL,
-  `shorttel` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `address` varchar(45) DEFAULT NULL,
-  `unit` varchar(45) DEFAULT NULL,
-  `has_left` tinyint(1) unsigned DEFAULT '0',
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`person_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 --
@@ -45,7 +21,6 @@ CREATE TABLE `ht_person` (
 --
 CREATE TABLE  `ht_teacher` (
   `teacher_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(45) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `sexuality` smallint(1) unsigned DEFAULT '1',
   `birthday` date DEFAULT NULL,
@@ -105,7 +80,6 @@ CREATE TABLE  `ht_class` (
 --
 CREATE TABLE  `ht_guardian` (
   `guardian_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(45) DEFAULT NULL,
   `name` varchar(45) NOT NULL,
   `sexuality` smallint(1) unsigned DEFAULT '1',
   `birthday` date DEFAULT NULL,
@@ -133,22 +107,24 @@ CREATE TABLE  `ht_student` (
   `student_id` int(10) unsigned NOT NULL auto_increment,
   `code` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
+  `dorm` varchar(10) default '',
   `sexuality` smallint(1) unsigned default '1',
   `birthday` date default NULL,
   `national` varchar(20) default NULL,
   `id_card` varchar(45) default NULL,
   `phone` varchar(45) default NULL,
+  `qq` varchar(20) default '',
   `email` varchar(45) default NULL,
   `address` varchar(256) default NULL,
   `class_code` varchar(45) NOT NULL,
   `guardian_id` int(10) unsigned default NULL,
-  `guardian_name` varchar(45) default NULL,
+  `guardian_name` varchar(45) NOT NULL,
   `guardian_relation` varchar(45) default NULL,
-  `guardian_phone` varchar(45) default NULL,
+  `guardian_phone` varchar(45) NOT NULL,
   `password` varchar(32) default '',
   `license` varchar(45) default '',
   `has_left` smallint(1) unsigned default '0',
-  `is_active` smallint(1) unsigned default '1',
+  `is_active` smallint(1) unsigned default '0',
   `created` datetime NOT NULL,
   PRIMARY KEY  (`student_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -156,7 +132,6 @@ CREATE TABLE  `ht_student` (
 
 CREATE TABLE  `ht_course` (
   `course_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(45) DEFAULT NULL,
   `semster` varchar(45) NOT NULL,
   `weekday` smallint(2) NOT NULL,
   `class_code` varchar(45) NOT NULL,
@@ -307,7 +282,6 @@ CREATE TABLE  `ht_forum` (
 DROP TABLE IF EXISTS `ht_exam_prj`;
 CREATE TABLE  `ht_exam_prj` (
   `prj_id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `sdate` date default NULL,
   `edate` date default NULL,
@@ -320,7 +294,6 @@ CREATE TABLE  `ht_exam_prj` (
 
 CREATE TABLE  `ht_exam` (
   `exam_id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(45) default NULL,
   `prj_code` varchar(45) NOT NULL,
   `class_code` varchar(45) NOT NULL,
   `subject` varchar(45) NOT NULL,
@@ -349,7 +322,6 @@ CREATE TABLE  `ht_score` (
 DROP TABLE IF EXISTS `ht_duty_item`;
 CREATE TABLE  `ht_duty_item` (
   `duty_item_id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(20) NOT NULL,
   `name` varchar(45) NOT NULL,
   `genus` smallint(1) unsigned NOT NULL default '0',
   `score` int(10) default '0',

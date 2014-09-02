@@ -19,10 +19,10 @@
   </section>
   
   <section id="display_charge_ui">
-    <title>账户充值</title>
+    <title>账号充值</title>
     <content>
     <![CDATA[
-	<p>本页面提供账户充值的操作，输入需要充值的金额，按系统提示操作即可完成充值操作。</p>
+	<p>本页面提供账号充值的操作，输入需要充值的金额，按系统提示操作即可完成充值操作。</p>
 	]]>
     </content>
   </section>

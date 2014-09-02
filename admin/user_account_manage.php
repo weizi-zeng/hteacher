@@ -127,7 +127,7 @@ elseif ($_REQUEST['act'] == 'query')
 }
 
 /**
-* 获得账户变动金额
+* 获得账号变动金额
 * @param   string  $type   0,充值 1,提现
 * @return  array
 */

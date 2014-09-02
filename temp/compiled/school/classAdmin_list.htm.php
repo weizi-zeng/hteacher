@@ -17,7 +17,7 @@
     	<option value="<?php echo $this->_var['list']['code']; ?>" ><?php echo $this->_var['list']['name']; ?></option>
     	<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
     </select>
-    &nbsp;账户名称&nbsp;<input type="text" name="keyword" /> <input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" />
+    &nbsp;账号名称&nbsp;<input type="text" name="keyword" /> <input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" />
   </form>
 </div>
 
@@ -27,7 +27,7 @@
 
 <table cellspacing='1' cellpadding='3' id='list-table'>
   <tr>
-    <th>账户</th>
+    <th>账号</th>
     <th>电话</th>
     <th>邮箱</th>
     <th>所属班级</th>

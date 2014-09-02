@@ -188,7 +188,7 @@ class shenzhou
         $version             = trim($_REQUEST['version']);
         $language            = trim($_REQUEST['language']);
         $sign_type           = trim($_REQUEST['signType']);
-        $pay_type            = trim($_REQUEST['payType']);            //20代表神州行卡密直接支付；22代表快钱账户神州行余额支付
+        $pay_type            = trim($_REQUEST['payType']);            //20代表神州行卡密直接支付；22代表快钱账号神州行余额支付
         $card_umber          = trim($_REQUEST['cardNumber']);
         $card_pwd            = trim($_REQUEST['cardPwd']);
         $order_id            = trim($_REQUEST['orderId']);            //订单号

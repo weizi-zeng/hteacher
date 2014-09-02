@@ -4,7 +4,7 @@
 <form name="theForm" method="post" enctype="multipart/form-data" onsubmit="return validate();">
 <table width="100%">
   <tr>
-    <td class="label">账户：</td>
+    <td class="label">账号：</td>
     <td>
       <input type="text" name="user_name" maxlength="20" value="<?php echo htmlspecialchars($this->_var['user']['user_name']); ?>" size="34"/><?php echo $this->_var['lang']['require_field']; ?></td>
   </tr>

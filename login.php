@@ -147,7 +147,6 @@ $smarty->template_dir   = ROOT_PATH . 'themes/' . $_CFG['template'];
 $smarty->assign('lang', $_LANG);
 
 
-
 /*------------------------------------------------------ */
 //-- 验证登陆信息
 /*------------------------------------------------------ */
@@ -176,7 +175,7 @@ if ($_REQUEST['act'] == 'signin')
 		$guardian = getGuardianByUsername($_REQUEST['username']);
 		if($guardian){
 			if($guardian["has_left"]){//已经离校
-				login_display("此账户相关人已经毕业离校");
+				login_display("此账号相关人已经毕业离校");
 				exit;
 			}
 			
@@ -198,7 +197,7 @@ if ($_REQUEST['act'] == 'signin')
 					}
 				
 				}else {
-					login_display("此账户未激活");
+					login_display("此账号未激活");
 				}
 			}else {
 				//调转到注册页面
@@ -207,7 +206,7 @@ if ($_REQUEST['act'] == 'signin')
 			}
 			
 		}else {
-			login_display("账户不正确");
+			login_display("账号不正确");
 		}
 		
 	}else {
@@ -258,7 +257,7 @@ if ($_REQUEST['act'] == 'signin')
 		}
 		else
 		{
-			login_display("账户或密码不正确");
+			login_display("账号或密码不正确");
 		}
 	
 	}
@@ -307,7 +306,24 @@ if ($_REQUEST['act'] == 'signin')
 	exit;
 	
 }
-
+/*------------------------------------------------------ */
+//-- 加载提示信息跳转到注册页面
+/*------------------------------------------------------ */
+if ($_REQUEST['act'] == 'toReg')
+{
+	$guardian = getGuardianByUsername($_REQUEST['username']);
+	if($guardian){
+		if($guardian["has_left"]){
+			//已经离校
+			login_display("此账号相关人已经毕业离校");
+			exit;
+		}
+		//调转到注册页面
+		$warn = "请确认上面的信息正确无误，然后输入注册码，进行注册；<br/>若信息有误，请找管理员确认之后再进行注册！";
+		register_display($guardian, $warn);
+	}
+	login_display("您输入的预留号码不正确");
+}
 
 /*------------------------------------------------------ */
 //-- 监护人注册

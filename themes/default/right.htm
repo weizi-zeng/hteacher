@@ -4,24 +4,40 @@
   /**
    * 检查表单输入的内容
    */
-  function validate()
-  {
-    var username = document.getElementById("username");
-    if(!username.value){
-    	document.getElementById("username").focus();
-    	document.getElementById("warn").innerHTML = "帐号不能为空！";
-    	return false;
-    }
-    
-    var password = document.getElementById("password");
-    if(!password.value){
-    	document.getElementById("password").focus();
-    	document.getElementById("warn").innerHTML = "密码不能为空！";
-    	return false;
-    }
-    
-    return true;
+  //登陆
+  function login(o){
+	  var username = document.getElementById("username");
+	    if(!username.value){
+	    	document.getElementById("username").focus();
+	    	document.getElementById("warn").innerHTML = "帐号不能为空！";
+	    	return false;
+	    }
+	    
+	    var password = document.getElementById("password");
+	    if(!password.value){
+	    	document.getElementById("password").focus();
+	    	document.getElementById("warn").innerHTML = "密码不能为空！";
+	    	return false;
+	    }
+	    
+	    $("#act").val("signin");
+	    //提交到后台
+	  	$("#theForm").submit();
   }
+  
+	//注册
+	function register(o){
+	  var username = document.getElementById("username");
+	    if(!username.value){
+	    	document.getElementById("username").focus();
+	    	document.getElementById("warn").innerHTML = "请输入您在学校预留的手机号码。";
+	    	return false;
+	    }
+	    $("#act").val("toReg");
+	    //提交到后台
+	  	$("#theForm").submit();
+	}
+  
   
   function vote_send(){
 	//TODO
@@ -54,9 +70,9 @@
 	
 		<!--登录-->
       <div id="login">
-			<form method="post" action="login.php?act=signin" name='theForm' onsubmit="return validate()">
+			<form method="post" action="login.php" name='theForm' id="theForm">
 			
-				<div style=" margin:10px 0 20px -20px; padding-top:11px;">
+				<div style="padding-top:11px;">
 						
 						<div class="return_message" style="display:none" id="infobarNoCookie">
                             <div class="re_mes_t txt_alert">
@@ -65,48 +81,51 @@
                         </div>
                         
                         <div class="loginPanel" style="background:none">
-										<div style="height:25px;margin-bottom:8px;">
-                                        <label for="uin" class="column">
-                                           身　份：
-                                        </label>
-                                        <select id="status" name="status" onchange="showRegBtn(this);" class="txt text" style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
-                                        	<option value="admin">管理员</option>
-                                        	<option value="guardian">监护人</option>
-                                        </select>
-                                        </div>
-                                        <div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div>
-                                        
-                                        
-                                        <div style="height:25px;">
-                                        <label for="uin" class="column">
-                                            帐　号：
-                                        </label>
-                                        <input class="txt text" id="username" name="username" tabindex="1" type="text">
-                                        </div>
-                                        <div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div>
-                                        
-                                        
-                                        <div style="height:25px;margin:8px 0 0 0;clear:left">
-                                            <label for="pp" class="column">
-                                                密　码：
-                                            </label>
-                                            <input id="password" name="password" value="" tabindex="2" class="txt text" type="password">
-                                        </div>
-										
-                                        <div style="margin:8px 0 0 0;color:red;" id="warn"></div>
-										
-                                        <div style="padding:16px 0 0 60px;clear:both; overflow:hidden;">
-										
-                                            <input class="btn bold wd2" value="登 录" style="cursor:pointer;" id="btlogin" name="btlogin" tabindex="3" type="submit">
-                                            <input class="btn bold wd2" value="注 册" style="cursor:pointer;display:none;" id="btreg" name="btreg" tabindex="3" type="submit">
-                                            <!-- 
-											<a href="javascript:forgetPwd();" >忘记密码？</a>
-											 -->
-                                        </div>
-										
-                                        <div style="margin:10px 0 10px 60px;color:#6076a0;clear:left;">
-                                        </div>
-                                        
+                        	<table>
+                        		<tr>
+                        			<td><label for="uin" class="column">身　份：</label></td>
+                        			<td><select id="status" name="status" onchange="showRegBtn(this);" class="txt text" style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
+                                        	<option value="guardian">亲爱的家长</option>
+                                        	<option value="admin">辛勤的老师</option>
+                                        </select></td>
+                        		</tr>
+                        		<tr>
+                        			<td><div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div></td>
+                        		</tr>
+                        		
+                        		<tr>
+                        			<td><label for="uin" class="column">帐　号：</label></td>
+                        			<td><input class="txt text" id="username" name="username" type="text" style="width:153px;"></td>
+                        		</tr>
+                        		<tr>
+                        			<td><div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div></td>
+                        		</tr>
+                        		
+                        		<tr>
+                        			<td><label for="uin" class="column">密　码：</label></td>
+                        			<td><input id="password" name="password" class="txt text" type="password" style="width:153px;"></td>
+                        		</tr>
+                        		<tr>
+                        			<td><div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div></td>
+                        		</tr>
+                        		
+                        		<tr>
+                        			<td colspan="2" style="text-align:center;"><div style="color:red;" id="warn"></div></td>
+                        		</tr>
+                        		
+                        		<tr>
+                        			<td></td>
+                        			<td>
+                        				<input type="hidden" name="act" id="act"/>
+                        				<input class="btn bold wd2" value="登 录" style="cursor:pointer;" onclick="login(this);" name="btlogin" type="button">
+                                        <input class="btn bold wd2" value="注 册" id="btreg" style="cursor:pointer;" onclick="register(this);" name="btreg" type="button">
+                                    </td>
+                        		</tr>
+                        		<tr>
+                        			<td><div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div></td>
+                        		</tr>
+                        		
+                        	</table>
                         </div>
                     </div>
 			</form>
@@ -117,21 +136,24 @@
       <div id="right" width="270">
 		
 		   <div class="right_box">
-				<div class="right_title">在线调查</div>
-				<form id="searchForm">
-				<div class="right_ques" id="kkList"><span>您好！在使用我爱我班网站过程中，您认为我们网站存在着那些不足？</span>
-							<label><input name="itemId" value="21" type="radio">设计风格</label>
-							<label><input name="itemId" value="22" type="radio">信息的及时和准确性</label>
-							<label><input name="itemId" value="23" type="radio">信息太少</label>
-							<label><input name="itemId" value="24" type="radio">使用不方便</label>
-							<label><input name="itemId" value="25" type="radio">其他</label>
-							<div class="right_button">
-					<input class="button_1" id="vote" value="投票" onclick="vote_send();" type="button">
-				  </div></div></form>
+				<div class="right_title">教育园地</div>
+				<ul class="right_list">
+				<?
+				$sql = "select * from ".$ecs->table('problems')." where is_active=1 order by problems_id desc limit 10";
+				$problems = $db->getAll($sql);
+
+					foreach($problems as $k=>$problem){
+						?>
+						<li><a href="problems.php?act=view&problems_id=<?=$problem[problems_id] ?>"><?=$problem[title] ?></a></li>
+						<?php
+					}
+				 ?>
+				 <li><a href="problems.php ?>">更多...</a></li>
+			   </ul>
 			  </div>
 			  
 			  <div class="right_box">
-				<div class="right_title">常见问题</div>
+				<div class="right_title">系统相关</div>
 				<ul class="right_list">
 				<?
 				$sql = "select * from ".$ecs->table('problems')." where is_active=1 order by problems_id desc limit 10";
@@ -147,7 +169,5 @@
 			   </ul>
 			  </div> 
 			  
-			 <div class="service"><a href="javascript:gotoService();"><img src="index_files/indexRight_data/service.jpg"></a></div>
-			 
       </div>
     </div>

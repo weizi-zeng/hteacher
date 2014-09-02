@@ -24,7 +24,7 @@ define('SOURCE_ID', '620386');
 class sms
 {
 	var $sms_server_id;
-	var $user;		//账户
+	var $user;		//账号
 	var $pass;		//密码
 	var $server;	//服务器
 	var $port; 		//端口号

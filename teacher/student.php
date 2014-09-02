@@ -52,26 +52,11 @@ elseif ($_REQUEST['act'] == 'import')
 			continue;
 		}
 		
-		$i=1;
+		$i=0;
 		$arr['code'] = replace_quote($line_list[$i++]);//学号
 		$arr['name'] = trim($line_list[$i++]);//学生信息
-		$arr['sexuality'] = trim($line_list[$i++])=="男"?"1":"0";
-		$arr['birthday'] = replace_quote($line_list[$i++]);
-		$arr['id_card'] = replace_quote($line_list[$i++]);
-		$arr['national'] = trim($line_list[$i++]);
-		$arr['address'] = trim($line_list[$i++]);
-		$arr['phone'] = replace_quote($line_list[$i++]);
-		$arr['email'] = trim($line_list[$i++]);
-		
 		$arr['guardian_name'] = trim($line_list[$i++]);//监护人信息
-		$arr['guardian_sexuality'] = trim($line_list[$i++])=="男"?"1":"0";
-		$arr['guardian_birthday'] = replace_quote($line_list[$i++]);
-		$arr['guardian_id_card'] = replace_quote($line_list[$i++]);
 		$arr['guardian_phone'] = replace_quote($line_list[$i++]);
-		$arr['guardian_email'] = trim($line_list[$i++]);
-		$arr['guardian_unit'] = trim($line_list[$i++]);
-		$arr['guardian_relation'] = trim($line_list[$i++]);
-		
 		$arr['class_code'] = $class_code;
 		
 		$students_list[] = $arr;
@@ -88,7 +73,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	$id    = !empty($_REQUEST['student_id'])        ? intval($_REQUEST['student_id'])      : 0;
 	if($id==0){//insert
 		
-		$sql = "select * from ".$ecs->table("student")." where code='".$_REQUEST["code"]."'";
+		$sql = "select * from ".$ecs->table("student")." where code='".$_REQUEST["code"]."' and class_code='".$_SESSION["class_code"]."'";
 		$s = $db->getRow($sql);
 		if($s){
 			make_json_result("添加失败！学号“".$_REQUEST["code"]."”已被“".$s["name"]."”同学占用!");
@@ -96,14 +81,14 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 		}
 		
 		$sql = "insert into ".$ecs->table("student")
-		." (code,name,sexuality,birthday,
-		national,id_card,phone,email,address,class_code,
+		." (code,name,dorm,sexuality,birthday,
+		national,id_card,phone,qq,email,address,class_code,
 		guardian_name,guardian_relation,guardian_phone,has_left,
 		created )
 		values 
-			('".$_REQUEST["code"]."','".$_REQUEST["name"]."','".$_REQUEST["sexuality"]."',
+			('".$_REQUEST["code"]."','".$_REQUEST["name"]."','".$_REQUEST["dorm"]."','".$_REQUEST["sexuality"]."',
 			'".$_REQUEST["birthday"]."','".$_REQUEST["national"]."',
-			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["email"]."',
+			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["qq"]."','".$_REQUEST["email"]."',
 			'".$_REQUEST["address"]."','".$_SESSION["class_code"]."',
 			'".$_REQUEST["guardian_name"]."','".$_REQUEST["guardian_relation"]."','".$_REQUEST["guardian_phone"]."','".$_REQUEST["has_left"]."',
 			now())";
@@ -118,7 +103,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	
 	else //update
 	{
-		$sql = "select * from ".$ecs->table("student")." where code='".$_REQUEST["code"]."' and student_id!=".$id;
+		$sql = "select * from ".$ecs->table("student")." where code='".$_REQUEST["code"]."' and class_code='".$_SESSION["class_code"]."' and student_id!=".$id;
 		$s = $db->getRow($sql);
 		if($s){
 			make_json_result("修改失败！学号“".$_REQUEST["code"]."”已被“".$s["name"]."”同学占用!");
@@ -128,11 +113,13 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 		$sql = "update ".$ecs->table("student")
 		." set name='".$_REQUEST["name"]."',
 			code='".$_REQUEST["code"]."',
+			dorm='".$_REQUEST["dorm"]."',
 			sexuality='".$_REQUEST["sexuality"]."',
 			birthday='".$_REQUEST["birthday"]."',
 			national='".$_REQUEST["national"]."',
 			id_card='".$_REQUEST["id_card"]."',
 			phone='".$_REQUEST["phone"]."',
+			qq='".$_REQUEST["qq"]."',
 			email='".$_REQUEST["email"]."',
 			address='".$_REQUEST["address"]."',
 			guardian_name='".$_REQUEST["guardian_name"]."',
@@ -176,7 +163,8 @@ elseif ($_REQUEST['act'] == 'export')
 		$content .= $v["student_id"] . ",'".$v["code"]. "',".$v["name"]. ",".$sexuality. ",".$v["birthday"]. ",".$v["national"]. ",'".$v["id_card"]. "','".$v["phone"]. "',".$v["email"]. ",".$v["address"]. ",".$has_left. ",".$v["guardian_name"]. ",'".$v["guardian_phone"] . "',".$v["guardian_relation"]. ",".$v["created"] . "\n";
 	}
 	
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+// 	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
@@ -263,15 +251,9 @@ function insert_datas($students_list){
 	
 	foreach ($students_list as $k=>$v){
 		$sql = "insert into ".$GLOBALS['ecs']->table("guardian")
-		." (name,sexuality,birthday,national,id_card,phone,email,
-		address,unit,relationship,class_code,student_name,created)
+		." (name,phone,class_code,student_name,created)
 					values
-	   ('".$v["guardian_name"]."','".$v["guardian_sexuality"]."',
-		'".$v["guardian_birthday"]."','".$v["national"]."',
-		'".$v["guardian_id_card"]."','".$v["guardian_phone"]."',
-		'".$v["guardian_email"]."',
-		'".$v["address"]."','".$v["guardian_unit"]."',
-		'".$v["guardian_relation"]."','".$v["class_code"]."','".$v["name"]."',
+	   ('".$v["guardian_name"]."','".$v["guardian_phone"]."','".$v["class_code"]."','".$v["name"]."',
 		now()
 		)  ";
 		
@@ -282,18 +264,13 @@ function insert_datas($students_list){
 		
 		
 		$sql = "insert into ".$GLOBALS['ecs']->table("student")
-		." (code, name,sexuality,birthday,national,id_card,
-		phone,email,address,class_code,guardian_id,
-		guardian_name,guardian_phone,guardian_relation,
+		." (code, name, class_code,guardian_id,
+		guardian_name,guardian_phone,
 		created)
 				values 
-		('".$v["code"]."','".$v["name"]."','".$v["sexuality"]."',
-		'".$v["birthday"]."','".$v["national"]."',
-		'".$v["id_card"]."','".$v["phone"]."',
-		'".$v["email"]."',
-		'".$v["address"]."','".$v["class_code"]."',
+		('".$v["code"]."','".$v["name"]."','".$v["class_code"]."',
 		'".$guardian_id."',
-		'".$v["guardian_name"]."','".$v["guardian_phone"]."','".$v["guardian_relation"]."',
+		'".$v["guardian_name"]."','".$v["guardian_phone"]."',
 		now()
 		)  ";
 		
@@ -301,7 +278,6 @@ function insert_datas($students_list){
 		
 		$GLOBALS['db']->query($sql);
 		$student_id = $GLOBALS['db']->insert_id();
-		
 		
 		$sql = "update ".$GLOBALS['ecs']->table("guardian")." set student_id=".$student_id." where guardian_id=".$guardian_id;
 		$GLOBALS['db']->query($sql);

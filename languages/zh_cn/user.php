@@ -113,7 +113,7 @@ $_LANG['member_rank'] = '会员等级';
 $_LANG['member_discount'] = '会员折扣';
 $_LANG['rank_integral'] = '等级积分';
 $_LANG['consume_integral'] = '消费积分';
-$_LANG['account_balance'] = '账户余额';
+$_LANG['account_balance'] = '账号余额';
 $_LANG['user_bonus'] = '用户红包';
 $_LANG['user_bonus_info'] = '共计 %d 个,价值 %s';
 $_LANG['not_bonus'] = '没有红包';
@@ -437,7 +437,7 @@ $_LANG['passwd_balnk'] = '密码中不能包含空格';
 /* 用户中心默认页面 */
 $_LANG['welcome_to'] = '欢迎您回到';
 $_LANG['last_time'] = '您的上一次登录时间';
-$_LANG['your_account'] = '您的账户';
+$_LANG['your_account'] = '您的账号';
 $_LANG['your_notice'] = '用户提醒';
 $_LANG['your_surplus'] = '余额';
 $_LANG['credit_line'] = '信用额度';

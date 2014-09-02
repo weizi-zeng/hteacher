@@ -133,7 +133,7 @@ $_LANG['kilogram'] = '千克';
 $_LANG['08_members'] = '会员管理';
 $_LANG['08_schools'] = '学校管理';
 $_LANG['09_advice'] = '系统留言';
-$_LANG['09_problems'] = '常见问题';
+$_LANG['09_problems'] = '系统相关';
 $_LANG['10_priv_admin'] = '超级管理员';
 $_LANG['10_license_manage'] = '注册码管理';
 $_LANG['10_sys_log'] = '系统日志';
@@ -163,7 +163,7 @@ $_LANG['03_classAdmin_msg'] = '班主任意见';
 $_LANG['04_customer_msg'] = '监护人投诉';
 $_LANG['05_other_msg'] = '外围区意见箱';
 
-/*常见问题*/
+/*系统相关*/
 $_LANG['01_problems_list'] = '问题列表';
 $_LANG['02_problems_add'] = '添加问题';
 
@@ -200,7 +200,7 @@ $_LANG['convert'] = '转换数据';
 /* 短信管理 */
 // $_LANG['02_sms_my_info'] = '账号信息';
 // $_LANG['03_sms_send'] = '发送短信';
-// $_LANG['04_sms_charge'] = '账户充值';
+// $_LANG['04_sms_charge'] = '账号充值';
 // $_LANG['05_sms_send_history'] = '发送记录';
 // $_LANG['06_sms_charge_history'] = '充值记录';
 $_LANG['01_sms_setting'] = '服务器设置';
@@ -265,5 +265,5 @@ $_LANG['catname_exist'] = '已存在相同的分类名称!';
 $_LANG['brand_name_exist'] = '已存在相同的品牌名称!';
 
 $_LANG['alipay_login'] = '<a href="https://www.alipay.com/user/login.htm?goto=https%3A%2F%2Fwww.alipay.com%2Fhimalayas%2Fpracticality_profile_edit.htm%3Fmarket_type%3Dfrom_agent_contract%26customer_external_id%3D%2BC4335319945672464113" target="_blank">立即免费申请支付接口权限</a>';
-$_LANG['alipay_look'] = '<a href=\"https://www.alipay.com/himalayas/practicality.htm\" target=\"_blank\">请申请成功后登录支付宝账户查看</a>';
+$_LANG['alipay_look'] = '<a href=\"https://www.alipay.com/himalayas/practicality.htm\" target=\"_blank\">请申请成功后登录支付宝账号查看</a>';
 ?>
