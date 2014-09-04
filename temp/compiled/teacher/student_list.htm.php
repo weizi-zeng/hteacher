@@ -55,7 +55,7 @@
                             <input id="search_name" name="search_name" style="width: 150px;" />
                         </td>
                         
-                         <td style="text-align: right; width:80px;">监护人电话：</td>
+                         <td style="text-align: right; width:80px;">家长电话：</td>
                         <td style="text-align: left; width:150px;">
                             <input id="search_guardian_phone" name="search_guardian_phone" type="text" class="easyui-validatebox" data-options="required:false" maxlength="20" validType="telephone" style="width: 150px" />
                         </td>
@@ -133,17 +133,17 @@
                       </tr>
                       
                     <tr>
-                        <th style="text-align: right">监护人姓名：</th>
+                        <th style="text-align: right">家长姓名：</th>
                         <td style="width:70%"><input id="guardian_name" name="guardian_name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 200px" /></td>
                     </tr>
                     <tr> 
-                        <th style="text-align: right">监护人电话：</th>
+                        <th style="text-align: right">家长电话：</th>
                         <td><input id="guardian_phone" name="guardian_phone" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 200px" />
-                        	<a class="easyui-tooltip" icon="icon-help" title="该项为必输项，请填手机号码，这是监护人注册与短信通知的唯一号码"  ><span >重要</span></a>
+                        	<a class="easyui-tooltip" icon="icon-help" title="该项为必输项，请填手机号码，这是家长注册与短信通知的唯一号码"  ><span >重要</span></a>
                         </td>
                     </tr>
                     <tr>
-                        <th style="text-align: right">与监护人关系：</th>
+                        <th style="text-align: right">与家长关系：</th>
                         <td>
                         	<select id="guardian_relation" name="guardian_relation" >
                         		<option value="父子">父子</option>

@@ -35,7 +35,7 @@ switch ($action)
 		$content = trim($_POST["content"]);
 		$copy = trim($_POST["copy"]);
 		
-		$result = array("error"=>1,"msg"=>"您选择的监护人的电话号码全部为空");
+		$result = array("error"=>1,"msg"=>"您选择的家长的电话号码全部为空");
 		if(str_len($phones)>4){
 			if($copy){
 				$admin = get_admin_by_id($_SESSION["admin_id"]);

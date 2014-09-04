@@ -33,6 +33,19 @@
     
     
     </script>
+    <style type="text/css">
+    	#add_window table{
+    		border:1px solid rgb(104, 212, 253);
+    	}
+    	#add_window td{
+    		font-size:10px;
+    		text-align:left;
+    	}
+    	input[type=checkbox]{
+    		width:24px;
+    	}
+    </style>
+    
 </head>
 <body class="easyui-layout">
     <noscript>
@@ -104,6 +117,70 @@
      	</div>
      </div>
         
+    </div>
+    
+    <div id="add_window" class="easyui-window" closed="true" title="添加" style="width: 900px;
+        height: 600px; padding: 0px;" >
+        <div class="easyui-layout" fit="true">
+            <div region="center" border="false" fit="true" style="padding: 0px; border: 0px;">
+                <form id="add_form" name="add_form" method="post">
+                
+                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
+                	<tr>
+                        <td style="width:96%">
+                        	<table width="100%" >
+                        		<?php $_from = $this->_var['students']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'stds');if (count($_from)):
+    foreach ($_from AS $this->_var['stds']):
+?>
+                        		<tr>
+                        			<?php $_from = $this->_var['stds']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'student');if (count($_from)):
+    foreach ($_from AS $this->_var['student']):
+?>
+                        			<td>
+                        				<label title="学号：<?php echo $this->_var['student']['code']; ?>">
+                        					<input type="checkbox" name="student_code" value="<?php echo $this->_var['student']['code']; ?>" title="<?php echo $this->_var['student']['code']; ?>"/><?php echo $this->_var['student']['name']; ?>
+                        				</label>
+                        			</td>
+                        			<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+                        		</tr>
+                        		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+                        	</table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:96%" colspan="2">
+                        	<table width="100%" >
+                        		<tr style="font-weight:bolder;">
+                        			<td>量化项目</td>
+                        			<td>记录分数</td>
+                        			<td>事发日期</td>
+                        			<td>备注描述</td>
+                        		</tr>
+                        		<?php $_from = $this->_var['duty_items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'it');if (count($_from)):
+    foreach ($_from AS $this->_var['it']):
+?>
+                        		<tr>
+                        			<td>
+                        				<label>
+                        					<input type="checkbox" name="duty_item" value="<?php echo $this->_var['it']['name']; ?>"/><?php echo $this->_var['it']['name']; ?>
+                        				</label>
+                        			</td>
+                        			<td><input name="score" class="easyui-numberbox" data-options="required:true"  maxlength="4" value="<?php echo $this->_var['it']['score']; ?>" style="width: 114px" /></td>
+                        			<td><input name="date_" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
+                        			<td><input name="desc_" maxlength="200" style="width: 250px"  /></td>
+                        		</tr>
+                        		<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+                        	</table>
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+            <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
+                <a id="add" icon="icon-add" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+                <a id="btn_edit_cancel" onclick="$('#add_window').window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
+            </div>
+        </div>
     </div>
     
     

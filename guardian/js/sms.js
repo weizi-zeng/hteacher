@@ -41,8 +41,8 @@
 				  { field: 'code', title: '学号', width: 80, sortable: true, align: 'center' },
                   { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
                   { field: 'address', title: '住址', width: 300, sortable: true, align: 'center' },
-                  { field: 'guardian_name', title: '监护人', width: 80, sortable: true, align: 'center' },
-                  { field: 'guardian_phone', title: '监护人电话', width: 120, sortable: true, align: 'center' },
+                  { field: 'guardian_name', title: '家长', width: 80, sortable: true, align: 'center' },
+                  { field: 'guardian_phone', title: '家长电话', width: 120, sortable: true, align: 'center' },
                   { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
                   ]],
                   

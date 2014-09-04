@@ -45,7 +45,7 @@
                 columns: [[
 				  { field: 'prj_id', title: 'ID', hidden: true },
 				  { field: 'code', title: '项目编号', width: 120, sortable: true, align: 'center' },
-                  { field: 'name', title: '项目名称', width: 120, sortable: true, align: 'center' },
+                  { field: 'name', title: '考试名称', width: 120, sortable: true, align: 'center' },
                   { field: 'sdate', title: '考试开始日期', width: 120, sortable: true, align: 'center' },
                   { field: 'edate', title: '考试结束日期', width: 120, sortable: true, align: 'center' },
                   { field: 'closed', title: '是否归档', width: 120, sortable: true, align: 'center',

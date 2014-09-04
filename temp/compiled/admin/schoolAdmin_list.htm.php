@@ -28,6 +28,7 @@
 <table cellspacing='1' cellpadding='3' id='list-table'>
   <tr>
     <th>账号</th>
+    <th>姓名</th>
     <th>电话</th>
     <th>邮箱</th>
     <th>所属学校</th>
@@ -41,8 +42,9 @@
 ?>
   <tr>
     <td class="first-cell" ><?php echo $this->_var['list']['user_name']; ?></td>
-    <td><span onclick="listTable.edit(this, 'edit_cellphone', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo $this->_var['list']['cellphone']; ?></span></td>
-    <td><span onclick="listTable.edit(this, 'edit_email', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo $this->_var['list']['email']; ?></span></td>
+    <td><span onclick="listTable.edit(this, 'edit_name', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo empty($this->_var['list']['name']) ? '未填写' : $this->_var['list']['name']; ?></span></td>
+    <td><span onclick="listTable.edit(this, 'edit_cellphone', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo empty($this->_var['list']['cellphone']) ? '未填写' : $this->_var['list']['cellphone']; ?></span></td>
+    <td><span onclick="listTable.edit(this, 'edit_email', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo empty($this->_var['list']['email']) ? '未填写' : $this->_var['list']['email']; ?></span></td>
     <td align="left"><?php echo $this->_var['list']['school']; ?></td>
     <td align="center"><?php echo $this->_var['list']['add_time']; ?></td>
     <td align="center"><?php echo empty($this->_var['list']['last_login']) ? 'N/A' : $this->_var['list']['last_login']; ?></td>

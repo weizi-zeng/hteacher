@@ -134,6 +134,15 @@ elseif (in_array($_REQUEST['act'], array('insert', 'update')))
         {
             sys_msg("此年级编码“".$grade['code']."”已经存在");
         }
+        
+        /* 判断名称是否重复 */
+        $sql = "SELECT grade_id
+                        FROM " . $ecs->table('grade') . "
+                        WHERE name = '" . $grade['name'] . "' ";
+        if ($db->getOne($sql))
+        {
+        	sys_msg("此年级“".$grade['name']."”已经存在");
+        }
 
         $sql = "insert into ".$ecs->table('grade')." (name,code,created) values ('" . $grade['name'] . "','" . $grade['code'] . "', now()) ";
         $db->query($sql);

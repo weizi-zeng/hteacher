@@ -8,7 +8,14 @@
   <form action="javascript:searchClassAdmin()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
     
-    &nbsp;所属班级&nbsp;
+    &nbsp;所属年级&nbsp;
+    <select name="grade_id" >
+    	<option value="" >所有...</option>
+    	{foreach from=$grade_list item=list}
+    	<option value="{$list.grade_id}" >{$list.name}</option>
+    	{/foreach}
+    </select>
+    &nbsp;&nbsp;所属班级&nbsp;
     <select name="class_code" >
     	<option value="" >所有...</option>
     	{foreach from=$class_list item=list}
@@ -26,6 +33,7 @@
 <table cellspacing='1' cellpadding='3' id='list-table'>
   <tr>
     <th>账号</th>
+    <th>姓名</th>
     <th>电话</th>
     <th>邮箱</th>
     <th>所属班级</th>
@@ -37,8 +45,9 @@
   {foreach from=$classAdmin_list item=list}
   <tr>
     <td class="first-cell" >{$list.user_name}</td>
-    <td><span onclick="listTable.edit(this, 'edit_cellphone', {$list.user_id})">{$list.cellphone}</span></td>
-    <td><span onclick="listTable.edit(this, 'edit_email', {$list.user_id})">{$list.email}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_name', {$list.user_id})">{$list.name|default:未填写}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_cellphone', {$list.user_id})">{$list.cellphone|default:未填写}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_email', {$list.user_id})">{$list.email|default:未填写}</span></td>
     <td align="left">{$list.class}</td>
     <td align="center">{$list.add_time}</td>
     <td align="center">{$list.last_login|default:N/A}</td>
@@ -83,6 +92,7 @@ listTable.filter.{$key} = '{$item}';
 function searchClassAdmin()
 {
     listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter['grade_id'] = Utils.trim(document.forms['searchForm'].elements['grade_id'].value);
     listTable.filter['class_code'] = Utils.trim(document.forms['searchForm'].elements['class_code'].value);
     listTable.filter['page'] = 1;
     listTable.loadList();

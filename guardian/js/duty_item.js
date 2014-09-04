@@ -45,10 +45,8 @@
                 idField: me.idFiled,
                 columns: [[
 				  { field: 'duty_item_id', title: 'ID', checkbox: true },
-				  { field: 'code', title: '项目编号', width: 120, sortable: true, align: 'center' },
-                  { field: 'name', title: '项目名称', width: 120, sortable: true, align: 'center' },
-                  { field: 'score', title: '分数', width: 120, sortable: true, align: 'center' },
-                  { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
+                  { field: 'name', title: '考试名称', width: 120, sortable: true, align: 'center' },
+                  { field: 'score', title: '分数', width: 120, sortable: true, align: 'center' }
                   ]],
                   
                   toolbar: "#toolbar",

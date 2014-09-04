@@ -139,10 +139,10 @@ elseif ($_REQUEST['act'] == 'sendSMS')
 			$result = $sms->send($row['guardian_phone'], $content, $school_code, $class_code, $_SESSION["admin_name"]);
 			
 			if($result["error"]==0){
-				$msg.='<p style="color:green;">向'.$v["student_code"]."-".$v["student_name"]."监护人发送短信成功！短信内容：<br>".$content."<p>";
+				$msg.='<p style="color:green;">向'.$v["student_code"]."-".$v["student_name"]."家长发送短信成功！短信内容：<br>".$content."<p>";
 					
 			}else {
-				$msg.='<p style="color:red;">向'.$v["student_code"]."-".$v["student_name"]."监护人发送短信失败！失败原因：".$result["msg"]."。短信内容：<br>".$content."<p>"
+				$msg.='<p style="color:red;">向'.$v["student_code"]."-".$v["student_name"]."家长发送短信失败！失败原因：".$result["msg"]."。短信内容：<br>".$content."<p>"
 				;
 			}
 		}else {

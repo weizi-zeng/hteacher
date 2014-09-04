@@ -10,7 +10,7 @@ if (!defined('IN_ECS'))
  * status_id=1 : 学校管理员
  * status_id=2 : 班级管理员
  * status_id=3 : 教师
- * status_id=4 : 监护人
+ * status_id=4 : 家长
  */
 function get_status($status_id)
 {
@@ -45,7 +45,7 @@ function get_status_list()
 	$list[3]["status_name"] = "教师";
 
 	$list[4]["status_id"] = 4;
-	$list[4]["status_name"] = "监护人";
+	$list[4]["status_name"] = "家长";
 
 	$list[5]["status_id"] = 5;
 	$list[5]["status_name"] = "学生";

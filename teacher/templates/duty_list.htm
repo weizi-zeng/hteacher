@@ -31,6 +31,19 @@
     
     
     </script>
+    <style type="text/css">
+    	#add_window table{
+    		border:1px solid rgb(104, 212, 253);
+    	}
+    	#add_window td{
+    		font-size:10px;
+    		text-align:left;
+    	}
+    	input[type=checkbox]{
+    		width:24px;
+    	}
+    </style>
+    
 </head>
 <body class="easyui-layout">
     <noscript>
@@ -98,6 +111,64 @@
      	</div>
      </div>
         
+    </div>
+    
+    <div id="add_window" class="easyui-window" closed="true" title="添加" style="width: 900px;
+        height: 600px; padding: 0px;" >
+        <div class="easyui-layout" fit="true">
+            <div region="center" border="false" fit="true" style="padding: 0px; border: 0px;">
+                <form id="add_form" name="add_form" method="post">
+                
+                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
+                	<tr>
+                        <td style="width:96%">
+                        	<table width="100%" >
+                        		{foreach from=$students item=stds}
+                        		<tr>
+                        			{foreach from=$stds item=student}
+                        			<td>
+                        				<label title="学号：{$student.code}">
+                        					<input type="checkbox" name="student_code" value="{$student.code}" title="{$student.code}"/>{$student.name}
+                        				</label>
+                        			</td>
+                        			{/foreach}
+                        		</tr>
+                        		{/foreach}
+                        	</table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:96%" colspan="2">
+                        	<table width="100%" >
+                        		<tr style="font-weight:bolder;">
+                        			<td>量化项目</td>
+                        			<td>记录分数</td>
+                        			<td>事发日期</td>
+                        			<td>备注描述</td>
+                        		</tr>
+                        		{foreach from=$duty_items item=it}
+                        		<tr>
+                        			<td>
+                        				<label>
+                        					<input type="checkbox" name="duty_item" value="{$it.name}"/>{$it.name}
+                        				</label>
+                        			</td>
+                        			<td><input name="score" class="easyui-numberbox" data-options="required:true"  maxlength="4" value="{$it.score}" style="width: 114px" /></td>
+                        			<td><input name="date_" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
+                        			<td><input name="desc_" maxlength="200" style="width: 250px"  /></td>
+                        		</tr>
+                        		{/foreach}
+                        	</table>
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+            <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
+                <a id="add" icon="icon-add" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+                <a id="btn_edit_cancel" onclick="$('#add_window').window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
+            </div>
+        </div>
     </div>
     
     

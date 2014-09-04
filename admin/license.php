@@ -48,6 +48,38 @@ if ($_REQUEST['act']== 'createLicense')
 // 	sys_msg("创建注册码成功，成功创建了".$sum."个注册码！", 0, $links);
 }
 
+/*------------------------------------------------------ */
+//-- 批量导出注册码
+/*------------------------------------------------------ */
+if ($_REQUEST['act']== 'exportLicense')
+{
+	/* 检查权限 */
+	admin_priv('license_manage');
+
+	$license = license_list_export();
+	$lic = array();
+	foreach($license as $l){
+		$lic[] = $l["license"];
+	}
+	//导出注册码
+	license_export($lic);
+}
+
+/*------------------------------------------------------ */
+//-- 切换是否有效
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act'] == 'toggle_removed')
+{
+	check_authz_json('license_manage');
+
+	$id     = intval($_POST['id']);
+	$val    = intval($_POST['val']);
+
+	$db->query("update ".$ecs->table("license")." set removed='".($val?"0":"1")."' where license_id=".$id);
+	clear_cache_files();
+
+	make_json_result($val);
+}
 
 /*------------------------------------------------------ */
 //-- 查看注册码
@@ -366,6 +398,55 @@ function license_list()
 }
 
 
+
+
+/**
+ * @access  public
+ * @param
+ *
+ * @return void
+ */
+function license_list_export()
+{
+		/* 过滤条件 */
+		$filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);//注册码
+		$filter['is_active'] = $_REQUEST['is_active']==="" ? -1 : intval($_REQUEST['is_active']);//注册码
+		$filter['sdate'] = empty($_REQUEST['sdate']) ? '' : trim($_REQUEST['sdate']);//注册码
+		$filter['edate'] = empty($_REQUEST['edate']) ? '' : trim($_REQUEST['edate']);//注册码
+
+		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
+		{
+			$filter['keywords'] = json_str_iconv($filter['keywords']);
+		}
+
+		$ex_where = ' WHERE 1  ';
+		if ($filter['keywords'])
+		{
+			$ex_where .= " AND license LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
+		}
+		if ($filter['is_active']>-1)
+		{
+			$ex_where .= " AND is_active = '" . $filter['is_active'] ."'";
+		}
+		if ($filter['sdate'])
+		{
+			$ex_where .= " AND sdate = '" . $filter['sdate'] ."'";
+		}
+		if ($filter['edate'])
+		{
+			$ex_where .= " AND edate = '" . $filter['edate'] ."'";
+		}
+
+		$sql = "SELECT * ".
+                " FROM " . $GLOBALS['ecs']->table('license') . $ex_where .
+                " ORDER by license_id ";
+
+	$list = $GLOBALS['db']->getAll($sql);
+	return $list;
+}
+
+
+
 function license_export($license){
 	
 	$content = "注册码\n";
@@ -375,7 +456,7 @@ function license_export($license){
 		$content .= $v . "\n";
 	}
 	
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);//UTF8
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	

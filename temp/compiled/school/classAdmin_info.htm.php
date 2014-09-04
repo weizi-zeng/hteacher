@@ -8,7 +8,11 @@
     <td>
       <input type="text" name="user_name" maxlength="20" value="<?php echo htmlspecialchars($this->_var['user']['user_name']); ?>" size="34"/><?php echo $this->_var['lang']['require_field']; ?></td>
   </tr>
-  
+  <tr>
+    <td class="label">姓名：</td>
+    <td>
+      <input type="text" name="name" maxlength="20" value="<?php echo htmlspecialchars($this->_var['user']['name']); ?>" size="34"/></td>
+  </tr>
    <?php if ($this->_var['form_action'] == "insert"): ?>
   <tr>
     <td class="label">密码：</td>
@@ -59,7 +63,12 @@
       </select><?php echo $this->_var['lang']['require_field']; ?>
     </td>
   </tr>
-  
+  <tr>
+   <td class="label">发生短信：</td>
+    <td>
+    	<input type="checkbox" id="sendSMS" name="sendSMS" title="短信通知用户账号密码"/>
+    </td>
+  </tr>
   <tr><td>&nbsp;</td><td><div style="color:red;text-align:left;" id="warn"></div></td></tr>
   
   <tr>
@@ -69,6 +78,7 @@
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <input type="reset" value="重置" class="button" />
       <input type="hidden" name="act" value="<?php echo $this->_var['form_action']; ?>" />
+      <input type="hidden" name="sms" id="sms"/>
       <input type="hidden" name="id" value="<?php echo $this->_var['user']['user_id']; ?>" /></td>
   </tr>
 </table>
@@ -86,6 +96,9 @@ document.forms['theForm'].elements['user_name'].focus();
 */
 function validate()
 {
+	var sendSMS = document.getElementById('sendSMS').checked?"send":"unsend";
+	document.getElementById('sms').value = sendSMS;
+	
 	var user_name = document.forms['theForm'].elements['user_name'];
 	if(!user_name.value){
 		document.forms['theForm'].elements['user_name'].focus();

@@ -14,7 +14,7 @@
         </div>
         {/if}
         <div align="right"  nowrap="nowrap">
-        	【 {if $list_from eq "list_school"}学校管理员意见{elseif $list_from eq "list_class"}班主任意见{elseif $list_from eq "list_customer"}监护人投诉{else}外围区 {$msg.user_email}{/if} 】
+        	【 {if $list_from eq "list_school"}学校管理员意见{elseif $list_from eq "list_class"}班主任意见{elseif $list_from eq "list_customer"}家长投诉{else}外围区 {$msg.user_email}{/if} 】
         	<a href="mailto:{$msg.user_email}">{$msg.user_name}</a> @ {$msg.msg_time}
         </div>
       </td>

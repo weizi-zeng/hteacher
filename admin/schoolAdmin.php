@@ -16,6 +16,7 @@
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
+require(ROOT_PATH . '/includes/cls_sms.php');
 
 /*------------------------------------------------------ */
 //-- 学校管理员帐号列表
@@ -124,17 +125,31 @@ elseif ($_REQUEST['act'] == 'insert')
     
      $password  = md5($_POST['password']);
     
-     $sql = "INSERT INTO ".$ecs->table('admin_user')." (user_name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id, school_code) ".
-               "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '1', '".$code."')";
+     $sql = "INSERT INTO ".$ecs->table('admin_user')." (user_name, name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id, school_code) ".
+               "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['name'])."','".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '1', '".$code."')";
     
     $db->query($sql);
     
         /* 记录管理员操作 */
     admin_log($_POST['user_name'], 'add', 'admin');
+    $msg = "创建学校管理员 &nbsp;" .$_POST['user_name'] . "&nbsp; 成功！";
+    
+    //发生短信逻辑
+    $smskey = empty($_POST['sms']) ? '' : trim($_POST['sms']);
+    if($smskey=='send'){
+    	$content = trim($_POST['name'])."您好！您在我爱我班系统的账号已开通：".trim($_POST['user_name'])."/".$_POST['password'];
+    	$sms = new sms();
+    	$result = $sms->send(trim($_POST['cellphone']), $content, "", "", $_SESSION["admin_name"]);
+    	if($result["error"]!=0){
+    		$msg.= $result["msg"];
+    	}else {
+    		$msg.= "并且短信发生成功！";
+    	}
+    }
 
     /* 提示信息 */
     $link[] = array('text' => $_LANG['go_back'], 'href'=>'schoolAdmin.php?act=list');
-    sys_msg("创建学校管理员 &nbsp;" .$_POST['user_name'] . "&nbsp; 成功！",0, $link);
+    sys_msg($msg,0, $link);
 }
 
 /*------------------------------------------------------ */
@@ -173,6 +188,7 @@ elseif ($_REQUEST['act'] == 'update')
     /* 变量初始化 */
     $admin_id    = !empty($_REQUEST['id'])        ? intval($_REQUEST['id'])      : 0;
     $admin_name  = !empty($_REQUEST['user_name']) ? trim($_REQUEST['user_name']) : '';
+    $name  = !empty($_REQUEST['name']) ? trim($_REQUEST['name']) : '';
     $admin_email = !empty($_REQUEST['email'])     ? trim($_REQUEST['email'])     : '';
     $admin_cellphone = !empty($_REQUEST['cellphone'])     ? trim($_REQUEST['cellphone'])     : '';
     $admin_school_code = !empty($_REQUEST['school_code'])     ? trim($_REQUEST['school_code'])     : '';
@@ -224,6 +240,7 @@ elseif ($_REQUEST['act'] == 'update')
     {
     	$sql = "UPDATE " .$ecs->table('admin_user'). " SET ".
                    "user_name = '$admin_name', ".
+    				"name = '$name', ".
                    "email = '$admin_email', ".
     	        "cellphone = '$admin_cellphone', ".
     	        "school_code = '$admin_school_code', ".
@@ -236,6 +253,7 @@ elseif ($_REQUEST['act'] == 'update')
     {
     	$sql = "UPDATE " .$ecs->table('admin_user'). " SET ".
                    "user_name = '$admin_name', ".
+    				"name = '$name', ".
                    "email = '$admin_email', ".
     	        "cellphone = '$admin_cellphone', ".
     			"status_id = 1, ".
@@ -249,7 +267,20 @@ elseif ($_REQUEST['act'] == 'update')
     admin_log($_POST['user_name'], 'edit', 'schoolAdmin');
     
     /* 如果修改了密码，则需要将session中该管理员的数据清空 */
-    $msg = "修改“".$_POST['user_name']."”管理员信息成功";
+    $msg = "修改“".$_POST['user_name']."”管理员信息成功！";
+    
+    //发生短信逻辑
+    $smskey = empty($_POST['sms']) ? '' : trim($_POST['sms']);
+    if($smskey=='send'){
+    	$content = $name."您好！您的账号已被重置：".trim($_REQUEST['user_name'])."/".$_POST['new_password'];
+    	$sms = new sms();
+    	$result = $sms->send($admin_cellphone, $content, "", "", $_SESSION["admin_name"]);
+    	if($result["error"]!=0){
+    		$msg.= $result["msg"];
+    	}else {
+    		$msg.= "并且短信发生成功！";
+    	}
+    }
     
     /* 提示信息 */
     $links[0]['text']    = $_LANG['goto_list'];
@@ -261,6 +292,28 @@ elseif ($_REQUEST['act'] == 'update')
 
 }
 
+
+/*------------------------------------------------------ */
+//-- 编辑name
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act'] == 'edit_name')
+{
+	/* 检查权限 */
+	check_authz_json('schoolAdmin_manage');
+
+	$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+	$name = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
+
+	$sql = "SELECT user_name FROM " . $ecs->table('admin_user') . " WHERE user_id = '$id'";
+	$user_name = $db->getOne($sql);
+
+	$sql = "update ".$ecs->table('admin_user')." set name='".$name."' WHERE user_id = '$id'";
+	$db->query($sql);
+		
+	admin_log(addslashes($user_name.','.$name), 'edit', 'schoolAdmin');
+	
+	make_json_result(stripcslashes($name));
+}
 
 /*------------------------------------------------------ */
 //-- 编辑email

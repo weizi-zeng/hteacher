@@ -170,7 +170,7 @@ if ($_REQUEST['act'] == 'signin')
 	$_REQUEST['status'] = isset($_REQUEST['status']) ? trim($_REQUEST['status']) : 'admin';
 	
 	$row = array();
-	if($_REQUEST['status']=='guardian'){//如果是监护人登陆，走监护人登陆逻辑
+	if($_REQUEST['status']=='guardian'){//如果是家长登陆，走家长登陆逻辑
 		
 		$guardian = getGuardianByUsername($_REQUEST['username']);
 		if($guardian){
@@ -284,7 +284,7 @@ if ($_REQUEST['act'] == 'signin')
 	 * status_id=1 : 学校管理员
 	 * status_id=2 : 班级管理员
 	 * status_id=3 : 教师
-	 * status_id=4 : 监护人
+	 * status_id=4 : 家长
 	 */
 	if($row['status_id']==0){
 		//超级管理员系统
@@ -299,7 +299,7 @@ if ($_REQUEST['act'] == 'signin')
 		ecs_header("Location: teacher/index.php?act=signin\n");
 	
 	}else{
-		//监护人系统
+		//家长系统
 		ecs_header("Location: guardian/index.php?act=signin\n");
 	
 	}
@@ -326,7 +326,7 @@ if ($_REQUEST['act'] == 'toReg')
 }
 
 /*------------------------------------------------------ */
-//-- 监护人注册
+//-- 家长注册
 /*------------------------------------------------------ */
 if ($_REQUEST['act'] == 'register')
 {
@@ -431,7 +431,7 @@ function register_display($guardian, $warn){
 }
 
 /**
-* 通过电话号码获取监护人的信息
+* 通过电话号码获取家长的信息
 */
 function getGuardianByUsername($username){
 	$sql = "show databases like '%_school' ";
@@ -484,7 +484,7 @@ function validateRegCode($regCode){
 	return $res;
 }
 
-//通过ID获取监护人信息
+//通过ID获取家长信息
 function getGuardianById($id, $school){
 	$table = $school.".ht_student";
 	$sql = "select * from ".$table." where student_id='".$id."'";

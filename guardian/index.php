@@ -573,8 +573,8 @@ elseif ($_REQUEST['act'] == 'send_mail')
 function get_menus_by_status($status){
 		return array(
 			array(id=>"1", title=>"基础信息",submenus=>array(
-				array(id=>"12", title=>"学生花名册", url=>"student.php?act=list"),
-				array(id=>"13", title=>"个人信息管理", url=>"guardian.php?act=list"),
+				array(id=>"12", title=>"学生信息", url=>"student.php?act=list"),
+				array(id=>"13", title=>"家长信息", url=>"guardian.php?act=list"),
 				array(id=>"14", title=>"教师信息", url=>"teacher.php?act=list"),
 				array(id=>"15", title=>"课程安排表", url=>"course.php?act=list")
 			)),

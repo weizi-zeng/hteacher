@@ -98,7 +98,7 @@ function login(o){
       </tr>
       <tr>
         <td>密码</td>
-        <td><input type="password" name="password" id="password" style="width:153px;"/></td>
+        <td><input type="password" name="password" id="password" style="width:153px;" onkeydown='if(event.keyCode==13){login(this);}' /></td>
       </tr>
       {if $gd_version > 0}
       <tr>
@@ -123,6 +123,13 @@ function login(o){
         <td colspan="2" align="left">
         &raquo; <a href="./index.php" style="color:white">返回主页面</a>
         </td>
+      </tr>
+      <tr>
+      	<td colspan="2">
+      		<div style="margin-top:50px;">
+			  	本系统只支持火狐，<a href="data/googleInstaller.exe" style="color:red;" title="下载谷歌浏览器安装包">谷歌</a>，IE10以上等高版本的浏览器！<a style="color:red" href="themes/default/checkBrower.htm" target="_blank">检查浏览器信息</a>
+			  </div>
+      	</td>
       </tr>
       </table>
     </td>

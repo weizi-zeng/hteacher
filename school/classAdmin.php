@@ -16,6 +16,7 @@
 define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
+require(ROOT_PATH . '/includes/cls_sms.php');
 
 /*------------------------------------------------------ */
 //-- 班级管理员帐号列表
@@ -32,9 +33,11 @@ if ($_REQUEST['act'] == 'list')
 
     $classAdmin_list = classAdmin_list($table);
     $class_list = class_list();
+    $grade_list = grade_list();
 
     $smarty->assign('classAdmin_list',    $classAdmin_list['classAdmin_list']);
     $smarty->assign('class_list',       $class_list);
+    $smarty->assign('grade_list',       $grade_list);
     $smarty->assign('filter',       $classAdmin_list['filter']);
     $smarty->assign('record_count', $classAdmin_list['record_count']);
     $smarty->assign('page_count',   $classAdmin_list['page_count']);
@@ -124,17 +127,31 @@ elseif ($_REQUEST['act'] == 'insert')
     
      $password  = md5($_POST['password']);
     
-     $sql = "INSERT INTO ".$table." (user_name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id, school_code, class_code) ".
-               "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '2', '".$_SESSION["school_code"]."', '".$code."')";
+     $sql = "INSERT INTO ".$table." (user_name, name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id, school_code, class_code) ".
+               "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['name'])."','".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '2', '".$_SESSION["school_code"]."', '".$code."')";
     
     $db->query($sql);
     
         /* 记录管理员操作 */
     admin_log($_POST['user_name'], 'add', 'admin');
 
+    $msg = "创建班级管理员 &nbsp;" .$_POST['user_name'] . "&nbsp; 成功！";
+    //发生短信逻辑
+    $smskey = empty($_POST['sms']) ? '' : trim($_POST['sms']);
+    if($smskey=='send'){
+    	$content = trim($_POST['name'])."您好！您在我爱我班系统的账号已开通：".trim($_POST['user_name'])."/".$_POST['password'];
+    	$sms = new sms();
+    	$result = $sms->send(trim($_POST['cellphone']), $content, "", "", $_SESSION["admin_name"]);
+    	if($result["error"]!=0){
+    		$msg.= $result["msg"];
+    	}else {
+    		$msg.= "并且短信发生成功！";
+    	}
+    }
+    
     /* 提示信息 */
     $link[] = array('text' => $_LANG['go_back'], 'href'=>'classAdmin.php?act=list');
-    sys_msg("创建班级管理员 &nbsp;" .$_POST['user_name'] . "&nbsp; 成功！",0, $link);
+    sys_msg($msg,0, $link);
 }
 
 /*------------------------------------------------------ */
@@ -173,6 +190,7 @@ elseif ($_REQUEST['act'] == 'update')
     /* 变量初始化 */
     $admin_id    = !empty($_REQUEST['id'])        ? intval($_REQUEST['id'])      : 0;
     $admin_name  = !empty($_REQUEST['user_name']) ? trim($_REQUEST['user_name']) : '';
+    $name  = !empty($_REQUEST['name']) ? trim($_REQUEST['name']) : '';
     $admin_email = !empty($_REQUEST['email'])     ? trim($_REQUEST['email'])     : '';
     $admin_cellphone = !empty($_REQUEST['cellphone'])     ? trim($_REQUEST['cellphone'])     : '';
     $admin_class_code = !empty($_REQUEST['class_code'])     ? trim($_REQUEST['class_code'])     : '';
@@ -224,6 +242,7 @@ elseif ($_REQUEST['act'] == 'update')
     {
     	$sql = "UPDATE " .$table. " SET ".
                    "user_name = '$admin_name', ".
+    				"name = '$name', ".
                    "email = '$admin_email', ".
     	        "cellphone = '$admin_cellphone', ".
     	        "class_code = '$admin_class_code', ".
@@ -235,6 +254,7 @@ elseif ($_REQUEST['act'] == 'update')
     {
     	$sql = "UPDATE " .$table. " SET ".
                    "user_name = '$admin_name', ".
+    				"name = '$name', ".
                    "email = '$admin_email', ".
     	        "cellphone = '$admin_cellphone', ".
     	        "class_code = '$admin_class_code' ".
@@ -247,7 +267,20 @@ elseif ($_REQUEST['act'] == 'update')
     admin_log($_POST['user_name'], 'edit', 'classAdmin');
     
     /* 如果修改了密码，则需要将session中该管理员的数据清空 */
-    $msg = "修改“".$_POST['user_name']."”管理员信息成功";
+    $msg = "修改“".$_POST['user_name']."”管理员信息成功！";
+    
+    //发生短信逻辑
+    $smskey = empty($_POST['sms']) ? '' : trim($_POST['sms']);
+    if($smskey=='send'){
+    	$content = $name."您好！您的账号已被重置：".trim($_REQUEST['user_name'])."/".$_POST['new_password'];
+    	$sms = new sms();
+    	$result = $sms->send($admin_cellphone, $content, "", "", $_SESSION["admin_name"]);
+    	if($result["error"]!=0){
+    		$msg.= $result["msg"];
+    	}else {
+    		$msg.= "并且短信发生成功！";
+    	}
+    }
     
     /* 提示信息 */
     $links[0]['text']    = $_LANG['goto_list'];
@@ -259,6 +292,29 @@ elseif ($_REQUEST['act'] == 'update')
 
 }
 
+
+
+/*------------------------------------------------------ */
+//-- 编辑name
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act'] == 'edit_name')
+{
+	/* 检查权限 */
+	check_authz_json('classAdmin_manage');
+
+	$id = empty($_REQUEST['id']) ? 0 : intval($_REQUEST['id']);
+	$name = empty($_REQUEST['val']) ? '' : json_str_iconv(trim($_REQUEST['val']));
+
+	$sql = "SELECT user_name FROM " . $table . " WHERE user_id = '$id'";
+	$user_name = $db->getOne($sql);
+
+	$sql = "update ".$table." set name='".$name."' WHERE user_id = '$id'";
+	$db->query($sql);
+
+	admin_log(addslashes($user_name.','.$name), 'edit', 'classAdmin');
+
+	make_json_result(stripcslashes($name));
+}
 
 /*------------------------------------------------------ */
 //-- 编辑email
@@ -371,6 +427,7 @@ function classAdmin_list($table)
     {
         /* 过滤条件 */
         $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);//班级管理员名称
+        $filter['grade_id'] = empty($_REQUEST['grade_id']) ? '' : trim($_REQUEST['grade_id']);//班级管理员code
         $filter['class_code'] = empty($_REQUEST['class_code']) ? '' : trim($_REQUEST['class_code']);//班级管理员code
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
         {
@@ -389,7 +446,10 @@ function classAdmin_list($table)
         {
         	$ex_where .= " AND class_code = '" . mysql_like_quote($filter['class_code']) ."'";
         }
-
+        if ($filter['grade_id'])
+        {
+        	$ex_where .= "AND class_code in (select class_code from ".$GLOBALS['ecs']->table("class")." where grade=".$filter['grade_id'].") ";
+        }
         $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $table . $ex_where);
 
         /* 分页大小 */

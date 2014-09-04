@@ -8,7 +8,16 @@
   <form action="javascript:searchClassAdmin()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
     
-    &nbsp;所属班级&nbsp;
+    &nbsp;所属年级&nbsp;
+    <select name="grade_id" >
+    	<option value="" >所有...</option>
+    	<?php $_from = $this->_var['grade_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'list');if (count($_from)):
+    foreach ($_from AS $this->_var['list']):
+?>
+    	<option value="<?php echo $this->_var['list']['grade_id']; ?>" ><?php echo $this->_var['list']['name']; ?></option>
+    	<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+    </select>
+    &nbsp;&nbsp;所属班级&nbsp;
     <select name="class_code" >
     	<option value="" >所有...</option>
     	<?php $_from = $this->_var['class_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'list');if (count($_from)):
@@ -28,6 +37,7 @@
 <table cellspacing='1' cellpadding='3' id='list-table'>
   <tr>
     <th>账号</th>
+    <th>姓名</th>
     <th>电话</th>
     <th>邮箱</th>
     <th>所属班级</th>
@@ -41,8 +51,9 @@
 ?>
   <tr>
     <td class="first-cell" ><?php echo $this->_var['list']['user_name']; ?></td>
-    <td><span onclick="listTable.edit(this, 'edit_cellphone', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo $this->_var['list']['cellphone']; ?></span></td>
-    <td><span onclick="listTable.edit(this, 'edit_email', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo $this->_var['list']['email']; ?></span></td>
+    <td><span onclick="listTable.edit(this, 'edit_name', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo empty($this->_var['list']['name']) ? '未填写' : $this->_var['list']['name']; ?></span></td>
+    <td><span onclick="listTable.edit(this, 'edit_cellphone', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo empty($this->_var['list']['cellphone']) ? '未填写' : $this->_var['list']['cellphone']; ?></span></td>
+    <td><span onclick="listTable.edit(this, 'edit_email', <?php echo $this->_var['list']['user_id']; ?>)"><?php echo empty($this->_var['list']['email']) ? '未填写' : $this->_var['list']['email']; ?></span></td>
     <td align="left"><?php echo $this->_var['list']['class']; ?></td>
     <td align="center"><?php echo $this->_var['list']['add_time']; ?></td>
     <td align="center"><?php echo empty($this->_var['list']['last_login']) ? 'N/A' : $this->_var['list']['last_login']; ?></td>
@@ -89,6 +100,7 @@ listTable.filter.<?php echo $this->_var['key']; ?> = '<?php echo $this->_var['it
 function searchClassAdmin()
 {
     listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    listTable.filter['grade_id'] = Utils.trim(document.forms['searchForm'].elements['grade_id'].value);
     listTable.filter['class_code'] = Utils.trim(document.forms['searchForm'].elements['class_code'].value);
     listTable.filter['page'] = 1;
     listTable.loadList();

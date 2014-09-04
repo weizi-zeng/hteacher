@@ -57,7 +57,7 @@ switch ($action)
 		//短信测试
 		if($is_active && str_len($phone)>3){
 			$sms = new sms();
-			$res = $sms->send($phone, "您好，您已开通您的短信服务，感谢您的使用！【长沙开拓者】", "", "", $_SESSION["admin_name"]);
+			$res = $sms->send($phone, "您好，您已开通您的短信服务，感谢您的使用！【磐盛科技】", "", "", $_SESSION["admin_name"]);
 			if($res['error']==1){
 				$msg .= $res['msg'];
 			}else {

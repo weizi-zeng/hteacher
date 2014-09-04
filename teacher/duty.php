@@ -7,7 +7,17 @@ require(dirname(__FILE__) . '/includes/init.php');
 if ($_REQUEST['act'] == 'list')
 {
 	$students = get_students($class_code);
-	$smarty->assign("students", $students);
+	//将学生数据每十个一行进行处理
+	$stds = array();
+	$j = 0;
+	for($i=0;$i<count($students);$i++){
+		$stds[$j][] = $students[$i];
+		if(($i+1)%10==0){
+			$j++;
+		}
+	}
+	
+	$smarty->assign("students", $stds);
 	
 	$duty_items = get_duty_items($class_code);
 	$smarty->assign("duty_items", $duty_items);
@@ -21,6 +31,39 @@ elseif ($_REQUEST['act'] == 'ajax_list')
 	$list = duty_list();
 	make_json($list);
 }
+
+elseif ($_REQUEST['act'] == 'ajax_add')
+{
+	$students = empty($_REQUEST['students']) ? "":trim($_REQUEST['students']);	
+	$items = empty($_REQUEST['duty_items']) ? "":trim($_REQUEST['duty_items']);
+	
+	$student_arry = explode(",", $students);
+	$item_arry = explode("###SPLIT_V1###", $items);
+	
+	$total = 0;
+	foreach($student_arry as $student){
+		foreach($item_arry as $item){
+			$item_attr = explode("###SPLIT_V2###", $item);
+			if(!$item_attr[0] || count($item_attr)<4){
+				continue;
+			}
+			
+			$sql = "insert into ".$ecs->table("duty")
+			." (student_code,duty_item,
+								score,date_,desc_,class_code,created )
+							values 
+								('".$student."','".$item_attr[0]."',
+								'".$item_attr[1]."','".$item_attr[2]."',
+								'".$item_attr[3]."','".$_SESSION["class_code"]."',
+								now())";
+			$db->query($sql);
+			admin_log(addslashes($student.':'.$item_attr[0]), 'add', "duty_item");
+			$total++;
+		}
+	}
+	make_json_result("添加成功！共添加数据".$total."条!");
+}
+
 
 elseif ($_REQUEST['act'] == 'ajax_save')
 {
@@ -88,7 +131,7 @@ elseif ($_REQUEST['act'] == 'exportdutys')
 		$content .= "s:\"".$v["student_code"]."\",".$v["student_name"].",".$v["duty_item"].",".$v["score"].",".$v["date_"].",".$v["desc_"].",".$v["created"]."\r\n";
 	}
 	
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);//UTF8
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
@@ -115,7 +158,7 @@ elseif ($_REQUEST['act'] == 'exportRank')
 		$content .= "s:\"".$v["student_code"]."\",".$v["student_name"].",".$v["total"].",".($i++)."\r\n";
 	}
 
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);//UTF8
 
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 

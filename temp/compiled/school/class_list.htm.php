@@ -6,6 +6,16 @@
 <div class="form-div">
   <form action="javascript:searchclass()" name="searchForm">
     <img src="images/icon_search.gif" width="26" height="22" border="0" alt="SEARCH" />
+    &nbsp;所属年级&nbsp;
+    <select name="grade_id" >
+    	<option value="" >所有...</option>
+    	<?php $_from = $this->_var['grade_list']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }; $this->push_vars('', 'list');if (count($_from)):
+    foreach ($_from AS $this->_var['list']):
+?>
+    	<option value="<?php echo $this->_var['list']['grade_id']; ?>" ><?php echo $this->_var['list']['name']; ?></option>
+    	<?php endforeach; endif; unset($_from); ?><?php $this->pop_vars();; ?>
+    </select>
+    &nbsp;&nbsp;
     &nbsp;班级编号&nbsp;<input type="text" name="code" size="8" />
     &nbsp;班级名称&nbsp;<input type="text" name="keyword" /> <input type="submit" value="<?php echo $this->_var['lang']['button_search']; ?>" />
   </form>
@@ -94,6 +104,7 @@ function searchclass()
 {
     listTable.filter['keywords'] = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
     listTable.filter['code'] = Utils.trim(document.forms['searchForm'].elements['code'].value);
+    listTable.filter['grade_id'] = Utils.trim(document.forms['searchForm'].elements['grade_id'].value);
     listTable.filter['page'] = 1;
     listTable.loadList();
 }

@@ -15,7 +15,7 @@
 
 $_LANG['app_name'] = 'HTEACHER';
 $_LANG['cp_home'] = '班主任管理中心';
-$_LANG['copyright'] = '版权所有 &copy; 2014-2024 长沙开拓者，并保留所有权利。';
+$_LANG['copyright'] = '版权所有 &copy; 2014-2024 磐盛科技，并保留所有权利。';
 $_LANG['query_info'] = '共执行 %d 个查询，用时 %s 秒';
 $_LANG['memory_info'] = '，内存占用 %0.3f MB';
 $_LANG['gzip_enabled'] = '，Gzip 已启用';
@@ -145,7 +145,7 @@ $_LANG['16_email_manage'] = '邮件群发管理';
 $_LANG['17_stats'] = '报表统计';
 
 //教师
-//监护人
+//家长
 
 /* 会员管理 */
 $_LANG['03_school_list'] = '学校列表';
@@ -160,7 +160,7 @@ $_LANG['10_classAdmin_add'] = '添加班主任';
 /*系统留言*/
 $_LANG['02_schoolAdmin_msg'] = '学校管理员意见';
 $_LANG['03_classAdmin_msg'] = '班主任意见';
-$_LANG['04_customer_msg'] = '监护人投诉';
+$_LANG['04_customer_msg'] = '家长投诉';
 $_LANG['05_other_msg'] = '外围区意见箱';
 
 /*系统相关*/

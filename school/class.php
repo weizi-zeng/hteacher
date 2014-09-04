@@ -30,8 +30,10 @@ if ($_REQUEST['act'] == 'list')
     $smarty->assign('action_link',  array('text' => "添加班级", 'href'=>'class.php?act=add'));
 
     $class_list = get_class_list();
+    $grade_list = grade_list();
 
     $smarty->assign('class_list',    $class_list['class_list']);
+    $smarty->assign('grade_list',       $grade_list);
     $smarty->assign('filter',       $class_list['filter']);
     $smarty->assign('record_count', $class_list['record_count']);
     $smarty->assign('page_count',   $class_list['page_count']);
@@ -95,13 +97,17 @@ elseif ($_REQUEST['act'] == 'insert')
     if($code==''){
     	sys_msg("班级编号不能为空！", 1);
     }
+    $sql = "select * from ".$ecs->table('class') ." where code='".$code."'";
+    if($db->getRow($sql)){
+    	sys_msg("班级编号".$code."不能重复！", 1);
+    }
     
     $classname = empty($_POST['name']) ? '' : trim($_POST['name']);
     $grade = empty($_POST['grade']) ? 0 : intval($_POST['grade']);
     $hteacher = empty($_POST['hteacher']) ? '' : trim($_POST['hteacher']);
     $classroom = empty($_POST['classroom']) ? '' : trim($_POST['classroom']);
     
-    $sql = "insert into ". $GLOBALS['ecs']->table('class') 
+    $sql = "insert into ". $ecs->table('class') 
     	." (code,name,is_active,classroom,hteacher,has_left,grade,created) value "
     	." ('$code','$classname',1,'$classroom','$hteacher','0','$grade',now())";
     
@@ -318,6 +324,7 @@ function get_class_list()
         /* 过滤条件 */
         $filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);//班级名称
         $filter['code'] = empty($_REQUEST['code']) ? '' : trim($_REQUEST['code']);//班级code
+        $filter['grade_id'] = empty($_REQUEST['grade_id']) ? '' : trim($_REQUEST['grade_id']);//班级code
         if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
         {
             $filter['keywords'] = json_str_iconv($filter['keywords']);
@@ -334,6 +341,10 @@ function get_class_list()
         if ($filter['code'])
         {
         	$ex_where .= " AND c.code LIKE '%" . mysql_like_quote($filter['code']) ."%'";
+        }
+        if ($filter['grade_id'])
+        {
+        	$ex_where .= " AND c.grade='" . $filter['grade_id'] ."'";
         }
 
         $filter['record_count'] = $GLOBALS['db']->getOne("SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table('class') ." c ". $ex_where);

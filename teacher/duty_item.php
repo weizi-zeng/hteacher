@@ -19,12 +19,19 @@ elseif ($_REQUEST['act'] == 'ajax_list')
 elseif ($_REQUEST['act'] == 'ajax_save')
 {
 	$id    = !empty($_REQUEST['duty_item_id'])        ? intval($_REQUEST['duty_item_id'])      : 0;
+	//检查item是否唯一
+	$sql = "select * from ".$ecs->table("duty_item")." where class_code='".$_SESSION["class_code"]."' and name='".$_REQUEST["name"]."' and duty_item_id!=".$id;
+	if($db->getRow($sql)){
+		make_json_result("“".$_REQUEST["name"]."”已经存在！添加失败！");
+		exit;
+	}
+	
 	if($id==0){//insert
 		
 		$sql = "insert into ".$ecs->table("duty_item")
-		." (code, name, score, class_code, created)
+		." (name, score, class_code, created)
 		values 
-			('".$_REQUEST["code"]."','".$_REQUEST["name"]."','".$_REQUEST["score"]."','".$_SESSION["class_code"]."', now())";
+			('".$_REQUEST["name"]."','".$_REQUEST["score"]."','".$_SESSION["class_code"]."', now())";
 		
 		$db->query($sql);
 		
@@ -38,7 +45,6 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	{
 		$sql = "update ".$ecs->table("duty_item")
 		." set name='".$_REQUEST["name"]."',
-			code='".$_REQUEST["code"]."',
 			score='".$_REQUEST["score"]."'
 			where duty_item_id=".$id;
 		

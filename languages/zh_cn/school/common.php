@@ -15,7 +15,7 @@
 
 $_LANG['app_name'] = 'HTEACHER';
 $_LANG['cp_home'] = '班主任管理中心';
-$_LANG['copyright'] = '版权所有 &copy; 2014-2024 长沙开拓者，并保留所有权利。';
+$_LANG['copyright'] = '版权所有 &copy; 2014-2024 磐盛科技，并保留所有权利。';
 $_LANG['query_info'] = '共执行 %d 个查询，用时 %s 秒';
 $_LANG['memory_info'] = '，内存占用 %0.3f MB';
 $_LANG['gzip_enabled'] = '，Gzip 已启用';

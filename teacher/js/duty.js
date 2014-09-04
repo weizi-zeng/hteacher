@@ -19,10 +19,17 @@
             me.search_form = $('#search_form');
             me.dgData = $('#dgData');
             $('#save').click(function(e){
-            	if ($(this).hasClass("l-btn-disabled")) {
+            	if ($(this).linkbutton("options").disabled) {
                     return;
                 }
             	save(e);
+            });
+            
+            $('#add').click(function(e){
+            	if ($(this).linkbutton("options").disabled) {
+                    return;
+                }
+            	addduty(e);
             });
         }
 
@@ -70,9 +77,69 @@
     //操作函数
     //新增
     function add() {
-        clear();
-        $('#btn_edit_ok').show();
-        me.edit_window.window('open');
+        $("#add_window").window('open');
+    }
+    
+    //新增
+    function addduty(e) {
+    	var students = "";
+    	$("input[name=student_code]").each(function(i,e){
+    		if(e.checked){
+    			students += $(e).val()+',';
+    		}
+    	});
+    	if(students.length>0){
+    		students = students.substr(0,students.length-1);
+    	}else {
+    		showError("请勾选学生!");
+    		return ;
+    	}
+//    	console.dir(students);
+    	
+    	var duty_items = "";
+    	$("input[name=duty_item]").each(function(i,e){
+    		if(e.checked){
+    			duty_items += $(e).val()+'###SPLIT_V2###';
+    			duty_items += $(e).closest('tr').find('input[name=score]').val()+'###SPLIT_V2###';
+    			duty_items += $(e).closest('tr').find('input[name=date_]').val()+'###SPLIT_V2###';
+    			duty_items += $(e).closest('tr').find('input[name=desc_]').val()+'###SPLIT_V1###';
+    		}
+    	});
+    	if(duty_items.length>0){
+    		duty_items = duty_items.substr(0,duty_items.length-'###SPLIT_V1###'.length);
+    	}else {
+    		showError("请选择项目!");
+    		return ;
+    	}
+    	console.dir(duty_items);
+    	
+    	var params = {};
+    	params.students = students;
+    	params.duty_items = duty_items;
+    	
+        if ($("#add_form").form('validate')) {
+            $.ajax({
+                url: me.actionUrl + '?act=ajax_add',
+                data: params,
+                success: function (r) {
+                    if (r) {
+                    	if(r.error==0){
+                    		showInfo(r.content);
+                    		me.dgData.datagrid('reload');
+                    		$("#add_window").window('close');
+                    	}else {
+                    		showError(r.message);
+                    	}
+                    }
+                },
+                complete:function(){
+                	clearLoading();
+                	$("#add").linkbutton('enable');
+                }
+            });
+            showLoading(e);
+        	$("#add").linkbutton('disable');
+        }
     }
     
     //修改
@@ -132,20 +199,6 @@
         }
     }
     
-    //清空界面数据
-    function clear() {
-    	
-    	$("#duty_id").val("");
-    	
-    	$("#duty_item").val("");
-    	
-    	$('#score').numberbox('setValue', 0);
-    	
-    	$("#desc_").val("");
-        
-        $('form').form('validate');
-    }
-
      //数据删除
     function deleteduty() {
         var ids = "";

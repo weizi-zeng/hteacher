@@ -14,7 +14,7 @@
         </div>
         <?php endif; ?>
         <div align="right"  nowrap="nowrap">
-        	【 <?php if ($this->_var['list_from'] == "list_school"): ?>学校管理员意见<?php elseif ($this->_var['list_from'] == "list_class"): ?>班主任意见<?php elseif ($this->_var['list_from'] == "list_customer"): ?>监护人投诉<?php else: ?>外围区 <?php echo $this->_var['msg']['user_email']; ?><?php endif; ?> 】
+        	【 <?php if ($this->_var['list_from'] == "list_school"): ?>学校管理员意见<?php elseif ($this->_var['list_from'] == "list_class"): ?>班主任意见<?php elseif ($this->_var['list_from'] == "list_customer"): ?>家长投诉<?php else: ?>外围区 <?php echo $this->_var['msg']['user_email']; ?><?php endif; ?> 】
         	<a href="mailto:<?php echo $this->_var['msg']['user_email']; ?>"><?php echo $this->_var['msg']['user_name']; ?></a> @ <?php echo $this->_var['msg']['msg_time']; ?>
         </div>
       </td>

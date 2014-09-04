@@ -63,7 +63,7 @@ elseif ($_REQUEST['act'] == 'import')
 		$arr['phone'] = replace_quote($line_list[$i++]);
 		$arr['email'] = trim($line_list[$i++]);
 		
-		$arr['guardian_name'] = trim($line_list[$i++]);//监护人信息
+		$arr['guardian_name'] = trim($line_list[$i++]);//家长信息
 		$arr['guardian_sexuality'] = trim($line_list[$i++])=="男"?"1":"0";
 		$arr['guardian_birthday'] = replace_quote($line_list[$i++]);
 		$arr['guardian_id_card'] = replace_quote($line_list[$i++]);
@@ -153,7 +153,7 @@ elseif ($_REQUEST['act'] == 'export')
 {
 	$list = student_list();
 	
-	$content = "序号,学号,姓名,性别,出生年月,民族,身份证,电话,邮箱,住址,是否已离校,监护人,监护人电话,与监护人关系,创建日期\n";
+	$content = "序号,学号,姓名,性别,出生年月,民族,身份证,电话,邮箱,住址,是否已离校,家长,家长电话,与家长关系,创建日期\n";
 	
 	foreach ($list["rows"] as $k=>$v)
 	{
@@ -198,7 +198,7 @@ function student_list()
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
 		
-		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' ";
+		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' AND code='".$_SESSION["student_code"]."' ";
 		if ($filter['keywords'])
 		{
 			$ex_where .= " AND name LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";

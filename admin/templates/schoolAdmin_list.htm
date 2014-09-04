@@ -26,6 +26,7 @@
 <table cellspacing='1' cellpadding='3' id='list-table'>
   <tr>
     <th>账号</th>
+    <th>姓名</th>
     <th>电话</th>
     <th>邮箱</th>
     <th>所属学校</th>
@@ -37,8 +38,9 @@
   {foreach from=$schoolAdmin_list item=list}
   <tr>
     <td class="first-cell" >{$list.user_name}</td>
-    <td><span onclick="listTable.edit(this, 'edit_cellphone', {$list.user_id})">{$list.cellphone}</span></td>
-    <td><span onclick="listTable.edit(this, 'edit_email', {$list.user_id})">{$list.email}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_name', {$list.user_id})">{$list.name|default:未填写}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_cellphone', {$list.user_id})">{$list.cellphone|default:未填写}</span></td>
+    <td><span onclick="listTable.edit(this, 'edit_email', {$list.user_id})">{$list.email|default:未填写}</span></td>
     <td align="left">{$list.school}</td>
     <td align="center">{$list.add_time}</td>
     <td align="center">{$list.last_login|default:N/A}</td>

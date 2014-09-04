@@ -38,6 +38,10 @@
     	<table id="dgData" style="height:400px"></table>
     
      	<div id="toolbar" style="padding:5px;height:auto">
+     	  <div style="margin-bottom:5px">
+            <a href="javascript:void(0)" onclick="update();" class="easyui-linkbutton" iconCls="icon-edit" >修改个人信息</a>
+         </div>
+         <!-- 
     	 <div style="height:40px;margin-bottom:5px;" >
           <form id="search_form" method="post">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
@@ -47,7 +51,7 @@
                             <input id="search_name" name="search_name" style="width: 150px;" />
                         </td>
                         
-                         <td style="text-align: right; width:80px;">监护人电话：</td>
+                         <td style="text-align: right; width:80px;">家长电话：</td>
                         <td style="text-align: left; width:150px;">
                             <input id="search_guardian_phone" name="search_guardian_phone" type="text" class="easyui-validatebox" data-options="required:false" maxlength="20" validType="telephone" style="width: 150px" />
                         </td>
@@ -60,6 +64,7 @@
                 </table>
            </form>
      	</div>
+     	 -->
      </div>
         
     </div>
@@ -117,15 +122,15 @@
                       </tr>
                       
                     <tr>
-                        <th style="text-align: right">监护人姓名：</th>
+                        <th style="text-align: right">家长姓名：</th>
                         <td style="width:70%"><input id="guardian_name" name="guardian_name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /></td>
                     </tr>
                     <tr> 
-                        <th style="text-align: right">监护人电话：</th>
+                        <th style="text-align: right">家长电话：</th>
                         <td><input id="guardian_phone" name="guardian_phone" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 150px" /></td>
                     </tr>
                     <tr>
-                        <th style="text-align: right">与监护人关系：</th>
+                        <th style="text-align: right">与家长关系：</th>
                         <td>
                         	<select id="guardian_relation" name="guardian_relation" >
                         		<option value="父子">父子</option>

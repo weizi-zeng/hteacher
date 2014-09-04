@@ -47,6 +47,11 @@
 				  { field: 'student_id', title: 'ID', hidden: true },
 				  { field: 'code', title: '学号', width: 80, sortable: true, align: 'center' },
                   { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
+                  { field: 'is_active', title: '是否已注册', width: 100, sortable: true, align: 'center', 
+                	  formatter: function (value, rowData, rowIndex) {
+                		  return value==1?"是":"否";
+                	  }
+                  },
                   { field: 'sexuality', title: '性别', width: 60, sortable: true, align: 'center', 
                 	  formatter: function (value, rowData, rowIndex) {
                 		  return value==1?"男":"女";
@@ -63,9 +68,9 @@
                 		  return value==1?"是":"否";
                 	  },
                   },
-                  { field: 'guardian_name', title: '监护人', width: 80, sortable: true, align: 'center' },
-                  { field: 'guardian_phone', title: '监护人电话', width: 120, sortable: true, align: 'center' },
-                  { field: 'guardian_relation', title: '与监护人关系', width: 120, sortable: true, align: 'center' },
+                  { field: 'guardian_name', title: '家长', width: 80, sortable: true, align: 'center' },
+                  { field: 'guardian_phone', title: '家长电话', width: 120, sortable: true, align: 'center' },
+                  { field: 'guardian_relation', title: '与家长关系', width: 120, sortable: true, align: 'center' },
                   
                   { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
                   ]],

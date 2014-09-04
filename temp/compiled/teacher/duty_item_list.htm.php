@@ -47,7 +47,7 @@
           <form id="search_form" method="post">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
-                        <td style="text-align: right; width:80px;">项目名称：</td>
+                        <td style="text-align: right; width:80px;">考试名称：</td>
                         <td style="text-align: left; width:150px;">
                         	<input type="text" id="search_name" name="search_name" style="width: 170px;" />
                         </td>
@@ -76,16 +76,8 @@
                 </div>
                 
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
-                	<tr>
-                        <th style="text-align: right">项目编号：</th>
-                        <td style="width:70%">
-                        	<input id="code" name="code" value="" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" />
-                        	<span style="color:red;">必须唯一</span>
-                        </td>
-                    </tr>
-                    
                     <tr>
-                        <th style="text-align: right">项目名称：</th>
+                        <th style="text-align: right">考试名称：</th>
                         <td style="width:70%">
                         	<input id="name" name="name" value="" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" />
                         </td>

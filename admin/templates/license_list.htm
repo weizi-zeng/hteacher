@@ -17,6 +17,7 @@
       &nbsp;生效日期&nbsp;<input type="text" name="sdate" />
       &nbsp;失效日期&nbsp;<input type="text" name="edate" />
        <input type="submit" value="{$lang.button_search}" />
+       <input type="button" value="按条件导出" onclick="exportLicense(this);"/>
   </form>
 </div>
 
@@ -31,6 +32,7 @@
     <th>生效日期</th>
     <th>失效日期</th>
     <th>是否已注册使用</th>
+    <th>是否有效</th>
     <th>注册使用时间</th>
   </tr>
   {foreach from=$license_list item=list}
@@ -42,6 +44,7 @@
     <td align="center">
     <img src="images/{if $list.is_active eq 1}yes{else}no{/if}.gif" />
     </td>
+    <td align="center"><img style="cursor:pointer;" src="images/{if $list.removed eq 0}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_removed', {$list.license_id})" /></td>
     <td align="center">{$list.regtime|default:未使用}</td>
   </tr>
   {foreachelse}
@@ -82,6 +85,16 @@ function searchLicense()
     listTable.loadList();
 }
 
+/**
+ * 根据条件导出注册码
+ */
+function exportLicense(o){
+	var keywords = Utils.trim(document.forms['searchForm'].elements['keyword'].value);
+    var is_active = Utils.trim(document.forms['searchForm'].elements['is_active'].value);
+    var sdate = Utils.trim(document.forms['searchForm'].elements['sdate'].value);
+    var edate = Utils.trim(document.forms['searchForm'].elements['edate'].value);
+    window.open("license.php?act=exportLicense&keywords="+keywords+"&is_active="+is_active+"&sdate="+sdate+"&edate="+edate);
+}
 //-->
 </script>
 {/literal}
