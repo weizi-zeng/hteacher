@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta  charset="utf-8" />
+		<title>浏览器检查</title>
+		<link rel="shortcut icon" href="../images/favicon.ico" />
+		
+		<style type="text/css">
+			span {
+				font-weight:bold;
+			}
+		</style>
+		
+		<script type="text/javascript" >
+			
+			function checkBrower(){
+				
+				var ua = navigator.userAgent ;
+				
+				var htm = "<div>浏览器代码名称：<span>"+navigator.appCodeName+"</span></div>";
+				htm += "<div>浏览器名称：<span>"+navigator.appName+"</span></div>";
+				htm += "<div>浏览器版本号：<span>"+navigator.appVersion+"</span></div>";
+				htm += "<div>是否支持写cookie：<span>"+navigator.cookieEnabled+"</span></div>";
+				htm += "<div>当前语种：<span>"+navigator.language+"</span></div>";
+				htm += "<div>系统平台：<span>"+navigator.platform+"</span></div>";
+				
+				htm += "<div>用户代理：<span>"+ua+"</span></div>";
+				
+				document.getElementById('checkResult').innerHTML = htm;
+			
+				//判断浏览器是否为IE
+				var i = ua.indexOf("MSIE")
+				if(i>0){
+					//判断IE版本
+					var ver = parseFloat(ua.substr(i + "MSIE".length));   
+					if(ver<10){
+						document.getElementById('warn').innerHTML = "您当前的浏览器为“IE"+ver+"” ，推荐使用火狐，谷歌以及IE10以上的浏览器。";
+					}
+					
+				}
+			}
+		
+		</script>
+		
+	</head>
+
+	<body onload="checkBrower()">
+	
+	<div id="warn" style="font-size:28px;color:red;font-weight:bolder;margin-top:50px;margin-left:200px;"></div>
+	<div id="checkResult" style="font-size:24px;margin-top:20px;margin-left:200px;"></div>
+		
+	</body>
+	
+</html>
