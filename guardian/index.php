@@ -582,7 +582,7 @@ function get_menus_by_status($status){
 				array(id=>"21", title=>"通知通告", url=>"notice.php?act=list")
 			)),
 			array(id=>"3", title=>"成绩管理",submenus=>array(
-				array(id=>"30", title=>"考试项目", url=>"exam_prj.php?act=list"),
+				array(id=>"30", title=>"考试名称", url=>"exam_prj.php?act=list"),
 				array(id=>"31", title=>"考试安排", url=>"exam.php?act=list"),
 				array(id=>"32", title=>"考试成绩", url=>"score.php?act=list"),
 			)),

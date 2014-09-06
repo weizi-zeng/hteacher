@@ -32,7 +32,7 @@
                 url: me.actionUrl + '?act=ajax_list', //me.actionUrl + '?Method=List', 
                 method: 'post',
                 fitColumns: true, 
-                remoteSort: false,  //列少设为true,列多设为false
+                remoteSort: true,  //列少设为true,列多设为false
                 autoRowHeight: false,
                 singleSelect:true,
                 pagination: true,
@@ -43,17 +43,12 @@
                 sortName: me.idFiled,
                 idField: me.idFiled,
                 columns: [[
-				  { field: 'prj_id', title: 'ID', hidden: true },
-				  { field: 'code', title: '项目编号', width: 120, sortable: true, align: 'center' },
-                  { field: 'name', title: '考试名称', width: 120, sortable: true, align: 'center' },
-                  { field: 'sdate', title: '考试开始日期', width: 120, sortable: true, align: 'center' },
-                  { field: 'edate', title: '考试结束日期', width: 120, sortable: true, align: 'center' },
-                  { field: 'closed', title: '是否归档', width: 120, sortable: true, align: 'center',
-                	  formatter: function (value, rowData, rowIndex) {
-                		  return value==1?"是":"否";
-                	  },
-                  },
-                  { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
+				  { field: 'prj_id', title: 'ID', width: 60, align: 'center',  sortable: true,
+					  sorter:function(a,b){
+						  return parseInt(a)>=parseInt(b);
+					  }
+				  },
+                  { field: 'name', title: '考试名称', width: 120, sortable: true, align: 'center' }
                   ]],
                   
                   toolbar: "#toolbar",
@@ -85,33 +80,10 @@
         	var row = rows[0];
         	
         	$("#prj_id").val(row.prj_id);
-        	$("#code").val(row.code);
         	$("#name").val(row.name);
-        	
-        	$("#sdate").datebox("setValue",row.sdate);
-        	$("#edate").datebox("setValue",row.edate);
-        	
-        	if(row.closed=="1"){
-        		$('[name="closed"]:radio').each(function() {   
-                    if (this.value == '1'){   
-                       this.checked = true;
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}else {
-        		$('[name="closed"]:radio').each(function() {   
-                    if (this.value == '0'){   
-                       this.checked = true;
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}
         	
         	 $('#btn_edit_ok').show();
              me.edit_window.window('open');
-             
         } else {
             showError('请选择一条记录进行操作!');
             return;
@@ -147,7 +119,6 @@
     
     //清空界面数据
     function clear() {
-    	
     	$("#prj_id").val("");
     	$("#sdate").val("");
     	$("#sdate").val("");
@@ -200,22 +171,4 @@
     
     function searchexam_prjs(){
     	$('#dgData').datagrid('reload');
-    }
-    
-    //获取当前选中的ids
-    function getIds(){
-    	var selects = $('#dgData').datagrid('getSelections');
-    	if(selects.length==0){
-    		showError("请选择记录进行操作");
-    		return false;
-    	}
-    	var ids = '';
-    	for(var i=0;i<selects.length;i++){
-    		ids += selects[i].prj_id;
-    		if(i<selects.length-1){
-    			ids += ",";
-    		}
-    	}
-    	
-    	return ids;
     }

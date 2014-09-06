@@ -583,10 +583,12 @@ function get_menus_by_status($status){
 				array(id=>"21", title=>"通知通告", url=>"notice.php?act=list")
 			)),
 			array(id=>"3", title=>"成绩管理",submenus=>array(
-				array(id=>"30", title=>"考试项目", url=>"exam_prj.php?act=list"),
-				array(id=>"31", title=>"考试安排", url=>"exam.php?act=list"),
-				array(id=>"32", title=>"考试成绩", url=>"score.php?act=list"),
-				array(id=>"33", title=>"成绩发布", url=>"score_publish.php?act=list")
+				array(id=>"31", title=>"考试名称", url=>"exam_prj.php?act=list"),
+				array(id=>"32", title=>"考试科目", url=>"exam_subject.php?act=list"),
+				array(id=>"33", title=>"考试安排", url=>"exam.php?act=list"),
+				array(id=>"34", title=>"考试成绩", url=>"score.php?act=list"),
+				array(id=>"35", title=>"年级排名", url=>"grade_rank.php?act=list"),
+				array(id=>"36", title=>"成绩发布", url=>"score_publish.php?act=list")
 			)),
 			array(id=>"4", title=>"成绩分析",submenus=>array(
 				array(id=>"41", title=>"班级单科成绩分析", url=>"aly_class_subject.php?act=list"),

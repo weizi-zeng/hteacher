@@ -22,35 +22,30 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	if($id==0){//insert
 		
 		$sql = "insert into ".$ecs->table("exam_prj")
-		." (code,name,class_code,sdate,edate,closed,created )
+		." (name,class_code,created )
 		values 
-			('".$_REQUEST["code"]."','".$_REQUEST["name"]."','".$_SESSION["class_code"]."',
-			'".$_REQUEST["sdate"]."','".$_REQUEST["edate"]."','".$_REQUEST["closed"]."',
+			('".$_REQUEST["name"]."','".$_SESSION["class_code"]."',
 			now())";
 		
 		$db->query($sql);
 		
-		admin_log(addslashes($_REQUEST["code"]), 'add', 'exam_prj');
+		admin_log(addslashes($_REQUEST["name"]), 'add', 'exam_prj');
 		
-		make_json_result("添加“".$_REQUEST["code"]."”成功！");
+		make_json_result("添加“".$_REQUEST["name"]."”成功！");
 		
 	}
 	
 	else //update
 	{
 		$sql = "update ".$ecs->table("exam_prj")
-		." set name='".$_REQUEST["name"]."',
-			code='".$_REQUEST["code"]."',
-			sdate='".$_REQUEST["sdate"]."',
-			edate='".$_REQUEST["edate"]."',
-			closed='".$_REQUEST["closed"]."' 
+		." set name='".$_REQUEST["name"]."'
 			where prj_id=".$id;
 		
 		$db->query($sql);
 		
-		admin_log(addslashes($_REQUEST["code"]), 'update', 'exam_prj');
+		admin_log(addslashes($_REQUEST["name"]), 'update', 'exam_prj');
 		
-		make_json_result("修改“".$id.",".$_REQUEST["code"]."”成功！");
+		make_json_result("修改“".$id.",".$_REQUEST["name"]."”成功！");
 		
 	}
 	
@@ -83,7 +78,6 @@ function exam_prj_list()
 	if ($result === false)
 	{
 		/* 过滤条件 */
-		$filter['code'] = empty($_REQUEST['search_code']) ? '' : trim($_REQUEST['search_code']);//编号
 		$filter['name'] = empty($_REQUEST['search_name']) ? '' : trim($_REQUEST['search_name']);//名称
 		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
 		{
@@ -96,10 +90,6 @@ function exam_prj_list()
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
 		
 		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' ";
-		if ($filter['code'])
-		{
-			$ex_where .= " AND code like '" . mysql_like_quote($filter['code']) ."%'";
-		}
 		if ($filter['name'])
 		{
 			$ex_where .= " AND name like '" . mysql_like_quote($filter['name']) ."%'";
@@ -132,31 +122,6 @@ function exam_prj_list()
         'page' => $filter['page_count'], 'total' => $filter['record_count']);
 
 	return $arr;
-}
-
-
-
-function insert_datas($exam_prjs_list){
-
-	$sql = "insert into ".$GLOBALS['ecs']->table("exam_prj")
-	." (code,name,class_code,subject,
-				teacher,exam_prjdate,stime,etime,classroom,created )
-			values ";
-	;
-	foreach ($exam_prjs_list as $k=>$v){
-		$sql .= "('".$v["code"]."','".$v["name"]."','".$v["class_code"]."',
-		'".$v["subject"]."','".$v["teacher"]."',
-		'".$v["exam_prjdate"]."','".$v["stime"]."','".$v["etime"]."',
-		'".$v["classroom"]."',
-		now())";
-		
-		if($k<(sizeof($exam_prjs_list)-1)){
-			$sql .= ",";
-		}
-	}
-// 	print_r($sql);
-	
-	$GLOBALS['db']->query($sql);
 }
 
 
