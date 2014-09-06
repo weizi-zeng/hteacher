@@ -172,7 +172,7 @@ elseif($_REQUEST['act'] == 'export')
 		$content .= implode(",", $goods_value) . "\n";
 
 	}
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);
 
 	$zip->add_file(ecs_iconv(EC_CHARSET, $charset, $content), 'goods_list.csv');
 

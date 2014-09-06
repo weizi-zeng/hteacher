@@ -184,7 +184,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamname')
 	}
 	
 	
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
@@ -230,7 +230,7 @@ elseif ($_REQUEST['act'] == 'exportbyexamcode')
 	}
 
 
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);
 
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 
@@ -256,7 +256,7 @@ elseif ($_REQUEST['act'] == 'exportbystudentcode')
 		$content .= "'".$v["student_code"]."',".$v["student_name"].",".$v["prj_code"].",".$v["exam_code"].",".$v["exam_subject"].",".$v["score"].",".$v["add_score"]."\r\n";
 	}
 	
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);
 
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 

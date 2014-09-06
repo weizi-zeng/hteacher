@@ -202,7 +202,7 @@ elseif ($_REQUEST['act'] == 'export')
 	$content .= "第二节晚自习,".$v["w2_time"]. ",".$v["w2_w1"]. ",".$v["w2_w2"]. ",".$v["w2_w3"]. ",".$v["w2_w4"]. ",".$v["w2_w5"]. ",".$v["w2_w6"]. ",".$v["w2_w7"] . "\n";
 	$content .= "第三节晚自习,".$v["w3_time"]. ",".$v["w3_w1"]. ",".$v["w3_w2"]. ",".$v["w3_w3"]. ",".$v["w3_w4"]. ",".$v["w3_w5"]. ",".$v["w3_w6"]. ",".$v["w3_w7"] . "\n";
 	
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
+	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
