@@ -309,6 +309,21 @@ function get_exam_prjs($class_code)
 	return $GLOBALS['db']->getAll($sql);
 }
 
+/**
+* 根据班级代码获取所有值日项目
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_exam_subjects()
+{
+	$sql = "SELECT * ".
+                " FROM hteacher.ht_subject ";
+	return $GLOBALS['db']->getAll($sql);
+}
+
 
 /**
  * 获取所有量化数据
@@ -356,39 +371,18 @@ function get_dutys($class_code, $student_code, $duty_item="", $stime="", $etime=
 
 function set_params(){
 	global $smarty, $_SESSION;
-
 	//查询条件加载
 	//班级所有学生
 	$students = get_students($_SESSION["class_code"]);
 	$smarty->assign("students", $students);
-	//班级所有考试
-	$exams = get_exams($_SESSION["class_code"]);
-	$smarty->assign("exams", $exams);
-
-	//考试项目
+	
+	//考试名称
 	$prjs = get_exam_prjs($_SESSION["class_code"]);
 	$smarty->assign("prjs", $prjs);
 	
-	$exam_codes = array();
-	$exam_subjects = array();//科目
-	foreach($exams as $k=>$v){
-		
-		$isExist = false;
-		foreach($exam_subjects as $name){
-			if($name==$v["subject"]){
-				$isExist = true;
-				break;
-			}
-		}
-		if(!$isExist){
-			$exam_subjects[] = $v["subject"];
-		}
-
-		$exam_codes[] = $v["code"];
-	}
-
-	$smarty->assign("exam_codes", $exam_codes);
-	$smarty->assign("exam_subjects", $exam_subjects);
+	//考试科目
+	$subjects = get_exam_subjects();
+	$smarty->assign("exam_subjects", $subjects);
 }
 
 ?>

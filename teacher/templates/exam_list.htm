@@ -22,6 +22,19 @@
     <script type="text/javascript">
        //公共变量初始化
     </script>
+    
+        <style type="text/css">
+    	#add_window table{
+    		border:1px solid rgb(104, 212, 253);
+    	}
+    	#add_window td{
+    		font-size:10px;
+    		text-align:left;
+    	}
+    	input[type=checkbox]{
+    		width:24px;
+    	}
+    </style>
 </head>
 <body class="easyui-layout">
     <noscript>
@@ -51,17 +64,7 @@
           <form id="search_form" method="post">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
-                   		<td style="text-align: right; width:80px;">考试编号：</td>
-                        <td style="text-align: left; width:150px;">
-                        	<select id="search_code" name="search_code" style="width:120px;">
-                        		<option value="">所有...</option>
-                        		{foreach from=$exam_codes item=exam_code}
-                        		<option value="{$exam_code}">{$exam_code}</option>
-                        		{/foreach}
-                        	</select>
-                        </td>
-                        
-                        <td style="text-align: right; width:80px;">考试项目：</td>
+                        <td style="text-align: right; width:80px;">考试名称：</td>
                         <td style="text-align: left; width:150px;">
                         	<select id="search_prj" name="search_prj" style="width:120px;">
                         		<option value="">所有...</option>
@@ -76,7 +79,7 @@
                         	<select id="search_subject" name="search_subject" style="width:120px;">
                         		<option value="">所有...</option>
                         		{foreach from=$exam_subjects item=exam_subject}
-                        		<option value="{$exam_subject}">{$exam_subject}</option>
+                        		<option value="{$exam_subject.subject}">{$exam_subject.subject}</option>
                         		{/foreach}
                         	</select>
                         </td>
@@ -96,6 +99,65 @@
     </div>
     
     
+    <div id="add_window" class="easyui-window" closed="true" title="数据维护" style="width: 800px;
+        height: 500px; padding: 0px;" >
+        <div class="easyui-layout" fit="true">
+            <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
+                <form id="add_form" name="edit_form" method="post" style="padding-top:20px;">
+                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
+                    <tr>
+                        <td style="text-align:center;">
+                        	考试名称：<select id="add_prj_code" name="prj_code" style="width:120px;">
+                        		{foreach from=$prjs item=prj}
+                        		<option value="{$prj.code}">{$prj.code}</option>
+                        		{/foreach}
+                        	</select>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2">
+                        	 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
+                        	 	<tr style="font-weight:bolder;">
+                        			<td>
+                        			<label><input type="checkbox" onclick="selectAllSubjects(this);"/>考试科目</label></td>
+                        			<td>监考老师</td>
+                        			<td>考试日期</td>
+                        			<td>考试起止时间</td>
+                        			<td>所在教室</td>
+                        		</tr>
+                        		{foreach from=$exam_subjects item=it}
+                        		<tr>
+                        			<td>
+                        				<label>
+                        					<input type="checkbox" name="subject" value="{$it.subject}"/>{$it.subject}
+                        				</label>
+                        			</td>
+                        			<td><input name="teacher" class="easyui-validatebox" maxlength="20" style="width: 114px" /></td>
+                        			<td><input name="examdate" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
+                        			<td>
+			                        	<input name="stime" type="text" class="easyui-timespinner" style="width:60px;"/>
+			                        	-
+			                        	<input name="etime" type="text" class="easyui-timespinner" style="width:60px;"/>
+			                        </td>
+			                        <td><input name="classroom" type="text" class="easyui-validatebox" maxlength="20" style="width: 120px" /></td>
+                        		</tr>
+                        		{/foreach}
+                        	 </table>
+                        </td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+            <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
+                <a id="add" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+                <a onclick="me.add_window.window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
+            </div>
+        </div>
+    </div>
+    
+    
+    
     <div id="edit_window" class="easyui-window" closed="true" title="数据维护" style="width: 480px;
         height: 300px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
@@ -107,16 +169,8 @@
                 </div>
                 
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
-                	<tr>
-                        <th style="text-align: right">考试编号：</th>
-                        <td style="width:70%">
-                        	<input id="code" name="code" value="110302001数学" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" />
-                        	<span style="color:red;">必须唯一</span>
-                        </td>
-                    </tr>
-                    
                     <tr>
-                        <th style="text-align: right">考试项目：</th>
+                        <th style="text-align: right">考试名称：</th>
                         <td style="width:70%">
                         	<select id="prj_code" name="prj_code" style="width:120px;">
                         		{foreach from=$prjs item=prj}
@@ -127,34 +181,33 @@
                     </tr>
                     <tr>
                         <th style="text-align: right">考试科目：</th>
-                        <td><input id="subject" name="subject" value="数学" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" /></td>
+                        <td>
+                        <select id="subject" name="subject" style="width:120px;">
+                       		{foreach from=$exam_subjects item=exam_subject}
+                       		<option value="{$exam_subject.subject}">{$exam_subject.subject}</option>
+                       		{/foreach}
+                       	</select>
+                       	</td>
                     </tr>
                     <tr>
                         <th style="text-align: right">监考老师：</th>
-                        <td><input id="teacher" name="teacher" class="easyui-validatebox" data-options="required:true"  maxlength="20" style="width: 170px" /></td>
+                        <td><input id="teacher" name="teacher" class="easyui-validatebox" maxlength="20" style="width: 170px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">考试日期：</th>
-                        <td><input id="examdate" name="examdate" class="easyui-datebox" data-options="required:true"  maxlength="20" style="width: 170px" /></td>
+                        <td><input id="examdate" name="examdate" class="easyui-datebox" maxlength="20" style="width: 170px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">考试起止时间：</th>
                         <td>
-                        	<input id="stime" name="stime" type="text" class="easyui-timespinner" style="width:80px;" data-options="required:true"/>
+                        	<input id="stime" name="stime" type="text" class="easyui-timespinner" style="width:80px;" />
                         	-
-                        	<input id="etime" name="etime" type="text" class="easyui-timespinner" style="width:80px;" data-options="required:true"/>
+                        	<input id="etime" name="etime" type="text" class="easyui-timespinner" style="width:80px;" />
                         </td>
                     </tr>
                     <tr> 
                         <th style="text-align: right">所在教室：</th>
-                        <td><input id="classroom" name="classroom" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" style="width: 170px" /></td>
-                    </tr>
-                    <tr> 
-                        <th style="text-align: right">是否归档：</th>
-                         <td>
-                        <label><input type="radio" value="0" name="closed" checked="true" style="width:20px;"/>否</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="1" name="closed" style="width:20px;"/>是</label>
-                        </td>
+                        <td><input id="classroom" name="classroom" type="text" class="easyui-validatebox" maxlength="20" style="width: 170px" /></td>
                     </tr>
                 </table>
                 </form>
@@ -165,6 +218,8 @@
             </div>
         </div>
     </div>
+    
+    
     
     <div id="import_window" class="easyui-window" closed="true" title="导入数据" style="width: 480px;
         height: 220px; padding: 0px;" >

@@ -107,7 +107,7 @@ function guardian_list()
 		$filter['sort']    = empty($_REQUEST['sort'])    ? 'guardian_id' : trim($_REQUEST['sort']);
 		$filter['order'] = empty($_REQUEST['order']) ? 'DESC'     : trim($_REQUEST['order']);
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
-		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
+		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
 		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' and student_code='".$_SESSION["student_code"]."'";
 		if ($filter['phone'])

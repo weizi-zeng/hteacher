@@ -125,7 +125,7 @@ elseif ($_REQUEST['act'] == 'ajax_delete')
 	make_json_result("删除成功！");
 }
 
-/// 根据考试项目导出成绩
+/// 根据考试名称导出成绩
 elseif ($_REQUEST['act'] == 'exportbyexamname')
 {
 	$prj_code = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);//考试名称
@@ -247,7 +247,7 @@ elseif ($_REQUEST['act'] == 'exportbystudentcode')
 	$student_code = $_SESSION["student_code"];//学生学号
 	$prj_code = empty($_REQUEST['search_prj_code']) ? '' : trim($_REQUEST['search_prj_code']);
 
-	$content = "学号,姓名,考试项目,考试编号,考试科目,分数,附加分数\r\n";
+	$content = "学号,姓名,考试名称,考试编号,考试科目,分数,附加分数\r\n";
 
 	$list = get_scores_by_exam($class_code, $prj_code, "", $student_code, " s.exam_code");
 
@@ -292,7 +292,7 @@ function score_list()
 		$filter['sort']    = empty($_REQUEST['sort'])    ? 'score_id' : trim($_REQUEST['sort']);
 		$filter['order'] = empty($_REQUEST['order']) ? 'DESC'     : trim($_REQUEST['order']);
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
-		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
+		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
 		$ex_where = " WHERE s.class_code='".$_SESSION["class_code"]."' and s.student_code='".$_SESSION["student_code"]."' ";
 		if ($filter['prj_code'])

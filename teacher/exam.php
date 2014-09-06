@@ -34,7 +34,7 @@ elseif ($_REQUEST['act'] == 'import')
 		if($bigan_flag===false){
 			foreach($line_list as $k=>$v){
 				//考试编号
-				if(strpos($v, "考试编号")>-1){
+				if(strpos($v, "科目")>-1){
 					$bigan_flag = true;
 					$line_number++;
 					break;
@@ -48,7 +48,6 @@ elseif ($_REQUEST['act'] == 'import')
 		}
 
 		$i=1;
-		$arr['code'] = trim($line_list[$i++]);//考试编号
 		$arr['prj_code'] = trim($line_list[$i++]);
 		$arr['subject'] = trim($line_list[$i++]);
 		$arr['teacher'] = trim($line_list[$i++]);
@@ -75,51 +74,55 @@ if ($_REQUEST['act'] == 'ajax_list')
 	make_json($list);
 }
 
+
+elseif ($_REQUEST['act'] == 'ajax_add')
+{
+	$exam_prj = empty($_REQUEST['exam_prj']) ? "":trim($_REQUEST['exam_prj']);
+	$exam_subjects = empty($_REQUEST['exam_subjects']) ? "":trim($_REQUEST['exam_subjects']);
+	$exam_subjects = explode("###SPLIT_V1###", $exam_subjects);
+	
+	$total = 0;
+	foreach($exam_subjects as $subject){
+		
+			$item_attr = explode("###SPLIT_V2###", $subject);
+			if(!$item_attr[0] || count($item_attr)<6){
+				continue;
+			}
+				
+			$sql = "insert into ".$ecs->table("exam")
+		." (prj_code,class_code,subject,
+			teacher,examdate,stime,etime,classroom,created )
+		values 
+			('".$exam_prj."','".$_SESSION["class_code"]."',
+			'".$item_attr[0]."','".$item_attr[1]."',
+			'".$item_attr[2]."','".$item_attr[3]."','".$item_attr[4]."',
+			'".$item_attr[5]."',
+			now())";
+
+			$db->query($sql);
+			admin_log(addslashes($_REQUEST["prj_code"].$_REQUEST["subject"]), 'add', 'exam');
+			$total++;
+	}
+	make_json_result("添加成功！共添加数据".$total."条!");
+}
+
+
 elseif ($_REQUEST['act'] == 'ajax_save')
 {
-	$id    = !empty($_REQUEST['exam_id'])        ? intval($_REQUEST['exam_id'])      : 0;
-	if($id==0){//insert
-		
-		$sql = "insert into ".$ecs->table("exam")
-		." (code,prj_code,class_code,subject,
-			teacher,examdate,stime,etime,classroom,closed,created )
-		values 
-			('".$_REQUEST["code"]."','".$_REQUEST["prj_code"]."','".$_SESSION["class_code"]."',
-			'".$_REQUEST["subject"]."','".$_REQUEST["teacher"]."',
-			'".$_REQUEST["examdate"]."','".$_REQUEST["stime"]."','".$_REQUEST["etime"]."',
-			'".$_REQUEST["classroom"]."','".$_REQUEST["closed"]."',
-			now())";
-		
-		$db->query($sql);
-		
-		admin_log(addslashes($_REQUEST["code"]), 'add', 'exam');
-		
-		make_json_result("添加“".$_REQUEST["code"]."”成功！");
-		
-	}
-	
-	else //update
-	{
+		$id    = !empty($_REQUEST['exam_id'])        ? intval($_REQUEST['exam_id'])      : 0;
 		$sql = "update ".$ecs->table("exam")
 		." set prj_code='".$_REQUEST["prj_code"]."',
-			code='".$_REQUEST["code"]."',
 			subject='".$_REQUEST["subject"]."',
 			teacher='".$_REQUEST["teacher"]."',
 			examdate='".$_REQUEST["examdate"]."',
 			stime='".$_REQUEST["stime"]."',
 			etime='".$_REQUEST["etime"]."',
-			closed='".$_REQUEST["closed"]."',
 			classroom='".$_REQUEST["classroom"]."'
 			where exam_id=".$id;
 		
 		$db->query($sql);
-		
-		admin_log(addslashes($_REQUEST["code"]), 'update', 'exam');
-		
-		make_json_result("修改“".$id.",".$_REQUEST["code"]."”成功！");
-		
-	}
-	
+		admin_log(addslashes($_REQUEST["prj_code"].$_REQUEST["subject"]), 'update', 'exam');
+		make_json_result("修改“".$id.",".$_REQUEST["prj_code"].$_REQUEST["subject"]."”成功！");
 }
 
 elseif ($_REQUEST['act'] == 'ajax_delete')
@@ -159,7 +162,6 @@ elseif ($_REQUEST['act'] == 'publish')
 	$title = "《".$prj_code."》考试安排";
 	$notice = '<table cellspacing="0" cellpadding="0" style="width:100%"><tbody>';
 	$notice .= '<tr style="font-weight:bold;">';
-	$notice .= '<td style="text-align:center;width:20%;border:1px solid rgb(27, 240, 180)">考试编号</td>';
 	$notice .= '<td style="text-align:center;width:15%;border:1px solid rgb(27, 240, 180)">考试科目</td>';
 	$notice .= '<td style="text-align:center;width:15%;border:1px solid rgb(27, 240, 180)">监考老师</td>';
 	$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">考试日期</td>';
@@ -169,7 +171,6 @@ elseif ($_REQUEST['act'] == 'publish')
 	
 	foreach ($rows as $row){
 		$notice .= '<tr>';
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["code"].'</td>';
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["subject"].'</td>';
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["teacher"].'</td>';
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$row["examdate"].'</td>';
@@ -210,7 +211,6 @@ function exam_list()
 	if ($result === false)
 	{
 		/* 过滤条件 */
-		$filter['code'] = empty($_REQUEST['search_code']) ? '' : trim($_REQUEST['search_code']);//编号
 		$filter['prj_code'] = empty($_REQUEST['search_prj']) ? '' : trim($_REQUEST['search_prj']);//名称
 		$filter['subject'] = empty($_REQUEST['search_subject']) ? '' : trim($_REQUEST['search_subject']);//科目
 		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
@@ -221,13 +221,9 @@ function exam_list()
 		$filter['sort']    = empty($_REQUEST['sort'])    ? 'exam_id' : trim($_REQUEST['sort']);
 		$filter['order'] = empty($_REQUEST['order']) ? 'DESC'     : trim($_REQUEST['order']);
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
-		$filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
+		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
 		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' ";
-		if ($filter['code'])
-		{
-			$ex_where .= " AND code like '" . mysql_like_quote($filter['code']) ."%'";
-		}
 		if ($filter['prj_code'])
 		{
 			$ex_where .= " AND prj_code like '" . mysql_like_quote($filter['prj_code']) ."%'";
@@ -275,12 +271,12 @@ function exam_list()
 function insert_datas($exams_list){
 
 	$sql = "insert into ".$GLOBALS['ecs']->table("exam")
-	." (code,prj_code,class_code,subject,
+	." (prj_code,class_code,subject,
 				teacher,examdate,stime,etime,classroom,created )
 			values ";
 	;
 	foreach ($exams_list as $k=>$v){
-		$sql .= "('".$v["code"]."','".$v["prj_code"]."','".$v["class_code"]."',
+		$sql .= "('".$v["prj_code"]."','".$v["class_code"]."',
 		'".$v["subject"]."','".$v["teacher"]."',
 		'".$v["examdate"]."','".$v["stime"]."','".$v["etime"]."',
 		'".$v["classroom"]."',

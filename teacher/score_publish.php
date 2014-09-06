@@ -6,7 +6,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'list')
 {
-	//考试项目
+	//考试名称
 	$prjs = get_exam_prjs($_SESSION["class_code"]);
 	$smarty->assign("prjs", $prjs);
 	
@@ -15,10 +15,10 @@ if ($_REQUEST['act'] == 'list')
 }
 
 
-/// 根据考试项目导出成绩
+/// 根据考试名称导出成绩
 elseif ($_REQUEST['act'] == 'publish')
 {
-	$prj_code = empty($_REQUEST['prj_code']) ? '' : trim($_REQUEST['prj_code']);//考试项目
+	$prj_code = empty($_REQUEST['prj_code']) ? '' : trim($_REQUEST['prj_code']);//考试名称
 	//获取这个项目所有的考试科目
 	$subjects = get_subjects_by_exam($class_code, $prj_code);
 	
@@ -90,7 +90,7 @@ elseif ($_REQUEST['act'] == 'publish')
 /// 根据学生学号导出成绩
 elseif ($_REQUEST['act'] == 'sendSMS')
 {
-	$prj_code = empty($_REQUEST['prj_code']) ? '' : trim($_REQUEST['prj_code']);//考试项目
+	$prj_code = empty($_REQUEST['prj_code']) ? '' : trim($_REQUEST['prj_code']);//考试名称
 	$list = get_scores_by_exam($class_code, $prj_code, "", "", " s.student_code");
 	$students = array();
 	foreach ($list as $k=>$v)
@@ -117,7 +117,7 @@ elseif ($_REQUEST['act'] == 'sendSMS')
 	//获取这个项目所有的考试科目
 	$subjects = get_subjects_by_exam($class_code, $prj_code);
 	if(!$subjects){
-		die('<p style="color:red;">您选择的考试项目《'.$prj_code.'》下面没有成绩数据，清选择有效的考试项目！</p>');
+		die('<p style="color:red;">您选择的考试名称《'.$prj_code.'》下面没有成绩数据，清选择有效的考试名称！</p>');
 	}
 	foreach($students as $k=>$v){
 		$content = '【'.$v["student_name"].'《'.$prj_code.'》考试成绩】';

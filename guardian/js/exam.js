@@ -37,8 +37,8 @@
                 singleSelect:true,
                 checkOnSelect:true,
                 pagination: true,
-                pageSize: 15,
-                pageList: [2, 4, 5, 15, 30, 45, 60],
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
                 nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
@@ -46,7 +46,7 @@
                 columns: [[
 				  { field: 'exam_id', title: 'ID', hidden: true },
 				  { field: 'code', title: '考试编号', width: 120, sortable: true, align: 'center' },
-                  { field: 'prj_code', title: '考试项目', width: 120, sortable: true, align: 'center' },
+                  { field: 'prj_code', title: '考试名称', width: 120, sortable: true, align: 'center' },
                   { field: 'subject', title: '考试科目', width: 120, sortable: true, align: 'center' },
                   { field: 'teacher', title: '监考老师', width: 120, sortable: true, align: 'center' },
                   { field: 'examdate', title: '考试日期', width: 120, sortable: true, align: 'center' },
@@ -254,7 +254,7 @@
     function publicexam(){
     	var exam_name = $('#search_prj').val();
     	if(!exam_name){
-    		showError("请选择考试项目！");
+    		showError("请选择考试名称！");
     		return;
     	}
     	window.location.href='exam.php?act=publish&prj_code='+exam_name;
@@ -264,7 +264,7 @@
     function sendexam(){
     	var exam_name = $('#search_prj').val();
     	if(!exam_name){
-    		showError("请选择考试项目！");
+    		showError("请选择考试名称！");
     		return;
     	}
     	
@@ -302,8 +302,8 @@
             remoteSort: false,  //列少设为true,列多设为false
             autoRowHeight: false,
             pagination: true,
-            pageSize: 100,
-            pageList: [20,30,40,50,60,70,80,90,100],
+            pageSize: 25,
+            pageList: [15, 25, 50, 100, 200],
             singleSelect: false,
             nowrap: false,  //折行
             border: false,

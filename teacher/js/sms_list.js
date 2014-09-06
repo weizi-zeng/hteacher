@@ -26,8 +26,8 @@
                 autoRowHeight: false,
                 checkOnSelect:true,
                 pagination: true,
-                pageSize: 20,
-                pageList: [20,40,60,80,100],
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
                 nowrap: false,  //折行
                 border: false,
                 singleSelect:true,

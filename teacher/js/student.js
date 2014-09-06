@@ -36,8 +36,8 @@
                 remoteSort: false,  //列少设为true,列多设为false
                 autoRowHeight: false,
                 pagination: true,
-                pageSize: 15,
-                pageList: [2, 4, 5, 15, 30, 45, 60],
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
                 singleSelect: true,
                 nowrap: false,  //折行
                 border: false,
@@ -50,7 +50,12 @@
                   { field: 'is_active', title: '是否已注册', width: 100, sortable: true, align: 'center', 
                 	  formatter: function (value, rowData, rowIndex) {
                 		  return value==1?"是":"否";
-                	  }
+                	  },
+                	  styler: function(value,row,index){
+          				if (value==0){
+          					return 'background-color:#D0D7DD;color:red;';
+          				}
+          			 }
                   },
                   { field: 'dorm', title: '宿舍', width: 80, sortable: true, align: 'center' },
                   { field: 'sexuality', title: '性别', width: 60, sortable: true, align: 'center', 
@@ -78,7 +83,11 @@
                   ]],
                   
                   toolbar: "#toolbar",
-                  
+//                  rowStyler:function(index,row){
+//                	  if(row.is_active==0){
+//                		  return 'background-color:#D0D7DD;color:#fff;'
+//                	  }
+//                  },
                 onBeforeLoad: function (param) {
                     me.search_form.find('input').each(function (index) {
                         param[this.name] = $(this).val();

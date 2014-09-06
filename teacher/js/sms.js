@@ -29,8 +29,8 @@
                 remoteSort: false,  //列少设为true,列多设为false
                 autoRowHeight: false,
                 pagination: true,
-                pageSize: 100,
-                pageList: [20,30,40,50,60,70,80,90,100],
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
                 singleSelect: false,
                 nowrap: false,  //折行
                 border: false,

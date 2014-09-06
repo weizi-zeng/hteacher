@@ -36,8 +36,8 @@
                 autoRowHeight: false,
                 rownumbers:true,
                 pagination: true,
-                pageSize: 15,
-                pageList: [2, 4, 5, 15, 30, 45, 60],
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
                 singleSelect: true,
                 nowrap: false,  //折行
                 border: false,
@@ -46,7 +46,7 @@
                 columns: [[
 				  { field: 'score_id', title: 'ID', hidden: true },
 				  { field: 'exam_code', title: '考试编号', width: 150, sortable: true, align: 'center' },
-				  { field: 'prj_code', title: '考试项目', width: 150, sortable: true, align: 'center' },
+				  { field: 'prj_code', title: '考试名称', width: 150, sortable: true, align: 'center' },
                   { field: 'exam_subject', title: '考试科目', width: 150, sortable: true, align: 'center' },
                   { field: 'student_code', title: '学号', width: 120, sortable: true, align: 'center' },
                   { field: 'student_name', title: '学生', width: 120, sortable: true, align: 'center' },
@@ -196,11 +196,11 @@
     	window.location.href='./templates/scoreTemplate.csv';
     }
     
-    //根据考试项目进行导出
+    //根据考试名称进行导出
     function exportscoresbyexamname(){
     	var prj_code = $("#search_prj_code").val();
     	if(!prj_code){
-    		showError('请选择考试项目!'); 
+    		showError('请选择考试名称!'); 
             return;
     	}
     	window.open("score.php?act=exportbyexamname&order=asc&rows=2000&search_prj_code="+prj_code);

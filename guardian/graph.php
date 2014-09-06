@@ -203,7 +203,7 @@ else if ($_REQUEST['act'] == 'history_score')//学生历次考试成绩走势图
 	
 	$graph->xaxis->SetTickLabels($X);
 	$graph->xaxis->SetFont(FF_SIMSUN, FS_BOLD);
-	$graph->xaxis->title->Set(iconv("UTF-8","GB2312//IGNORE","考试项目"));
+	$graph->xaxis->title->Set(iconv("UTF-8","GB2312//IGNORE","考试名称"));
 	$graph->xaxis->title->SetFont(FF_SIMSUN, FS_BOLD);
 	
 	$i = 0;
@@ -281,7 +281,7 @@ else if ($_REQUEST['act'] == 'history_rank')//学生历次考试排名走势图
 
 	$graph->xaxis->SetTickLabels($X);
 	$graph->xaxis->SetFont(FF_SIMSUN, FS_BOLD);
-	$graph->xaxis->title->Set(iconv("UTF-8","GB2312//IGNORE","考试项目"));
+	$graph->xaxis->title->Set(iconv("UTF-8","GB2312//IGNORE","考试名称"));
 	$graph->xaxis->title->SetFont(FF_SIMSUN, FS_BOLD);
 
 	$i = 0;

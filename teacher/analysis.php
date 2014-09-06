@@ -27,7 +27,7 @@ $subjects = get_subjects($_SESSION["class_code"]);
 // 	$student = $list[0]["student_name"];
 // 	$title = $student_code."-".$student."同学历次考试成绩走势图";
 	
-// 	$X = array();//横轴——历年的考试项目
+// 	$X = array();//横轴——历年的考试名称
 // 	foreach($list as $k=>$v){
 // 		$X[] = $v["exam_name"];
 // 	}

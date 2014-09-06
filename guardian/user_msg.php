@@ -88,7 +88,7 @@ function msg_list($from, $table)
     $filter['sort']    = empty($_REQUEST['sort']) ||  trim($_REQUEST['sort'])=='msg_reply'  ? 'msg_id' : trim($_REQUEST['sort']);
     $filter['order'] = empty($_REQUEST['order']) ? 'DESC'     : trim($_REQUEST['order']);
     $filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
-    $filter['page_size']	= empty($_REQUEST['rows']) ? '15'     : trim($_REQUEST['rows']);
+    $filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
     
     $where = " WHERE parent_id = '0' AND msg_from='".$from."' and user_id='".$_SESSION["admin_id"]."' ";
     $filter['from'] = $from;

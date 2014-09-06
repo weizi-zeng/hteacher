@@ -2,6 +2,8 @@
             dgData: null,
             edit_form: null,
             edit_window: null,
+            add_form: null,
+            add_window: null,
             search_form: null,
             idFiled: 'exam_id',
             actionUrl: 'exam.php'
@@ -14,15 +16,24 @@
         
         //页面初始化
         function pageInit() {
+            me.add_window = $('#add_window');
+            me.add_form = me.add_window.find('#add_form');
             me.edit_window = $('#edit_window');
             me.edit_form = me.edit_window.find('#edit_form');
+            
             me.search_form = $('#search_form');
             me.dgData = $('#dgData');
             $('#save').click(function(e){
-            	if ($(this).hasClass("l-btn-disabled")) {
+            	if ($(this).linkbutton("options").disabled) {
                     return;
                 }
             	save(e);
+            });
+            $('#add').click(function(e){
+            	if ($(this).linkbutton("options").disabled) {
+                    return;
+                }
+            	addExams(e);
             });
         }
 
@@ -37,28 +48,20 @@
                 singleSelect:true,
                 checkOnSelect:true,
                 pagination: true,
-                pageSize: 15,
-                pageList: [2, 4, 5, 15, 30, 45, 60],
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
                 nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
                 columns: [[
 				  { field: 'exam_id', title: 'ID', hidden: true },
-				  { field: 'code', title: '考试编号', width: 120, sortable: true, align: 'center' },
-                  { field: 'prj_code', title: '考试项目', width: 120, sortable: true, align: 'center' },
+                  { field: 'prj_code', title: '考试名称', width: 120, sortable: true, align: 'center' },
                   { field: 'subject', title: '考试科目', width: 120, sortable: true, align: 'center' },
                   { field: 'teacher', title: '监考老师', width: 120, sortable: true, align: 'center' },
                   { field: 'examdate', title: '考试日期', width: 120, sortable: true, align: 'center' },
                   { field: 'setime', title: '考试起止时间', width: 150, sortable: true, align: 'center' },
                   { field: 'classroom', title: '所在教室', width: 150, sortable: true, align: 'center' },
-                  
-                  { field: 'closed', title: '是否归档', width: 120, sortable: true, align: 'center',
-                	  formatter: function (value, rowData, rowIndex) {
-                		  return value==1?"是":"否";
-                	  },
-                  },
-                  
                   { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
                   ]],
                   
@@ -75,9 +78,8 @@
     //操作函数
     //新增
     function add() {
-        clear();
-        $('#btn_edit_ok').show();
-        me.edit_window.window('open');
+        $('#btn_add_ok').show();
+        me.add_window.window('open');
     }
     
     //修改
@@ -91,7 +93,6 @@
         	var row = rows[0];
         	
         	$("#exam_id").val(row.exam_id);
-        	$("#code").val(row.code);
         	$("#prj_code").val(row.prj_code);
         	
         	$("#examdate").datebox("setValue",row.examdate);
@@ -103,25 +104,6 @@
         	$("#teacher").val(row.teacher);
         	$("#classroom").val(row.classroom);
 
-        	if(row.closed=="1"){
-        		$('[name="closed"]:radio').each(function() {   
-                    if (this.value == '1'){   
-                       this.checked = true;
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}else {
-        		$('[name="closed"]:radio').each(function() {   
-                    if (this.value == '0'){   
-                       this.checked = true;
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}
-        	
-        	 $('#btn_edit_ok').show();
              me.edit_window.window('open');
              
         } else {
@@ -130,6 +112,58 @@
         }
     }
 
+    //添加考试数据
+    function addExams(e) {
+    	
+    	var exam_subjects = "";
+    	$("input[name=subject]").each(function(i,e){
+    		if(e.checked){
+    			exam_subjects += $(e).val()+'###SPLIT_V2###';
+    			exam_subjects += $(e).closest('tr').find('input[name=teacher]').val()+'###SPLIT_V2###';
+    			exam_subjects += $(e).closest('tr').find('input[name=examdate]').val()+'###SPLIT_V2###';
+    			exam_subjects += $(e).closest('tr').find('input[name=stime]').val()+'###SPLIT_V2###';
+    			exam_subjects += $(e).closest('tr').find('input[name=etime]').val()+'###SPLIT_V2###';
+    			exam_subjects += $(e).closest('tr').find('input[name=classroom]').val()+'###SPLIT_V1###';
+    		}
+    	});
+    	if(exam_subjects.length>0){
+    		exam_subjects = exam_subjects.substr(0,exam_subjects.length-'###SPLIT_V1###'.length);
+    	}else {
+    		showError("请选择考试科目!");
+    		return ;
+    	}
+//    	console.dir(exam_subjects);
+    	
+    	var params = {};
+    	params.exam_prj = $("#add_prj_code").val();
+    	params.exam_subjects = exam_subjects;
+    	
+        if (me.add_form.form('validate')) {
+            $.ajax({
+                url: me.actionUrl + '?act=ajax_add',
+                data: params,
+                success: function (r) {
+                    if (r) {
+                    	if(r.error==0){
+                    		showInfo(r.content);
+                    		me.dgData.datagrid('reload');
+                    		me.add_window.window('close');
+                    	}else {
+                    		showError(r.message);
+                    	}
+                    }
+                },
+                complete:function(){
+                	clearLoading();
+                	$("#add").linkbutton('enable');
+                }
+            });
+            showLoading(e);
+        	$("#add").linkbutton('disable');
+        }
+    }
+    
+    
     //保存
     function save(e) {
         if (me.edit_form.form('validate')) {
@@ -157,20 +191,6 @@
         }
     }
     
-    //清空界面数据
-    function clear() {
-    	
-    	$("#exam_id").val("");
-    	$("#stime").val("");
-    	$("#etime").val("");
-    	//$("#subject").val("");
-    	
-    	$("#teacher").val("");
-    	//$("#classroom").val("");
-        
-        $('form').form('validate');
-    }
-
      //数据删除
     function deleteexam() {
         var ids = "";
@@ -254,7 +274,7 @@
     function publicexam(){
     	var exam_name = $('#search_prj').val();
     	if(!exam_name){
-    		showError("请选择考试项目！");
+    		showError("请选择考试名称！");
     		return;
     	}
     	window.location.href='exam.php?act=publish&prj_code='+exam_name;
@@ -264,7 +284,7 @@
     function sendexam(){
     	var exam_name = $('#search_prj').val();
     	if(!exam_name){
-    		showError("请选择考试项目！");
+    		showError("请选择考试名称！");
     		return;
     	}
     	
@@ -302,8 +322,8 @@
             remoteSort: false,  //列少设为true,列多设为false
             autoRowHeight: false,
             pagination: true,
-            pageSize: 100,
-            pageList: [20,30,40,50,60,70,80,90,100],
+            pageSize: 25,
+            pageList: [15, 25, 50, 100, 200],
             singleSelect: false,
             nowrap: false,  //折行
             border: false,
@@ -313,7 +333,17 @@
 			  { field: 'student_id', title: 'ID', checkbox: true },
 			  { field: 'code', title: '学号', width: 80, sortable: true, align: 'center' },
               { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
-              { field: 'address', title: '住址', width: 300, sortable: true, align: 'center' },
+              { field: 'is_active', title: '是否已注册', width: 80, sortable: true, align: 'center',
+            	  formatter: function (value, rowData, rowIndex) {
+            		  return value==1?"是":"否";
+            	  },
+            	  styler: function(value,row,index){
+        				if (value==0){
+        					return 'color:red;';
+        				}
+        			 }
+              },
+              { field: 'address', title: '住址', width: 220, sortable: true, align: 'center' },
               { field: 'guardian_name', title: '家长', width: 80, sortable: true, align: 'center' },
               { field: 'guardian_phone', title: '家长电话', width: 120, sortable: true, align: 'center' },
               ]],
@@ -377,5 +407,17 @@ function check(){
 	$('#tip').text(rem);
 }
 
+
+function selectAllSubjects(o){
+	if(o.checked){
+		$("input[name=subject]").each(function(i,e){
+			e.checked=true;
+		});
+	}else {
+		$("input[name=subject]").each(function(i,e){
+			e.checked=false;
+		});
+	}
+}
 
     

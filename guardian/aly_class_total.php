@@ -29,7 +29,7 @@ define('IN_ECS', true);
 		function getGraph(){
 			var prj_code = $("#search_prj_code").val();
 			if(!prj_code){
-				showError('请选择考试项目!'); 
+				showError('请选择考试名称!'); 
 				return; 
 			}
 			
@@ -51,7 +51,7 @@ define('IN_ECS', true);
           <form id="search_form" method="post" action="analysis.php?act=score_trend" style="margin-top:10px;">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
-                    	<td style="text-align: right; width:80px;">考试项目：</td>
+                    	<td style="text-align: right; width:80px;">考试名称：</td>
                         <td style="text-align: left; width:230px;">
                         	<select id="search_prj_code" style="width:220px;">
                         		<option value="">所有...</option>

@@ -646,7 +646,7 @@ function page_and_size($filter)
 		}
 		else
 		{
-			$filter['page_size'] = 15;
+			$filter['page_size'] = 25;
 		}
 	}
 

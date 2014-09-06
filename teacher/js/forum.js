@@ -37,8 +37,8 @@
                 singleSelect:true,
                 checkOnSelect:true,
                 pagination: true,
-                pageSize: 15,
-                pageList: [2, 4, 5, 15, 30, 45, 60],
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
                 nowrap: false,  //折行
                 border: false,
                 sortName: me.idFiled,
