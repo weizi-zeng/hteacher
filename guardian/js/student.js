@@ -32,8 +32,8 @@
             me.dgData.datagrid({
                 url: me.actionUrl + '?act=ajax_list', //me.actionUrl + '?Method=List', 
                 method: 'get',
-                fitColumns: false, 
-                remoteSort: false,  //列少设为true,列多设为false
+                fitColumns: true, 
+                remoteSort: true,  //列少设为true,列多设为false
                 autoRowHeight: false,
                 pagination: true,
                 pageSize: 25,
@@ -47,11 +47,7 @@
 				  { field: 'student_id', title: 'ID', hidden: true },
 				  { field: 'code', title: '学号', width: 80, sortable: true, align: 'center' },
                   { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
-                  { field: 'is_active', title: '是否已注册', width: 100, sortable: true, align: 'center', 
-                	  formatter: function (value, rowData, rowIndex) {
-                		  return value==1?"是":"否";
-                	  }
-                  },
+                  { field: 'dorm', title: '宿舍', width: 80, sortable: true, align: 'center' },
                   { field: 'sexuality', title: '性别', width: 60, sortable: true, align: 'center', 
                 	  formatter: function (value, rowData, rowIndex) {
                 		  return value==1?"男":"女";
@@ -59,8 +55,8 @@
                   },
                   { field: 'birthday', title: '出生年月', width: 120, sortable: true, align: 'center' },
                   { field: 'national', title: '民族', width: 60, sortable: true, align: 'center' },
-                  { field: 'id_card', title: '身份证', width: 150, sortable: true, align: 'center' },
                   { field: 'phone', title: '电话', width: 120, sortable: true, align: 'center' },
+                  { field: 'qq', title: 'QQ', width: 120, sortable: true, align: 'center' },
                   { field: 'email', title: '邮箱', width: 200, sortable: true, align: 'center' },
                   { field: 'address', title: '住址', width: 300, sortable: true, align: 'center' },
                   { field: 'has_left', title: '是否已离校', width: 120, sortable: true, align: 'center',
@@ -70,9 +66,7 @@
                   },
                   { field: 'guardian_name', title: '家长', width: 80, sortable: true, align: 'center' },
                   { field: 'guardian_phone', title: '家长电话', width: 120, sortable: true, align: 'center' },
-                  { field: 'guardian_relation', title: '与家长关系', width: 120, sortable: true, align: 'center' },
-                  
-                  { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
+                  { field: 'guardian_relation', title: '与家长关系', width: 120, sortable: true, align: 'center' }
                   ]],
                   
                   toolbar: "#toolbar",
@@ -96,70 +90,7 @@
     
     //修改
     function update() {
-        var rows = me.dgData.datagrid('getSelections');
-        if (rows.length > 0) {
-        	var row = rows[0];
-        	
-        	$("#student_id").val(row.student_id);
-        	$("#code").val(row.code);
-        	$("#name").val(row.name);
-        	
-        	if(row.sexuality=="1"){
-        		$('[name="sexuality"]:radio').each(function() {   
-                    if (this.value == '1'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}else {
-        		$('[name="sexuality"]:radio').each(function() {   
-                    if (this.value == '0'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}
-        	
-        	$('#birthday').datebox("setValue",row.birthday); 
-        	$("#national").val(row.national);
-        	$("#id_card").val(row.id_card);
-           
-        	$("#phone").val(row.phone);
-        	$("#email").val(row.email);
-        	$("#address").val(row.address);
-        	
-        	$("#guardian_name").val(row.guardian_name);
-        	$("#guardian_relation").val(row.guardian_relation);
-        	$("#guardian_phone").val(row.guardian_phone);
-        	
-        	if(row.has_left=="1"){
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '1'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        		
-        	}else {
-        		$('[name="has_left"]:radio').each(function() {   
-                    if (this.value == '0'){   
-                       this.checked = true;   
-                    }else {
-                       this.checked = false;
-                    }
-                 });
-        	}
-        	
-        	 $('#btn_edit_ok').show();
-             me.edit_window.window('open');
-             
-        } else {
-            showError('请选择一条记录进行操作!');
-            return;
-        }
+    	me.edit_window.window('open');
     }
 
     //保存

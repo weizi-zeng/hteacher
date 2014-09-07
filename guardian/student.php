@@ -6,6 +6,8 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'list')
 {
+	$student = get_student($class_code, $_SESSION["student_code"]);
+	$smarty->assign("student", $student);
 	$smarty->display('student_list.htm');
 	exit;
 }
@@ -17,136 +19,28 @@ if ($_REQUEST['act'] == 'ajax_list')
 	make_json($list);
 }
 
-elseif ($_REQUEST['act'] == 'import')
-{
-	/* 将文件按行读入数组，逐行进行解析 */
-	$line_number = 0;
-	$students_list = array();
-	$data = file($_FILES["importFile"]["tmp_name"]);
-	
-	$bigan_flag = false;
-	foreach ($data AS $line)
-	{
-		// 转换编码
-// 		if (($_POST['charset'] != 'UTF8') && (strpos(strtolower(EC_CHARSET), 'utf') === 0))
-// 		{
-// 			$line = ecs_iconv($_POST['charset'], 'UTF8', $line);
-// 		}
-		$line = mb_convert_encoding($line, "UTF-8", "GBK");
-		
-		// 初始化
-		$arr    = array();
-		$line_list = explode(",",$line);
-		
-		if($bigan_flag===false){
-			foreach($line_list as $k=>$v){//学生姓名
-				if(strpos($v, "学生姓名")>-1){
-					$bigan_flag = true;
-					$line_number++;
-					break;
-				}
-			}
-			if(!$bigan_flag){	//定位起始行
-				$line_number++;
-			}
-			continue;
-		}
-		
-		$i=1;
-		$arr['code'] = replace_quote($line_list[$i++]);//学号
-		$arr['name'] = trim($line_list[$i++]);//学生信息
-		$arr['sexuality'] = trim($line_list[$i++])=="男"?"1":"0";
-		$arr['birthday'] = replace_quote($line_list[$i++]);
-		$arr['id_card'] = replace_quote($line_list[$i++]);
-		$arr['national'] = trim($line_list[$i++]);
-		$arr['address'] = trim($line_list[$i++]);
-		$arr['phone'] = replace_quote($line_list[$i++]);
-		$arr['email'] = trim($line_list[$i++]);
-		
-		$arr['guardian_name'] = trim($line_list[$i++]);//家长信息
-		$arr['guardian_sexuality'] = trim($line_list[$i++])=="男"?"1":"0";
-		$arr['guardian_birthday'] = replace_quote($line_list[$i++]);
-		$arr['guardian_id_card'] = replace_quote($line_list[$i++]);
-		$arr['guardian_phone'] = replace_quote($line_list[$i++]);
-		$arr['guardian_email'] = trim($line_list[$i++]);
-		$arr['guardian_unit'] = trim($line_list[$i++]);
-		$arr['guardian_relation'] = trim($line_list[$i++]);
-		
-		$arr['class_code'] = $class_code;
-		
-		$students_list[] = $arr;
-	}
-	
-	insert_datas($students_list);
-	
-	$smarty->display('student_list.htm');
-	exit;
-}
-
 elseif ($_REQUEST['act'] == 'ajax_save')
 {
 	$id    = !empty($_REQUEST['student_id'])        ? intval($_REQUEST['student_id'])      : 0;
-	if($id==0){//insert
-		
-		$sql = "insert into ".$ecs->table("student")
-		." (code,name,sexuality,birthday,
-		national,id_card,phone,email,address,class_code,
-		guardian_name,guardian_relation,guardian_phone,has_left,
-		created )
-		values 
-			('".$_REQUEST["code"]."','".$_REQUEST["name"]."','".$_REQUEST["sexuality"]."',
-			'".$_REQUEST["birthday"]."','".$_REQUEST["national"]."',
-			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["email"]."',
-			'".$_REQUEST["address"]."','".$_SESSION["class_code"]."',
-			'".$_REQUEST["guardian_name"]."','".$_REQUEST["guardian_relation"]."','".$_REQUEST["guardian_phone"]."','".$_REQUEST["has_left"]."',
-			now())";
-		
-		$db->query($sql);
-		
-		admin_log(addslashes($_REQUEST["name"]), 'add', $sql);
-		
-		make_json_result("添加“".$_REQUEST["name"]."”成功！");
-		
-	}
-	
-	else //update
-	{
+// 	print_r($_REQUEST);
+	if($id>0){//insert
 		$sql = "update ".$ecs->table("student")
-		." set name='".$_REQUEST["name"]."',
-			code='".$_REQUEST["code"]."',
-			sexuality='".$_REQUEST["sexuality"]."',
+		." set sexuality='".$_REQUEST["sexuality"]."',
 			birthday='".$_REQUEST["birthday"]."',
 			national='".$_REQUEST["national"]."',
 			id_card='".$_REQUEST["id_card"]."',
 			phone='".$_REQUEST["phone"]."',
+			qq='".$_REQUEST["qq"]."',
+			dorm='".$_REQUEST["dorm"]."',
 			email='".$_REQUEST["email"]."',
 			address='".$_REQUEST["address"]."',
-			guardian_name='".$_REQUEST["guardian_name"]."',
-			guardian_relation='".$_REQUEST["guardian_relation"]."',
-			guardian_phone='".$_REQUEST["guardian_phone"]."',
-			has_left='".$_REQUEST["has_left"]."' 
+			guardian_relation='".$_REQUEST["guardian_relation"]."'
 			where student_id=".$id;
 		
 		$db->query($sql);
-		
-		admin_log(addslashes($_REQUEST["name"]), 'update', $sql);
-		
-		make_json_result("修改“".$_REQUEST["name"]."”成功！");
-		
+		admin_log(addslashes($class_code.",".$_SESSION["student_code"]), 'update', $sql);
+		make_json_result("修改个人信息成功！");
 	}
-	
-}
-
-elseif ($_REQUEST['act'] == 'ajax_delete')
-{
-	$id    = !empty($_REQUEST['student_id'])        ? intval($_REQUEST['student_id'])      : 0;
-	$sql = "delete from ".$ecs->table("student")." where student_id=".$id;
-	
-	$db->query($sql);
-	
-	admin_log($_REQUEST["student_id"], 'delete', 'student');
-	
-	make_json_result("删除成功！");
 }
 
 elseif ($_REQUEST['act'] == 'export')
@@ -198,7 +92,7 @@ function student_list()
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
-		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' AND code='".$_SESSION["student_code"]."' ";
+		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."'  ";//AND code='".$_SESSION["student_code"]."'
 		if ($filter['keywords'])
 		{
 			$ex_where .= " AND name LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
@@ -231,11 +125,6 @@ function student_list()
 	}
 
 	$list = $GLOBALS['db']->getAll($sql);
-// 	foreach ($list AS $key=>$val)
-// 	{
-// 		$list[$key]['created']     = local_date($GLOBALS['_CFG']['time_format'], $val['created']);
-// 	}
-
 
 	$arr = array('rows' => $list, 'filter' => $filter,
         'page' => $filter['page_count'], 'total' => $filter['record_count']);
@@ -243,58 +132,4 @@ function student_list()
 	return $arr;
 }
 
-
-
-function insert_datas($students_list){
-	
-	foreach ($students_list as $k=>$v){
-		$sql = "insert into ".$GLOBALS['ecs']->table("guardian")
-		." (name,sexuality,birthday,national,id_card,phone,email,
-		address,unit,relationship,class_code,student_name,created)
-					values
-	   ('".$v["guardian_name"]."','".$v["guardian_sexuality"]."',
-		'".$v["guardian_birthday"]."','".$v["national"]."',
-		'".$v["guardian_id_card"]."','".$v["guardian_phone"]."',
-		'".$v["guardian_email"]."',
-		'".$v["address"]."','".$v["guardian_unit"]."',
-		'".$v["guardian_relation"]."','".$v["class_code"]."','".$v["name"]."',
-		now()
-		)  ";
-		
-// 		echo $sql."<br>";
-		
-		$GLOBALS['db']->query($sql);
-		$guardian_id = $GLOBALS['db']->insert_id();
-		
-		
-		$sql = "insert into ".$GLOBALS['ecs']->table("student")
-		." (code, name,sexuality,birthday,national,id_card,
-		phone,email,address,class_code,guardian_id,
-		guardian_name,guardian_phone,guardian_relation,
-		created)
-				values 
-		('".$v["code"]."','".$v["name"]."','".$v["sexuality"]."',
-		'".$v["birthday"]."','".$v["national"]."',
-		'".$v["id_card"]."','".$v["phone"]."',
-		'".$v["email"]."',
-		'".$v["address"]."','".$v["class_code"]."',
-		'".$guardian_id."',
-		'".$v["guardian_name"]."','".$v["guardian_phone"]."','".$v["guardian_relation"]."',
-		now()
-		)  ";
-		
-// 		echo $sql."<br>";
-		
-		$GLOBALS['db']->query($sql);
-		$student_id = $GLOBALS['db']->insert_id();
-		
-		
-		$sql = "update ".$GLOBALS['ecs']->table("guardian")." set student_id=".$student_id." where guardian_id=".$guardian_id;
-		$GLOBALS['db']->query($sql);
-		
-	}
-	
-	
-	
-}
 ?>

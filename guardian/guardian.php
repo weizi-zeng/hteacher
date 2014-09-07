@@ -6,6 +6,8 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'list')
 {
+	$guardian = get_guardian($class_code, $_SESSION["student_code"]);
+	$smarty->assign("guardian", $guardian);
 	$smarty->display('guardian_list.htm');
 	exit;
 }
@@ -21,42 +23,17 @@ if ($_REQUEST['act'] == 'ajax_list')
 elseif ($_REQUEST['act'] == 'ajax_save')
 {
 	$id    = !empty($_REQUEST['guardian_id'])        ? intval($_REQUEST['guardian_id'])      : 0;
-	if($id==0){//insert
+	if($id>=0){//insert
 		
-		$sql = "insert into ".$ecs->table("guardian")
-		." (name,sexuality,birthday,
-		national,id_card,phone,email,address,unit,class_code,
-		student_name,relationship,
-		created )
-		values 
-			('".$_REQUEST["name"]."','".$_REQUEST["sexuality"]."',
-			'".$_REQUEST["birthday"]."','".$_REQUEST["national"]."',
-			'".$_REQUEST["id_card"]."','".$_REQUEST["phone"]."','".$_REQUEST["email"]."',
-			'".$_REQUEST["address"]."','".$_REQUEST["unit"]."','".$_SESSION["class_code"]."',
-			'".$_REQUEST["student_name"]."','".$_REQUEST["relationship"]."',
-			now())";
-		
-		$db->query($sql);
-		
-		admin_log(addslashes($_REQUEST["name"]), 'add', 'guardian');
-		
-		make_json_result("添加“".$_REQUEST["name"]."”成功！");
-		
-	}
-	
-	else //update
-	{
 		$sql = "update ".$ecs->table("guardian")
 		." set name='".$_REQUEST["name"]."',
 			sexuality='".$_REQUEST["sexuality"]."',
 			birthday='".$_REQUEST["birthday"]."',
 			national='".$_REQUEST["national"]."',
 			id_card='".$_REQUEST["id_card"]."',
-			phone='".$_REQUEST["phone"]."',
 			email='".$_REQUEST["email"]."',
 			address='".$_REQUEST["address"]."',
 			unit='".$_REQUEST["unit"]."',
-			student_name='".$_REQUEST["student_name"]."',
 			relationship='".$_REQUEST["relationship"]."'
 			where guardian_id=".$id;
 		
@@ -109,7 +86,7 @@ function guardian_list()
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
-		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' and student_code='".$_SESSION["student_code"]."'";
+		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' ";//and student_code='".$_SESSION["student_code"]."'
 		if ($filter['phone'])
 		{
 			$ex_where .= " AND phone = '" . mysql_like_quote($filter['phone']) ."'";

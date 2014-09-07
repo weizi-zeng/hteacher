@@ -107,7 +107,7 @@ elseif ($_REQUEST['act'] == 'insert')
     
             if (!$is_only)
 		    {
-		    	sys_msg(sprintf("账号已存在", stripslashes($_POST['user_name'])), 1);
+		    	sys_msg(sprintf($_POST['user_name']."账号已存在", stripslashes($_POST['user_name'])), 1);
 		    }
     }
     
@@ -118,7 +118,7 @@ elseif ($_REQUEST['act'] == 'insert')
     
      	if (!$is_only)
      	{
-     		sys_msg(sprintf("此邮箱已经被使用", stripslashes($_POST['email'])), 1);
+     		sys_msg(sprintf($_POST['email']."此邮箱已经被使用", stripslashes($_POST['email'])), 1);
      	}
      }
     
@@ -205,7 +205,7 @@ elseif ($_REQUEST['act'] == 'update')
     
             if (!$is_only)
 		    {
-		    	sys_msg(sprintf("账号已存在", stripslashes($_REQUEST['user_name'])), 1);
+		    	sys_msg(sprintf($_REQUEST['user_name']."账号已存在", stripslashes($_REQUEST['user_name'])), 1);
 		    }
     }
     
@@ -216,7 +216,7 @@ elseif ($_REQUEST['act'] == 'update')
     
      	if (!$is_only)
      	{
-     		sys_msg(sprintf("此邮箱已经被使用", stripslashes($_REQUEST['email'])), 1);
+     		sys_msg(sprintf($_REQUEST['email']."此邮箱已经被使用", stripslashes($_REQUEST['email'])), 1);
      	}
      }
     

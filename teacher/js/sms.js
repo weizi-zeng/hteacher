@@ -47,6 +47,9 @@
                   ]],
                   
                   toolbar: "#toolbar",
+                  onBeforeLoad: function (param) {
+                	  param["search_is_active"] = 1;
+                  }
             });
 
     }

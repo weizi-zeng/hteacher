@@ -107,7 +107,7 @@ CREATE TABLE  `ht_guardian` (
 --
 CREATE TABLE  `ht_student` (
   `student_id` int(10) unsigned NOT NULL auto_increment,
-  `code` varchar(45) NOT NULL,
+  `code` INTEGER NOT NULL,
   `name` varchar(45) NOT NULL,
   `dorm` varchar(10) default '',
   `sexuality` smallint(1) unsigned default '1',
@@ -407,11 +407,12 @@ CREATE TABLE  `ht_exam` (
 
 CREATE TABLE  `ht_score` (
   `score_id` int(10) unsigned NOT NULL auto_increment,
-  `class_code` varchar(20) NOT NULL,
-  `exam_code` varchar(45) NOT NULL,
+  `prj_code` varchar(45) NOT NULL,
+  `subject` varchar(45) NOT NULL,
   `student_code` varchar(20) NOT NULL,
   `score` float NOT NULL,
   `add_score` float default '0',
+  `class_code` varchar(20) NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY  (`score_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

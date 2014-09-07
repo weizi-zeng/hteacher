@@ -46,69 +46,69 @@
     </div>
     
     
-    <div id="edit_window" class="easyui-window" closed="true" title="数据维护" style="width: 480px;
+    <div id="edit_window" class="easyui-window" closed="true" title="{$guardian.name}个人信息维护" style="width: 480px;
         height: 420px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
                 <form id="edit_form" name="edit_form" method="post" style="padding-top:20px;">
                 
                 <div title="隐藏参数">
-                    <input type="hidden" id="guardian_id" name="guardian_id" value="0" />
+                    <input type="hidden" id="guardian_id" name="guardian_id" value="{$guardian.guardian_id}" />
                 </div>
                 
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
                         <th style="text-align: right">姓名：</th>
-                        <td style="width:70%"><input id="name" name="name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /></td>
+                        <td style="width:70%"><input id="name" name="name" type="text" value="{$guardian.name}" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /></td>
                     </tr>
                     <tr>    
                         <th style="text-align: right">性别：</th>
                         <td>
-                        <label><input type="radio" value="1" name="sexuality" checked="true" style="width:20px;"/>男</label>
-                        &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="0" name="sexuality" style="width:20px;"/>女</label>
+                        <input type="radio" value="1" name="sexuality" {if $guardian.sexuality eq 1 } checked="true" {/if} style="width:20px;"/>男</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<label><input type="radio" value="0" name="sexuality" {if $guardian.sexuality eq 0 } checked="true" {/if} style="width:20px;"/>女</label>
                         </td>
                     </tr>
                     <tr>
                         <th style="text-align: right">生日：</th>
-                        <td><input id="birthday" name="birthday" type="text" maxlength="20" style="width: 150px" /></td>
+                        <td><input id="birthday" name="birthday" value="{$guardian.birthday}"  type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">民族：</th>
-                        <td><input id="national" name="national" value="汉族" type="text" maxlength="20" style="width: 150px" /></td>
+                        <td><input id="national" name="national" value="{$guardian.national}" type="text" maxlength="20" style="width: 150px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">身份证：</th>
-                        <td><input id="id_card" name="id_card" type="text" maxlength="20" style="width: 200px" /></td>
+                        <td><input id="id_card" name="id_card" value="{$guardian.id_card}" type="text" maxlength="20" style="width: 200px" /></td>
                     </tr>
                     <tr> 
                         <th style="text-align: right">电话：</th>
-                        <td><input id="phone" name="phone" type="text" class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 150px" /></td>
+                        <td><input id="phone" name="phone" type="text" value="{$guardian.phone}" disabled="disabled"  class="easyui-validatebox" data-options="required:true" maxlength="20" validType="telephone" style="width: 150px" /></td>
                     </tr>
                     <tr> 
                         <th style="text-align: right">邮箱：</th>
-                        <td><input id="email" name="email" type="text" class="easyui-validatebox" maxlength="20" validType="email" style="width: 200px" /></td>
+                        <td><input id="email" name="email" type="text" value="{$guardian.email}" class="easyui-validatebox" maxlength="20" validType="email" style="width: 200px" /></td>
                     </tr>
                      <tr>
                         <th style="text-align: right">地址：</th>
-                        <td><input id="address" name="address" type="text" class="easyui-validatebox" data-options="required:true" maxlength="60" style="width: 200px" /></td>
+                        <td><input id="address" name="address" type="text" value="{$guardian.address}" class="easyui-validatebox" data-options="required:true" maxlength="60" style="width: 200px" /></td>
                       </tr>
                       <tr>
                         <th style="text-align: right">所在单位：</th>
-                        <td><input id="unit" name="unit" type="text" class="easyui-validatebox" maxlength="60" style="width: 200px" /></td>
+                        <td><input id="unit" name="unit" type="text" value="{$guardian.unit}" class="easyui-validatebox" maxlength="60" style="width: 200px" /></td>
                       </tr>
                     <tr>
                         <th style="text-align: right">相关学生：</th>
-                        <td style="width:70%"><input id="student_name" name="student_name" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /></td>
+                        <td style="width:70%"><input id="student_name" name="student_name" disabled="disabled" value="{$guardian.student_name}" type="text" class="easyui-validatebox" data-options="required:true" maxlength="10" style="width: 150px" /></td>
                     </tr>
                     <tr>
                         <th style="text-align: right">与学生关系：</th>
                         <td>
                         	<select id="relationship" name="relationship" >
-                        		<option value="父子">父子</option>
-                        		<option value="父女">父女</option>
-                        		<option value="母子">母子</option>
-                        		<option value="母女">母女</option>
-                        		<option value="其他">其他</option>
+                        		<option value="父子" {if $guardian.relationship eq '父子'} selected {/if}>父子</option>
+                        		<option value="父女" {if $guardian.relationship eq '父女'} selected {/if}>父女</option>
+                        		<option value="母子" {if $guardian.relationship eq '母子'} selected {/if}>母子</option>
+                        		<option value="母女" {if $guardian.relationship eq '母女'} selected {/if}>母女</option>
+                        		<option value="母女" {if $guardian.relationship eq '其他'} selected {/if}>其他</option>
                         	</select>
                         </td>
                     </tr>

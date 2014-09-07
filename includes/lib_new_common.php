@@ -183,6 +183,18 @@ function get_student_name($class_code, $student_code)
 	return $GLOBALS['db']->getOne($sql);
 }
 
+function get_student($class_code, $student_code)
+{
+	$sql = "select * from ".$GLOBALS['ecs']->table("student")." where class_code= '" . $class_code."' and code='".$student_code."'";
+	return $GLOBALS['db']->getRow($sql);
+}
+
+
+function get_guardian($class_code, $student_code)
+{
+	$sql = "select * from ".$GLOBALS['ecs']->table("guardian")." where class_code= '" . $class_code."' and student_code='".$student_code."'";
+	return $GLOBALS['db']->getRow($sql);
+}
 
 /**
 * 根据班级代码获取所有考试
@@ -320,7 +332,7 @@ function get_exam_prjs($class_code)
 function get_exam_subjects()
 {
 	$sql = "SELECT * ".
-                " FROM hteacher.ht_subject ";
+                " FROM hteacher.ht_subject order by subject_id ";
 	return $GLOBALS['db']->getAll($sql);
 }
 

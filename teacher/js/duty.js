@@ -80,6 +80,21 @@
         $("#add_window").window('open');
     }
     
+    function clear(){
+    	$("input[name=student_code]").each(function(i,e){
+			e.checked = false;
+		});
+		$("input[name=duty_item]").each(function(i,e){
+				e.checked = false;
+				var duty_item_id =  $(e).attr("duty_item_id");
+				$("#"+duty_item_id+"_date_").datebox('setValue','');
+				
+				$(e).closest('tr').find('input[name=score]').val('');
+				$(e).closest('tr').find('input[name=date_]').val('');
+				$(e).closest('tr').find('input[name=desc_]').val('');
+		});
+    }
+    
     //新增
     function addduty(e) {
     	var students = "";
@@ -111,7 +126,6 @@
     		showError("请选择项目!");
     		return ;
     	}
-    	console.dir(duty_items);
     	
     	var params = {};
     	params.students = students;
@@ -127,6 +141,7 @@
                     		showInfo(r.content);
                     		me.dgData.datagrid('reload');
                     		$("#add_window").window('close');
+                    		clear();
                     	}else {
                     		showError(r.message);
                     	}

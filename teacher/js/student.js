@@ -33,7 +33,7 @@
                 url: me.actionUrl + '?act=ajax_list', //me.actionUrl + '?Method=List', 
                 method: 'get',
                 fitColumns: false, 
-                remoteSort: false,  //列少设为true,列多设为false
+                remoteSort: true,  //列少设为true,列多设为false
                 autoRowHeight: false,
                 pagination: true,
                 pageSize: 25,
@@ -90,6 +90,9 @@
 //                  },
                 onBeforeLoad: function (param) {
                     me.search_form.find('input').each(function (index) {
+                        param[this.name] = $(this).val();
+                    });
+                    me.search_form.find('select').each(function (index) {
                         param[this.name] = $(this).val();
                     });
                 }

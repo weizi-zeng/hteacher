@@ -199,6 +199,7 @@ function student_list()
 		/* 过滤条件 */
 		$filter['keywords'] = empty($_REQUEST['search_name']) ? '' : trim($_REQUEST['search_name']);//名称
 		$filter['guardian_phone'] = empty($_REQUEST['search_guardian_phone']) ? '' : trim($_REQUEST['search_guardian_phone']);//电话
+		$filter['is_active'] = ($_REQUEST['search_is_active']=='')? '' : intval($_REQUEST['search_is_active']);//是否注册
 		
 		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
 		{
@@ -219,6 +220,10 @@ function student_list()
 		{
 			$ex_where .= " AND guardian_phone = '" . mysql_like_quote($filter['guardian_phone']) ."'";
 		}
+		if ($_REQUEST['search_is_active']!='')
+		{
+			$ex_where .= " AND is_active = '" . $filter['is_active'] ."'";
+		}
 		
 		$sql = "SELECT COUNT(*) FROM " . $GLOBALS['ecs']->table("student") . $ex_where;
 		
@@ -231,7 +236,7 @@ function student_list()
                 " ORDER by " . $filter['sort'] . ' ' . $filter['order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 
-// 		echo $sql; echo '<br>';
+//  		echo $sql; echo '<br>';
 
 		$filter['keywords'] = stripslashes($filter['keywords']);
 		set_filter($filter, $sql);

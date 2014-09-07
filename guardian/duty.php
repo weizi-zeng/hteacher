@@ -6,19 +6,6 @@ require(dirname(__FILE__) . '/includes/init.php');
 
 if ($_REQUEST['act'] == 'list')
 {
-	$students = get_students($class_code);
-	//将学生数据每十个一行进行处理
-	$stds = array();
-	$j = 0;
-	for($i=0;$i<count($students);$i++){
-		$stds[$j][] = $students[$i];
-		if(($i+1)%10==0){
-			$j++;
-		}
-	}
-	
-	$smarty->assign("students", $stds);
-	
 	$duty_items = get_duty_items($class_code);
 	$smarty->assign("duty_items", $duty_items);
 	
@@ -182,7 +169,6 @@ function duty_list()
 	if ($result === false)
 	{
 		/* 过滤条件 */
-		$filter['student_code'] = empty($_REQUEST['search_student_code']) ? '' : trim($_REQUEST['search_student_code']);//编号
 		$filter['name'] = empty($_REQUEST['search_name']) ? '' : trim($_REQUEST['search_name']);//名称
 		$filter['sdate'] = empty($_REQUEST['search_sdate']) ? '' : trim($_REQUEST['search_sdate']);//起始日期
 		$filter['edate'] = empty($_REQUEST['search_edate']) ? '' : trim($_REQUEST['search_edate']);//截止日期
@@ -198,10 +184,6 @@ function duty_list()
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
 		$ex_where = " WHERE d.class_code='".$_SESSION["class_code"]."' AND d.student_code = '".$_SESSION["student_code"]."' " ;
-// 		if ($filter['student_code'])
-// 		{
-// 			$ex_where .= " AND d.student_code = '" . mysql_like_quote($filter['student_code']) ."'";
-// 		}
 		if ($filter['name'])
 		{
 			$ex_where .= " AND d.duty_item like '" . mysql_like_quote($filter['name']) ."%'";

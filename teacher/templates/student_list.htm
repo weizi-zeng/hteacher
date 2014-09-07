@@ -60,6 +60,15 @@
                             <input id="search_guardian_phone" name="search_guardian_phone" type="text" class="easyui-validatebox" data-options="required:false" maxlength="20" validType="telephone" style="width: 150px" />
                         </td>
                         
+                        <td style="text-align: right; width:100px;">是否已经注册：</td>
+                        <td style="text-align: left; width:80px;">
+                        	<select id="search_is_active" name="search_is_active" >
+                        		<option value="">所有...</option>
+                        		<option value="1">是</option>
+                        		<option value="0">否</option>
+                        	</select>
+                        </td>
+                        
                         <td style="text-align: left; width:150px;">
                         	<a href="javascript:void(0)" onclick="searchStudents();" class="easyui-linkbutton" icon="icon-search">查找</a>
                         </td>

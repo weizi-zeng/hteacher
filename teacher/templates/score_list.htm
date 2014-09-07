@@ -21,6 +21,53 @@
 
     <script type="text/javascript">
        //公共变量初始化
+       
+       
+        //加载数据列表
+        function loadGrid() {
+            me.dgData.datagrid({
+                url: me.actionUrl + '?act=ajax_list', //me.actionUrl + '?Method=List', 
+                method: 'get',
+                fitColumns: true, 
+                remoteSort: false,  //列少设为true,列多设为false
+                autoRowHeight: false,
+                rownumbers:true,
+                pagination: true,
+                pageSize: 25,
+                pageList: [15, 25, 50, 100, 200],
+                singleSelect: true,
+                nowrap: false,  //折行
+                border: false,
+                sortName: me.idFiled,
+                idField: me.idFiled,
+                columns: [[
+				  { field: 'score_id', title: 'ID', hidden: true },
+				  { field: 'prj_code', title: '考试名称', width: 150, sortable: true, align: 'center' },
+                  { field: 'exam_subject', title: '考试科目', width: 150, sortable: true, align: 'center' },
+                  { field: 'student_code', title: '学号', width: 120, sortable: true, align: 'center' },
+                  { field: 'student_name', title: '学生', width: 120, sortable: true, align: 'center' },
+                  //{foreach from=$exam_subjects item=subject}
+	          		{ field: '{$subject.subject}', title: '分数', width: 60, sortable: true, align: 'center',
+	              	  sorter:function(a,b){  
+	              		  return parseFloat(a)>parseFloat(b)?1:-1;
+	              	  }
+	                },
+          		  //{/foreach}
+                  { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
+                  ]],
+                  
+                  toolbar: "#toolbar",
+                  
+                onBeforeLoad: function (param) {
+                    me.search_form.find('select').each(function (index) {
+                        param[this.name] = $(this).val();
+                    });
+                }
+            });
+
+    }
+       
+       
     </script>
 </head>
 <body class="easyui-layout">

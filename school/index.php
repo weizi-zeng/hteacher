@@ -32,6 +32,7 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'top')
 {
+// 	print_r($_SESSION);
     // 获得管理员设置的菜单
     $lst = array();
     $nav = $db->GetOne("SELECT nav_list FROM hteacher.ht_admin_user WHERE user_id = '" . $_SESSION['admin_id'] . "'" );
@@ -49,10 +50,15 @@ elseif ($_REQUEST['act'] == 'top')
 
     // 获得管理员设置的菜单
 
+    //学校
+    $school_name = get_school_name($_SESSION['school_code']);
+    $smarty->assign('school_name', $school_name);
+    
     // 获得管理员ID
     $smarty->assign('send_mail_on',$_CFG['send_mail_on']);
     $smarty->assign('nav_list', $lst);
     $smarty->assign('admin_id', $_SESSION['admin_id']);
+    $smarty->assign('admin_name', $_SESSION['admin_name']);
     $smarty->assign('certi', $_CFG['certi']);
 
     $smarty->display('top.htm');

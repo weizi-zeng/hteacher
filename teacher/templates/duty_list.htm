@@ -70,11 +70,11 @@
           <form id="search_form" method="post">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
-                   		<td style="text-align: right; width:80px;">学生学号：</td>
+                   		<td style="text-align: right; width:80px;">学生：</td>
                         <td style="text-align: left; width:150px;">
                         	<select id="search_student_code" name="search_student_code" style="width:110px;">
                         		<option value="">所有...</option>
-                        		{foreach from=$students item=student}
+                        		{foreach from=$tmp_students item=student}
                         		<option value="{$student.code}">{$student.code}-{$student.name}</option>
                         		{/foreach}
                         	</select>
@@ -114,7 +114,7 @@
     </div>
     
     <div id="add_window" class="easyui-window" closed="true" title="添加" style="width: 900px;
-        height: 600px; padding: 0px;" >
+        height: 540px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" fit="true" style="padding: 0px; border: 0px;">
                 <form id="add_form" name="add_form" method="post">
@@ -150,12 +150,12 @@
                         		<tr>
                         			<td>
                         				<label>
-                        					<input type="checkbox" name="duty_item" value="{$it.name}"/>{$it.name}
+                        					<input type="checkbox" name="duty_item" value="{$it.name}" duty_item_id="{$it.duty_item_id}"/>{$it.name}
                         				</label>
                         			</td>
                         			<td><input name="score" class="easyui-numberbox" data-options="required:true"  maxlength="4" value="{$it.score}" style="width: 114px" /></td>
-                        			<td><input name="date_" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
-                        			<td><input name="desc_" maxlength="200" style="width: 250px"  /></td>
+                        			<td><input name="date_" id="{$it.duty_item_id}_date_" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
+                        			<td><input name="desc_" maxlength="200" style="width: 250px" /></td>
                         		</tr>
                         		{/foreach}
                         	</table>

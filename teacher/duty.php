@@ -7,6 +7,8 @@ require(dirname(__FILE__) . '/includes/init.php');
 if ($_REQUEST['act'] == 'list')
 {
 	$students = get_students($class_code);
+	$smarty->assign("tmp_students", $students);
+	
 	//将学生数据每十个一行进行处理
 	$stds = array();
 	$j = 0;
