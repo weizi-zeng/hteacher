@@ -1,0 +1,40 @@
+<!-- $Id: education_info.htm 16780 2009-11-09 09:28:30Z sxc_shop $ -->
+{include file="pageheader.htm"}
+{insert_scripts files="../js/utils.js,selectzone.js,validator.js"}
+<!-- start goods form -->
+<div class="tab-div">
+    <form  action="education.php" method="post" enctype="multipart/form-data" name="theForm" onsubmit="return validate();">
+    <table width="90%" id="general-table">
+      <tr>
+        <td class="narrow-label">标题</td>
+        <td><input type="text" name="title" id="title" size ="40" maxlength="60" value="{$education.title|escape}" />{$lang.require_field}</td>
+      </tr>
+      <tr><td colspan="2" >{$FCKeditor}</td></tr>
+    </table>
+    <div class="button-div">
+      <input type="hidden" name="act" value="{$form_action}" />
+      <input type="hidden" name="old_title" value="{$education.title}"/>
+      <input type="hidden" name="id" value="{$education.education_id}" />
+      <input type="submit" value="{$lang.button_submit}" class="button"  />
+      <input type="reset" value="{$lang.button_reset}" class="button" />
+    </div>
+    </form>
+</div>
+<!-- end goods form -->
+<script language="JavaScript">
+
+var educationId = {$education.education_id|default:0};
+var elements  = document.forms['theForm'].elements;
+
+function validate()
+{
+  var title = document.getElementById("title");
+  if(!title.value){
+	  alert("请输入标题和内容！");
+	  return false;
+  }
+  return true;
+}
+
+</script>
+{include file="pagefooter.htm"}
