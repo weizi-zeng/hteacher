@@ -273,8 +273,8 @@ function insert_datas($students_list){
 		}
 	}
 	
-	$GLOBALS['db']->query("delete from ".$GLOBALS['ecs']->table("guardian")." where student_code in (".$student_codes.")");
-	$GLOBALS['db']->query("delete from ".$GLOBALS['ecs']->table("student")." where code in (".$student_codes.")");
+	$GLOBALS['db']->query("delete from ".$GLOBALS['ecs']->table("guardian")." where class_code='".$_SESSION["class_code"]."' and  student_code in (".$student_codes.")");
+	$GLOBALS['db']->query("delete from ".$GLOBALS['ecs']->table("student")." where class_code='".$_SESSION["class_code"]."' and code in (".$student_codes.")");
 	
 	foreach ($students_list as $k=>$v){
 		//先删后存

@@ -84,7 +84,8 @@ function login(o){
   <tr>
     <td>
       <table>
-      <tr><td colspan="2" text-align="center"><div style="color:red;" >{$msg_detail}</div></td></tr>
+      <tr><td colspan="2"><div id="brows_warn" style="color:red;text-align:center;" ></div></td></tr>
+      <tr><td colspan="2"><div style="color:red;text-align:left;" >{$msg_detail}</div></td></tr>
       <tr>
         <td>身份</td>
         <td><select id="status" name="status" onchange="showRegBtn(this);"  style="width:153px;padding:1px;background-color:rgb(250, 255, 189);" >
@@ -177,4 +178,13 @@ function login(o){
   {/literal}
 //-->
 </script>
+
+<script type="text/javascript">
+//浏览器检查
+var ua = navigator.userAgent ;
+if(navigator.appName!="Netscape"){
+	$("#brows_warn").html('您的浏览器版本太低！');
+}
+</script>
+
 </body>

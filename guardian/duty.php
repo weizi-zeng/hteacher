@@ -115,7 +115,7 @@ elseif ($_REQUEST['act'] == 'exportdutys')
 	$list = duty_list();
 	
 	foreach($list["rows"] as $k=>$v){
-		$content .= "s:\"".$v["student_code"]."\",".$v["student_name"].",".$v["duty_item"].",".$v["score"].",".$v["date_"].",".$v["desc_"].",".$v["created"]."\r\n";
+		$content .= $v["student_code"].",".$v["student_name"].",".$v["duty_item"].",".$v["score"].",".$v["date_"].",".$v["desc_"].",".$v["created"]."\r\n";
 	}
 	
 	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);//UTF8
@@ -142,7 +142,7 @@ elseif ($_REQUEST['act'] == 'exportRank')
 	
 	$i=1;
 	foreach($rows as $k=>$v){
-		$content .= "s:\"".$v["student_code"]."\",".$v["student_name"].",".$v["total"].",".($i++)."\r\n";
+		$content .= $v["student_code"].",".$v["student_name"].",".$v["total"].",".($i++)."\r\n";
 	}
 
 	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);//UTF8

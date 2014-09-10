@@ -57,13 +57,10 @@ define('IN_ECS', true);
                         		<option value="">所有...</option>
                         		<?php 
                         		require(dirname(__FILE__) . '/includes/init.php');
-                        		$students = get_students($class_code);
-                        		
-                        			foreach($students as $k=>$v){
+                        		$student = get_student($class_code, $_SESSION["student_code"]);
                         				?>
-                        				<option value="<?=$v["code"]?>"><?=$v["code"]."-".$v["name"]?></option>
+                        				<option value="<?=$student["code"] ?>"><?=$student["code"] ."-".$student["name"] ?></option>
                         				<?php 
-                        			}
                         		?>
                         	</select>
                         </td>

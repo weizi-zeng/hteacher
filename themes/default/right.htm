@@ -139,16 +139,16 @@
 				<div class="right_title">教育园地</div>
 				<ul class="right_list">
 				<?
-				$sql = "select * from ".$ecs->table('problems')." where is_active=1 order by problems_id desc limit 10";
-				$problems = $db->getAll($sql);
+				$sql = "select * from ".$ecs->table('education')." where is_active=1 order by education_id desc limit 10";
+				$educations = $db->getAll($sql);
 
-					foreach($problems as $k=>$problem){
+					foreach($educations as $k=>$edu){
 						?>
-						<li><a href="problems.php?act=view&problems_id=<?=$problem[problems_id] ?>"><?=$problem[title] ?></a></li>
+						<li><a href="education.php?act=view&education_id=<?=$edu[education_id] ?>"><?=$edu[title] ?></a></li>
 						<?php
 					}
 				 ?>
-				 <li><a href="problems.php ?>">更多...</a></li>
+				 <li><a href="education.php">更多...</a></li>
 			   </ul>
 			  </div>
 			  
@@ -165,7 +165,7 @@
 						<?php
 					}
 				 ?>
-				 <li><a href="problems.php ?>">更多...</a></li>
+				 <li><a href="problems.php">更多...</a></li>
 			   </ul>
 			  </div> 
 			  

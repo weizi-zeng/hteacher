@@ -76,6 +76,10 @@ $modules['09_advice']['03_classAdmin_msg']           = 'user_msg.php?act=list_cl
 $modules['09_advice']['04_customer_msg']    = 'user_msg.php?act=list_customer';
 $modules['09_advice']['05_other_msg']    = 'user_msg.php?act=list_outer';
 
+//教育园地
+$modules['09_education']['01_education_list']    = 'education.php?act=list';
+$modules['09_education']['02_education_add']    = 'education.php?act=add';
+
 //系统相关
 $modules['09_problems']['01_problems_list']    = 'problems.php?act=list';
 $modules['09_problems']['02_problems_add']    = 'problems.php?act=add';

@@ -133,6 +133,7 @@ $_LANG['kilogram'] = '千克';
 $_LANG['08_members'] = '会员管理';
 $_LANG['08_schools'] = '学校管理';
 $_LANG['09_advice'] = '系统留言';
+$_LANG['09_education'] = '教育园地';
 $_LANG['09_problems'] = '系统相关';
 $_LANG['10_priv_admin'] = '超级管理员';
 $_LANG['10_license_manage'] = '注册码管理';
@@ -162,6 +163,10 @@ $_LANG['02_schoolAdmin_msg'] = '学校管理员意见';
 $_LANG['03_classAdmin_msg'] = '班主任意见';
 $_LANG['04_customer_msg'] = '家长投诉';
 $_LANG['05_other_msg'] = '外围区意见箱';
+
+/*教育园地*/
+$_LANG['01_education_list'] = '文章列表';
+$_LANG['02_education_add'] = '添加文章';
 
 /*系统相关*/
 $_LANG['01_problems_list'] = '问题列表';

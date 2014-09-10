@@ -10,17 +10,6 @@
     <div class="left" style="overflow:hidden">
     	<div width="100%" width="674px">
 			
-			<script type="text/javascript">
-				//浏览器检查
-				var ua = navigator.userAgent ;
-				if(navigator.appName!="Netscape"){
-					alert("您的浏览器版本太低，建议使用谷歌，百度，火狐，搜狗，IE10以上等高版本的浏览器！");
-					if(confirm("现在为您推荐谷歌浏览器，是否下载？")){
-						window.open("data/googleInstaller.exe");
-					}
-				}
-			</script>
-			
 			<form id="form1">
 				<div class="left">
 				 

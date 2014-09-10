@@ -97,6 +97,9 @@ $(function(){
 	}
 	
 });
+
+
+
  </script>
 </head>
  
@@ -116,20 +119,32 @@ $(function(){
     </div>
     <div class="top_right">
 		<a href="javascript:void(0)" onclick="SetHome(this,window.location);"><img src="index_files/sfut_02.png"></a>
-		<a href="javascript:void(0)" onclick="add_favorite(this, '我爱我班', 'http://localhost:8089/hteacher');"><img src="index_files/sfut_01.png"></a>
+		<a href="javascript:void(0)" onclick="add_favorite(this, '我爱我班', 'http://www.wawb.com.cn');"><img src="index_files/sfut_01.png"></a>
 	</div>
   </div>
   
-  <div class="banner"></div>
+  <div class="banner">
+  	<p id="brows_warn" style="color:red;"></p>
+  </div>
   
  <div class="nav">
    <div class="nav_1" id="menus">
       <a href="index.php">首页</a>
-      <a href="introduction.php">教育园地</a>
+      <a href="education.php">教育园地</a>
       <a href="problems.php">系统相关</a>
       <a href="support.php">技术支持</a>
     </div>
   </div>
 
-  
+<script type="text/javascript">
+//浏览器检查
+var ua = navigator.userAgent ;
+if(navigator.appName!="Netscape"){
+	$("#brows_warn").html('您的浏览器版本太低，建议使用谷歌，百度，火狐，搜狗，IE10以上等高版本的浏览器！<a href="data/googleInstaller.exe" target="_blank">下载谷歌浏览器</a>');
+	/*alert("您的浏览器版本太低，建议使用谷歌，百度，火狐，搜狗，IE10以上等高版本的浏览器！");
+	if(confirm("现在为您推荐谷歌浏览器，是否下载？")){
+		window.open("data/googleInstaller.exe");
+	}*/
+}
+</script>
   
