@@ -17,7 +17,7 @@ if ($_REQUEST['act'] == 'list')
 elseif ($_REQUEST['act'] == 'view')
 {
 	$id    = !empty($_REQUEST['notice_id'])        ? intval($_REQUEST['notice_id'])      : 0;
-	$sql = "select * from ".$ecs->table("notice")." where notice_id=".$id;
+	$sql = "select * from ".$ecs->table("notice")." where class_code='".$class_code."' and notice_id=".$id;
 	$row = $db->getRow($sql);
 	
 	if(empty($row) || $row["is_active"]!=1){
@@ -34,16 +34,16 @@ elseif ($_REQUEST['act'] == 'view')
 	}
 	
 	/* 上一篇下一篇文章 */
-	$next_notice = $db->getRow("SELECT notice_id, title FROM " .$ecs->table('notice'). " WHERE notice_id > $id AND is_active=1 LIMIT 1");
+	$next_notice = $db->getRow("SELECT notice_id, title FROM " .$ecs->table('notice'). " WHERE class_code='".$class_code."' and notice_id > $id AND is_active=1 LIMIT 1");
 	if (!empty($next_notice))
 	{
 		$smarty->assign('next_notice', $next_notice);
 	}
 	
-	$prev_aid = $db->getOne("SELECT max(notice_id) FROM " . $ecs->table('notice') . " WHERE notice_id < $id AND is_active=1");
+	$prev_aid = $db->getOne("SELECT max(notice_id) FROM " . $ecs->table('notice') . " WHERE class_code='".$class_code."' and notice_id < $id AND is_active=1");
 	if (!empty($prev_aid))
 	{
-		$prev_notice = $db->getRow("SELECT notice_id, title FROM " .$ecs->table('notice'). " WHERE notice_id = $prev_aid");
+		$prev_notice = $db->getRow("SELECT notice_id, title FROM " .$ecs->table('notice'). " WHERE class_code='".$class_code."' and notice_id = $prev_aid");
 		$smarty->assign('prev_notice', $prev_notice);
 	}
 	
