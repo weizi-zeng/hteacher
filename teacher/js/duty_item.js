@@ -43,6 +43,9 @@
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
+                onDblClickRow: function () {
+	            	  update();
+	              },
                 columns: [[
 				  { field: 'duty_item_id', title: 'ID', checkbox: true },
                   { field: 'name', title: '量化项目', width: 120, sortable: true, align: 'center' },

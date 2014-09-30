@@ -50,6 +50,9 @@
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
+                onDblClickRow: function () {
+	            	  update();
+	              },
                 columns: [[
 				  { field: 'duty_id', title: 'ID', hidden:true },
 				  { field: 'student_code', title: '学生学号', width: 120, sortable: true, align: 'center' },
@@ -89,7 +92,7 @@
 				var duty_item_id =  $(e).attr("duty_item_id");
 				$("#"+duty_item_id+"_date_").datebox('setValue','');
 				
-				$(e).closest('tr').find('input[name=score]').val('');
+				//$(e).closest('tr').find('input[name=score]').val('');
 				$(e).closest('tr').find('input[name=date_]').val('');
 				$(e).closest('tr').find('input[name=desc_]').val('');
 		});

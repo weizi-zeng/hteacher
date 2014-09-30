@@ -113,13 +113,11 @@
         
     </div>
     
-    <div id="add_window" class="easyui-window" closed="true" title="添加" style="width: 900px;
-        height: 540px; padding: 0px;" >
+    <div id="add_window" class="easyui-window" closed="true" title="添加" style="width: 900px;height: 540px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
-            <div region="center" border="false" fit="true" style="padding: 0px; border: 0px;">
-                <form id="add_form" name="add_form" method="post">
-                
-                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
+        	<form id="add_form" name="add_form" method="post">
+        	<div region="north" border="false" style="text-align: center;  height:105px; line-height: 10px; padding: 0px;">
+        		 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
                 	<tr>
                         <td style="width:96%">
                         	<table width="100%" >
@@ -137,6 +135,10 @@
                         	</table>
                         </td>
                     </tr>
+                 </table>
+        	</div>
+            <div region="center" border="false" style="height:380px; padding: 0px;  border: 0px;">
+                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
                     <tr>
                         <td style="width:96%" colspan="2">
                         	<table width="100%" >
@@ -162,12 +164,12 @@
                         </td>
                     </tr>
                 </table>
-                </form>
             </div>
             <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
                 <a id="add" icon="icon-add" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
                 <a id="btn_edit_cancel" onclick="$('#add_window').window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
             </div>
+            </form>
         </div>
     </div>
     
@@ -184,10 +186,10 @@
                 
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                 	<tr>
-                        <th style="text-align: right">学生学号：</th>
+                        <th style="text-align: right">学生：</th>
                         <td style="width:70%">
                         	<select id="student_code" name="student_code" style="width:120px;">
-                        		{foreach from=$students item=student}
+                        		{foreach from=$tmp_students item=student}
                         		<option value="{$student.code}">{$student.code}-{$student.name}</option>
                         		{/foreach}
                         	</select>

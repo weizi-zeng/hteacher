@@ -53,7 +53,7 @@
                 	  },
                 	  styler: function(value,row,index){
           				if (value==0){
-          					return 'background-color:#D0D7DD;color:red;';
+          					return 'color:red;';
           				}
           			 }
                   },
@@ -82,12 +82,10 @@
                   { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
                   ]],
                   
-                  toolbar: "#toolbar",
-//                  rowStyler:function(index,row){
-//                	  if(row.is_active==0){
-//                		  return 'background-color:#D0D7DD;color:#fff;'
-//                	  }
-//                  },
+	              toolbar: "#toolbar",
+	              onDblClickRow: function () {
+	            	  update();
+	              },
                 onBeforeLoad: function (param) {
                     me.search_form.find('input').each(function (index) {
                         param[this.name] = $(this).val();
@@ -248,7 +246,13 @@
             return;
         }
         var name=rows[0]["name"];
-        $.messager.confirm('提示信息', '确认要删除选择项？【'+rows[0]["code"]+ ','+ name + '】', function (isClickedOk) {
+        
+        var tip = '确认要删除选择项？【'+rows[0]["code"]+ ','+ name + '】';
+        var is_active=rows[0]["is_active"];
+        if(is_active==1){
+        	tip += '，<font style="color:red;">“'+name+'”已经注册，删除后注册信息将自动失效，请慎重！</font>';
+        }
+        $.messager.confirm('提示信息', tip, function (isClickedOk) {
             if (isClickedOk) {
                 $.ajax({
                     url: me.actionUrl+"?act=ajax_delete",

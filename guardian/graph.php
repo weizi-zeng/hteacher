@@ -326,7 +326,7 @@ else if ($_REQUEST['act'] == 'duty')//学生量化走势图
 
 	$datas = array();
 	foreach($list as $k=>$v){
-		$X[] = $v["date_"];
+		$X[] = $v["date_"]."日";
 		$datas[] = $v["score"];
 	}
 // 			print_r($X);echo '<br>';

@@ -133,7 +133,7 @@ elseif ($_REQUEST['act'] == 'exportdutys')
 		$content .= $v["student_code"].",".$v["student_name"].",".$v["duty_item"].",".$v["score"].",".$v["date_"].",".$v["desc_"].",".$v["created"]."\r\n";
 	}
 	
-	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);//UTF8
+	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);//UTF8
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
@@ -151,7 +151,7 @@ elseif ($_REQUEST['act'] == 'exportRank')
 	
 	$sql = "select d.student_code, s.name as student_name, sum(d.score) as total from ".$GLOBALS['ecs']->table("duty")." d 
 			left join ".$ecs->table("student")." s on s.code=d.student_code
-			WHERE d.date_ between '".$sdate."' and '".$edate."' 
+			WHERE d.date_ between '".$sdate."' and '".$edate."'  and d.class_code='".$class_code."' 
  			group by d.student_code order by total desc";
 	$rows = $db->getAll($sql);
 	
@@ -160,7 +160,7 @@ elseif ($_REQUEST['act'] == 'exportRank')
 		$content .= $v["student_code"].",".$v["student_name"].",".$v["total"].",".($i++)."\r\n";
 	}
 
-	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);//UTF8
+	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);//UTF8
 
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 

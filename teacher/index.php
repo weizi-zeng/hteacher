@@ -110,19 +110,38 @@ elseif ($_REQUEST['act'] == 'top')
 
 elseif ($_REQUEST['act'] == 'ChangePassword')
 {
-	$id  = !empty($_REQUEST['student_id']) ? intval($_REQUEST['student_id']) : 0;
+	$id  = $_SESSION['admin_id'];
 	$OldPassword  = !empty($_REQUEST['OldPassword']) ? trim($_REQUEST['OldPassword']) : '';
 	$NewPassword  = !empty($_REQUEST['NewPassword']) ? trim($_REQUEST['NewPassword']) : '';
 	$NewPasswordRe  = !empty($_REQUEST['NewPasswordRe']) ? trim($_REQUEST['NewPasswordRe']) : '';
-
-	$sql = "select 1 from ".$ecs->table('student')." where student_id=$id and password='".md5($OldPassword)."'";
-	// 	echo $sql;
-	$isExist = $db->getOne($sql);
-	if($isExist){
-		$sql = "update ".$ecs->table('student')." set password='".md5($NewPassword)."' where student_id=".$id;
+	
+	$sql="SELECT * FROM hteacher.ht_admin_user WHERE user_id=$id ";
+	$admin =$db->getRow($sql);
+	
+	$isRight = false;
+	$newPass = '';
+	if(!empty($admin["ec_salt"]))
+	{	
+		/* 检查密码是否正确 */
+		if($admin["password"]==md5(md5($OldPassword).$admin["ec_salt"])){
+			$isRight = true;
+			$newPass = md5(md5($NewPassword).$admin["ec_salt"]);
+		}
+	}
+	else
+	{
+		/* 检查密码是否正确 */
+		if($admin["password"]==md5($OldPassword)){
+			$isRight = true;
+			$newPass = md5($NewPassword);
+		}
+	}
+	
+	//修改密码
+	if($isRight){
+		$sql = "update hteacher.ht_admin_user set password='".$newPass."' where user_id=".$id;
 		$db->query($sql);
 		make_json(array("isOk"=>1,"message"=>""));
-
 	}else {
 		make_json(array("isOk"=>0,"message"=>"旧密码有误！"));
 	}

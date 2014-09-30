@@ -43,6 +43,9 @@
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
+                onDblClickRow: function () {
+	            	  update();
+	              },
                 columns: [[
 				  { field: 'teacher_id', title: 'ID', hidden: true },
                   { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },

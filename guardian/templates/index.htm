@@ -135,9 +135,8 @@
         </div>
     </div>
     
-    <div id="win_changepwd" class="easyui-window" closed="true" title="修改密码" icon="icon-save" style="width: 350px; height: 220px; padding: 5px; background: #fafafa;">
+    <div id="win_changepwd" class="easyui-window" closed="true" title="修改密码" icon="icon-save" style="width: 350px; height: 190px; padding: 5px; background: #fafafa;">
         <div class="easyui-layout" fit="true">
-            <div region="center" border="false" style="padding: 10px; background: #fff; border: 1px solid #ccc;">
                 <form id="win_changepwd_form" name="win_changepwd_form" method="post">
                 <table cellpadding="3" align="center">
                     <tr>
@@ -165,13 +164,14 @@
                             <input id="NewPasswordRe" name="NewPasswordRe" type="password" class="easyui-validatebox" required="true" validtype="equalTo['#NewPassword']" />
                         </td>
                     </tr>
+                    <tr>
+                    	<td colspan="2" style="text-align:center">
+                    		<a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">确定</a>
+                			<a id="btnCancel" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)">关闭</a>
+                    	</td>
+                    </tr>
                 </table>
                 </form>
-            </div>
-            <div region="south" border="false" style="text-align: center; height: 40px; line-height: 38px;">
-                
-                <a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)">确定</a> <a id="btnCancel" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)">关闭</a>
-            </div>
         </div>
     </div>
     
