@@ -161,11 +161,12 @@ elseif ($_REQUEST['act'] == 'exportRank')
 	}
 
 	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);//UTF8
+// 	$charset = "CP936";
 
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
-
-	header("Content-Disposition: attachment; filename=".$sdate."至".$edate."量化排名.csv");
-	header("Content-Type: application/unknown");
+	
+	header("Content-Disposition: attachment; filename=".$sdate."To".$edate."Duty Rank.csv");
+	header("Content-Type: application/unknown;charset=utf-8");
 	die($file);
 }
 
@@ -223,7 +224,7 @@ function duty_list()
 		/* 分页大小 */
 		$filter = page_and_size($filter);
 		$sql = "SELECT d.*, s.name as student_name ".
-                " FROM " . $GLOBALS['ecs']->table("duty")  ." d left join ". $GLOBALS['ecs']->table("student")." s on d.student_code=s.code ". $ex_where .
+                " FROM " . $GLOBALS['ecs']->table("duty")  ." d left join ". $GLOBALS['ecs']->table("student")." s on d.student_code=s.code and d.class_code=s.class_code ". $ex_where .
                 " ORDER by " . $filter['sort'] . ' ' . $filter['order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 
