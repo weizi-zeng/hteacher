@@ -197,7 +197,7 @@ elseif ($_REQUEST['act'] == 'export')
 		$content .= $v["student_id"] . ",'".$v["code"]. "',".$v["name"]. ",".$sexuality. ",".$v["birthday"]. ",".$v["national"]. ",'".$v["id_card"]. "','".$v["phone"]. "',".$v["email"]. ",".$v["address"]. ",".$has_left. ",".$v["guardian_name"]. ",'".$v["guardian_phone"] . "',".$v["guardian_relation"]. ",".$v["created"] . "\n";
 	}
 	
-	$charset = empty($_POST['charset']) ? 'GBK' : trim($_POST['charset']);
+	$charset = empty($_REQUEST['charset']) ? 'GBK' : trim($_REQUEST['charset']);
 	
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	

@@ -2,11 +2,12 @@
 
 define('IN_ECS',true);
 
-$school_code = "hteacher";
-$database = $school_code?$school_code:'hteacher';
-if($database!="hteacher" && !strpos($database, "_school")){
-	$database = $database.'_school';
-}
+$str = "afb0bf782a62a532da36beb4a23a7dcd";
+echo $str; echo '<br>';
 
-echo $database;
+echo md5("8MPUhm");echo '<br>';
+
+
+
+
 ?>

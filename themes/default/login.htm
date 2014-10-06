@@ -3,7 +3,21 @@
 <head>
 <title>管理员登录</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<link rel="shortcut icon" href="images/icon/favicon.ico" />
+
+<link href="resource/easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="resource/easyui/themes/icon.css" type="text/css" />
+
 <script type="text/javascript" src="index_files/jquery.js"></script>
+
+<script src="resource/easyui/jquery.min.js" type="text/javascript"></script>
+<script src="resource/easyui/jquery.easyui.min.js" type="text/javascript"></script>
+<script src="resource/easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    
+<script src="js/easyui-common.js" type="text/javascript"></script>
+
+
 
 {literal}
 <style type="text/css">
@@ -28,6 +42,42 @@ if (window.parent != window)
 {
   window.top.location.href = location.href;
 }
+
+
+
+$(function(){
+	  $("#forgetPwd_btn").click(function(e){
+		  if ($(this).linkbutton("options").disabled) {
+            return;
+        }
+		  if ($("#forgetPwd_form").form('validate')) {
+			  var params = {};
+			  params.status = $("#status").val();
+			  params.phone = $("#forgetPwd_phone").val();
+			  $.ajax({
+		            url: 'login.php?act=forgetPwd',
+		            data: params,
+		            success: function (returnData) {
+		                if (returnData) {
+		                    if (returnData.error == 0) {
+		                        showInfo('密码重置成功！请注意查收短信！');
+		                        $('#forgetPwd_dialog').dialog('close');
+		                    } else {
+		                        showError(returnData.message);
+		                    }
+		                }
+		            },
+		            complete:function(){
+		            	clearLoading();
+		            	$("#forgetPwd_btn").linkbutton('enable');
+		            }
+		        });
+		        showLoading(e);
+		    	$("#forgetPwd_btn").linkbutton('disable');
+		  }
+	  });
+});
+
 
 function showRegBtn(o){
 	  if(o.value=='guardian'){
@@ -79,6 +129,9 @@ function login(o){
 <body style="background: #91DBFE">
 
 <div class="login">
+ <!-- 固定写法，用于加载ajax正在处理提示 -->
+ <div id="loadingDiv" style="display:none;"></div>
+   					     
 <form method="post" action="login.php" name='theForm' id='theForm'>
   <table cellspacing="0" cellpadding="0" style="padding-top: 200px" align="center">
   <tr>
@@ -123,6 +176,7 @@ function login(o){
       <tr>
         <td colspan="2" align="left">
         &raquo; <a href="./index.php" style="color:white">返回主页面</a>
+        &raquo; <a href="javascript:void(0);" style="color:white;" onclick="$('#forgetPwd_dialog').dialog('open');">忘记密码</a>
         </td>
       </tr>
       <tr>
@@ -138,6 +192,50 @@ function login(o){
   </table>
 </form>
 <input type="hidden" value="{$gd_version}" id="gd_version" />
+
+
+
+                        <div id="forgetPwd_dialog" class="easyui-dialog" title="忘记密码" style="width:400px;height:220px;"
+						        data-options="modal:true,closed:true"><!-- ,closed:true -->
+						    <form id="forgetPwd_form">
+					        <table>
+					        	<tr>
+					        		<td colspan="2">
+						        		<div style="color:red;">
+						        			通过此操作，系统将根据电话号码，重置对应账户的密码，账户密码将由系统随机生成，重置成功后，系统会将重置后的账号密码发送到其账户绑定的手机号码上！
+						        		</div>
+					        		</td>
+					        	</tr>
+					        	<tr>
+                        			<td colspan="2" style="text-align:center;"><div style="color:red;" id="forgetPwd_warn"></div></td>
+                        		</tr>
+	                       		<tr>
+	                       			<td style="text-align:right;width:35%;">身份：</td>
+	                       			<td><select id="forgetPwd_status" class="txt text" style="width:157px;padding:1px;" >
+	                                       	<option value="guardian">亲爱的家长</option>
+	                                       	<option value="admin">辛勤的老师</option>
+	                                       </select></td>
+	                       		</tr>
+	                       		<tr>
+	                       			<td><div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div></td>
+	                       		</tr>
+	                       		<tr>
+                        			<td style="text-align:right;width:80px;">电话：</td>
+                        			<td><input id="forgetPwd_phone" type="text" style="width:153px;" class="easyui-validatebox" data-options="required:true,validType:'cellphone'"></td>
+                        		</tr>
+                        		<tr>
+                        			<td><div style="padding:3px 0 0 63px;color:#6076a0; zoom:1;"> </div></td>
+                        		</tr>
+                        		<tr>
+                        			<td colspan="2" style="text-align:center;">
+                        				<a class="easyui-linkbutton" id="forgetPwd_btn" >重置密码</a>
+                        				<a class="easyui-linkbutton" onclick="$('#forgetPwd_dialog').dialog('close');" >取消操作</a>
+                        			</td>
+                        		</tr>
+	                       </table>
+	                       </form>
+						</div>
+						
 </div>
 
 <script language="JavaScript">

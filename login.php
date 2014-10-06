@@ -72,6 +72,7 @@ require(ROOT_PATH . 'includes/cls_error.php');
 require(ROOT_PATH . 'includes/lib_time.php');
 require(ROOT_PATH . 'includes/lib_base.php');
 require(ROOT_PATH . 'includes/lib_common.php');
+require(ROOT_PATH . 'includes/lib_new_common.php');
 require(ROOT_PATH . 'includes/lib_sms_template.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php');
@@ -362,6 +363,49 @@ if ($_REQUEST['act'] == 'register')
 
 
 /*------------------------------------------------------ */
+//-- 忘记密码
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act'] == 'forgetPwd')
+{
+	$status = !empty($_REQUEST['status'])        ? trim($_REQUEST['status'])      : "";
+	$phone = !empty($_REQUEST['phone'])        ? trim($_REQUEST['phone'])      : "";
+	
+	if(!$status || !$phone){
+		make_json_error("输入条件错误！");
+		exit;
+	}
+	
+	$password = getRandStr(6);
+	//如果是家长
+	if($status=='guardian'){
+		//扫描所有数据库
+		$guardian = getGuardianByUsername($phone);
+		if($guardian){
+			$res = forgetPwd_changePwd_guardian($guardian, $guardian["school_code"], $password);
+			make_json($res);
+			exit;
+		}else {
+			make_json_error("根据您输入的电话号码".$phone."找不到绑定的账户！");
+			exit;
+		}
+	}
+	//如果是管理员
+	else if($status=='admin'){
+		$admin = getAdminByPhone($phone);
+		if($admin){
+			$res = forgetPwd_changePwd_admin($admin, $password);
+			make_json($res);
+			exit;
+		}else {
+			make_json_error("根据您输入的电话号码".$phone."找不到绑定的账户！");
+			exit;
+		}
+	}
+	
+}
+
+
+/*------------------------------------------------------ */
 //-- 退出登录
 /*------------------------------------------------------ */
 elseif ($_REQUEST['act'] == 'logout')
@@ -433,66 +477,6 @@ function register_display($guardian, $warn){
 	exit;
 }
 
-/**
-* 通过电话号码获取家长的信息
-*/
-function getGuardianByUsername($username){
-	$sql = "show databases like '%_school' ";
-	$rows = $GLOBALS['db']->getAll($sql);
-
-	$res = false;
-	if(count($rows)>0){
-		foreach($rows as $row){
-			foreach($row as $s){
-				$sql = "select * from ".$s.".ht_student where guardian_phone='".$username."' or guardian_name='".$username."' limit 1";
-				$res = $GLOBALS['db']->getRow($sql);
-				if($res){
-					$res["school_code"] = $s;
-					return $res;
-				}
-			}
-		}
-	}
-	return $res;
-}
-
-/**
- * 检验校验码
- * 1、是否正确
- * 2、是否有效
- */
-function validateRegCode($regCode){
-	$res = array("error"=>0,"msg"=>$regCode);
-	$table = "hteacher.ht_license";
-	$sql = "select * from ".$table." where license='".$regCode."'";
-	$license = $GLOBALS["db"]->getRow($sql);
-	if($license){
-		if($license["removed"]){
-			return array("error"=>1,"msg"=>"您的注册码已经被废弃！");
-		}
-		if($license["is_active"]){
-			return array("error"=>1,"msg"=>"您的注册码已经被使用！");
-		}
-		
-		$today = date("Y-m-d");
-		if($license["sdate"]>$today){
-			return array("error"=>1,"msg"=>"您的注册码要到".$license["sdate"]."才能生效！");
-		}
-		if($license["edate"]<$today){
-			return array("error"=>1,"msg"=>"您的注册码在".$license["edate"]."已经失效！");
-		}
-	}else {
-		return array("error"=>1,"msg"=>"您的注册码不正确！");
-	}
-	return $res;
-}
-
-//通过ID获取家长信息
-function getGuardianById($id, $school){
-	$table = $school.".ht_student";
-	$sql = "select * from ".$table." where student_id='".$id."'";
-	return $GLOBALS["db"]->getRow($sql);
-}
 
 //注册用户信息
 function register_system($guardian,$school,$regCode,$password){
@@ -508,5 +492,45 @@ function register_system($guardian,$school,$regCode,$password){
 	$content = sms_tmp_reg_success($guardian, $password, $regCode);
 	$sms = new sms();
 	return $sms->send($guardian["guardian_phone"], $content, $school, $guardian["class_code"], "system");
+}
+
+//家长通过忘记密码功能重置密码
+function forgetPwd_changePwd_guardian($guardian,$school,$password){
+	$table = $school.".ht_student";
+	$sql = "update ".$table." set password='".md5($password)."' where student_id=".$guardian['student_id'];//, address='".($password)."'
+	$GLOBALS["db"]->query($sql);
+
+	//发送短信提醒
+	require_once(ROOT_PATH . '/includes/cls_sms.php');
+	$content = sms_tmp_change_pwd_by_phone_guardian($guardian, $password);
+	$sms = new sms();
+	$res = $sms->send($guardian["guardian_phone"], $content, $school, $guardian["class_code"], "system");
+	$res["sql"] = $sql;
+	return $res;
+}
+
+//管理员通过忘记密码功能重置密码
+function forgetPwd_changePwd_admin($admin,$password){
+	$newPass = '';
+	if(!empty($admin["ec_salt"]))
+	{
+		$newPass = md5(md5($password).$admin["ec_salt"]);
+	}
+	else
+	{
+		$newPass = md5($password);
+	}
+	
+	$table = "hteacher.ht_admin_user";
+	$sql = "update ".$table." set password='".$newPass."' where user_id=".$admin['user_id'];
+	$GLOBALS["db"]->query($sql);
+
+	//发送短信提醒
+	require_once(ROOT_PATH . '/includes/cls_sms.php');
+	$content = sms_tmp_change_pwd_by_phone_admin($admin, $password);
+	$sms = new sms();
+	$res =  $sms->send($admin["cellphone"], $content, $admin["school_code"], $admin["class_code"], "system");
+	$res["sql"] = $sql;
+	return $res;
 }
 ?>

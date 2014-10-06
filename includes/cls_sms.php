@@ -129,6 +129,8 @@ class sms
 		 * 3、更新短信队列中的状态
 		 * 4、更新短信服务器的总条数记录
 		 */
+		$school_code = $school_code!="super"?$school_code:'hteacher';
+		
 		$database = $school_code?$school_code:'hteacher';
 		if($database!="hteacher" && !strpos($database, "_school")){
 			$database = $database.'_school';

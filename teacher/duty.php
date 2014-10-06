@@ -133,8 +133,7 @@ elseif ($_REQUEST['act'] == 'exportdutys')
 		$content .= $v["student_code"].",".$v["student_name"].",".$v["duty_item"].",".$v["score"].",".$v["date_"].",".$v["desc_"].",".$v["created"]."\r\n";
 	}
 	
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);//UTF8
-	
+	$charset = empty($_REQUEST['charset']) ? 'UTF8' : trim($_REQUEST['charset']);//UTF8
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
 	header("Content-Disposition: attachment; filename=duty_list.csv");
@@ -160,8 +159,7 @@ elseif ($_REQUEST['act'] == 'exportRank')
 		$content .= $v["student_code"].",".$v["student_name"].",".$v["total"].",".($i++)."\r\n";
 	}
 
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
-
+	$charset = empty($_REQUEST['charset']) ? 'UTF8' : trim($_REQUEST['charset']);
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	
 	header("Content-Disposition: attachment; filename=".$sdate."To".$edate."Duty Rank.csv");

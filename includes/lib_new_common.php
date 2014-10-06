@@ -397,4 +397,81 @@ function set_params(){
 	$smarty->assign("exam_subjects", $subjects);
 }
 
+
+function getRandStr($length) {
+// 	$str = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; 
+	$str = 'abcdefghijklmnopqrstuvwxyz0123456789';
+	$randString = ''; $len = strlen($str)-1; for($i = 0;$i < $length;$i ++){
+		$num = mt_rand(0, $len); $randString .= $str[$num];
+	} return $randString ;
+}
+
+
+/**
+ * 通过电话号码获取家长的信息
+ */
+function getGuardianByUsername($username){
+	$sql = "show databases like '%_school' ";
+	$rows = $GLOBALS['db']->getAll($sql);
+
+	$res = false;
+	if(count($rows)>0){
+		foreach($rows as $row){
+			foreach($row as $s){
+				$sql = "select * from ".$s.".ht_student where guardian_phone='".$username."' or guardian_name='".$username."' limit 1";
+				$res = $GLOBALS['db']->getRow($sql);
+				if($res){
+					$res["school_code"] = $s;
+					return $res;
+				}
+			}
+		}
+	}
+	return $res;
+}
+
+/**
+ * 检验校验码
+ * 1、是否正确
+ * 2、是否有效
+ */
+function validateRegCode($regCode){
+	$res = array("error"=>0,"msg"=>$regCode);
+	$table = "hteacher.ht_license";
+	$sql = "select * from ".$table." where license='".$regCode."'";
+	$license = $GLOBALS["db"]->getRow($sql);
+	if($license){
+		if($license["removed"]){
+			return array("error"=>1,"msg"=>"您的注册码已经被废弃！");
+		}
+		if($license["is_active"]){
+			return array("error"=>1,"msg"=>"您的注册码已经被使用！");
+		}
+
+		$today = date("Y-m-d");
+		if($license["sdate"]>$today){
+			return array("error"=>1,"msg"=>"您的注册码要到".$license["sdate"]."才能生效！");
+		}
+		if($license["edate"]<$today){
+			return array("error"=>1,"msg"=>"您的注册码在".$license["edate"]."已经失效！");
+		}
+	}else {
+		return array("error"=>1,"msg"=>"您的注册码不正确！");
+	}
+	return $res;
+}
+
+//通过ID获取家长信息
+function getGuardianById($id, $school){
+	$table = $school.".ht_student";
+	$sql = "select * from ".$table." where student_id='".$id."'";
+	return $GLOBALS["db"]->getRow($sql);
+}
+
+//通过电话号码查找管理员
+function getAdminByPhone($phone){
+	$sql = "select * from hteacher.ht_admin_user where cellphone='".$phone."'";
+	return $GLOBALS["db"]->getRow($sql);
+}
+
 ?>

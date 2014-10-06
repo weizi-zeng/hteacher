@@ -27,11 +27,18 @@ function sms_tmp_change_pwd_by_classAdmin($guardian, $password, $admin_name){
 /**
  * 用户忘记密码，通过手机重置密码的短信提醒
  */
-function sms_tmp_change_pwd(){
-	
+function sms_tmp_change_pwd_by_phone_guardian($guardian, $password){
+	$content = "尊敬的".$guardian["guardian_name"]."家长，您的密码已经被重置！您当前的账号密码为：".$guardian["guardian_phone"]."/".$password."，谢谢您的使用！";
+	return $content;
 }
 
-
+/**
+* 管理员忘记密码，通过手机重置密码的短信提醒
+*/
+function sms_tmp_change_pwd_by_phone_admin($admin, $password){
+	$content = "尊敬的".$admin["name"]."管理员，您的密码已经被重置！您当前的账号密码为：".$admin["user_name"]."/".$password."，谢谢您的使用！";
+	return $content;
+}
 
 
 ?>
