@@ -55,9 +55,8 @@
             <a href="javascript:void(0)" onclick="add();" class="easyui-linkbutton" iconCls="icon-add" >新增</a>
             <a href="javascript:void(0)" onclick="update();" class="easyui-linkbutton" iconCls="icon-edit" >修改</a>
             <a href="javascript:void(0)" onclick="deleteexam();" class="easyui-linkbutton" iconCls="icon-remove" >删除</a>
-            
-            <a href="javascript:void(0)" onclick="importexams();" class="easyui-linkbutton" iconCls="icon-application_put" >导入</a>
-            <a href="javascript:void(0)" onclick="template();" class="easyui-linkbutton" iconCls="icon-arrow_down" >下载模板</a>
+            <!-- <a href="javascript:void(0)" onclick="importexams();" class="easyui-linkbutton" iconCls="icon-application_put" >导入</a> 
+            <a href="javascript:void(0)" onclick="template();" class="easyui-linkbutton" iconCls="icon-arrow_down" >下载模板</a>-->
             
          </div>
     	 <div style="height:40px;margin-bottom:5px;" >
@@ -69,7 +68,7 @@
                         	<select id="search_prj" name="search_prj" style="width:120px;">
                         		<option value="">所有...</option>
                         		{foreach from=$prjs item=prj}
-                        		<option value="{$prj.code}">{$prj.code}</option>
+                        		<option value="{$prj.prj_id}">{$prj.name}</option>
                         		{/foreach}
                         	</select>
                         </td>
@@ -100,59 +99,64 @@
     
     
     <div id="add_window" class="easyui-window" closed="true" title="数据维护" style="width: 800px;
-        height: 500px; padding: 0px;" >
+        height: 460px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
-            <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
-                <form id="add_form" name="edit_form" method="post" style="padding-top:20px;">
-                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
-                    <tr>
-                        <td style="text-align:center;">
-                        	考试名称：<select id="add_prj_code" name="prj_code" style="width:120px;">
-                        		{foreach from=$prjs item=prj}
-                        		<option value="{$prj.code}">{$prj.code}</option>
-                        		{/foreach}
-                        	</select>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td colspan="2">
-                        	 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
-                        	 	<tr style="font-weight:bolder;">
-                        			<td>
-                        			<label><input type="checkbox" onclick="selectAllSubjects(this);"/>考试科目</label></td>
-                        			<td>监考老师</td>
-                        			<td>考试日期</td>
-                        			<td>考试起止时间</td>
-                        			<td>所在教室</td>
-                        		</tr>
-                        		{foreach from=$exam_subjects item=it}
-                        		<tr>
-                        			<td>
-                        				<label>
-                        					<input type="checkbox" name="subject" value="{$it.subject}"/>{$it.subject}
-                        				</label>
-                        			</td>
-                        			<td><input name="teacher" class="easyui-validatebox" maxlength="20" style="width: 114px" /></td>
-                        			<td><input name="examdate" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
-                        			<td>
-			                        	<input name="stime" type="text" class="easyui-timespinner" style="width:60px;"/>
-			                        	-
-			                        	<input name="etime" type="text" class="easyui-timespinner" style="width:60px;"/>
-			                        </td>
-			                        <td><input name="classroom" type="text" class="easyui-validatebox" maxlength="20" style="width: 120px" /></td>
-                        		</tr>
-                        		{/foreach}
-                        	 </table>
-                        </td>
-                    </tr>
-                </table>
-                </form>
-            </div>
-            <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
-                <a id="add" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
-                <a onclick="me.add_window.window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
-            </div>
+                <form id="add_form" name="edit_form" method="post" >
+                	<div region="north" border="false" style="text-align: center;  height:60px; line-height: 10px; padding: 0px;">
+		        		 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;margin-top:16px;">
+		                	<tr>
+		                        <th style="text-align:center;">
+		                        	考试名称：<select id="add_prj_id" name="prj_id" style="width:120px;">
+		                        		{foreach from=$prjs item=prj}
+		                        		<option value="{$prj.prj_id}">{$prj.name}</option>
+		                        		{/foreach}
+		                        	</select>
+		                        </th>
+		                    </tr>
+		                 </table>
+		        	</div>
+		        	
+		        	<div region="center" border="false" style="padding: 0px;  border: 0px;">
+		                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="border:none;">
+		                    <tr>
+		                        <td colspan="2">
+		                        	 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table" style="padding: 4px; ">
+		                        	 	<tr style="font-weight:bolder;">
+		                        			<td>
+		                        			<label><input type="checkbox" onclick="selectAllSubjects(this);"/>考试科目</label></td>
+		                        			<td>监考老师</td>
+		                        			<td>考试日期</td>
+		                        			<td>考试起止时间</td>
+		                        			<td>所在教室</td>
+		                        		</tr>
+		                        		{foreach from=$exam_subjects item=it}
+		                        		<tr>
+		                        			<td>
+		                        				<label>
+		                        					<input type="checkbox" name="subject" value="{$it.subject}"/>{$it.subject}
+		                        				</label>
+		                        			</td>
+		                        			<td><input name="teacher" class="easyui-validatebox" maxlength="20" style="width: 114px" /></td>
+		                        			<td><input name="examdate" class="easyui-datebox"  maxlength="20" style="width: 120px" /></td>
+		                        			<td>
+					                        	<input name="stime" type="text" class="easyui-timespinner" style="width:60px;"/>
+					                        	-
+					                        	<input name="etime" type="text" class="easyui-timespinner" style="width:60px;"/>
+					                        </td>
+					                        <td><input name="classroom" type="text" class="easyui-validatebox" maxlength="20" style="width: 120px" /></td>
+		                        		</tr>
+		                        		{/foreach}
+		                        	 </table>
+		                        </td>
+		                    </tr>
+		                </table>
+		            </div>
+		            
+		            <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
+		               <a id="add" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+	                   <a onclick="me.add_window.window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
+	             	</div>
+        		</form>
         </div>
     </div>
     
@@ -172,9 +176,9 @@
                     <tr>
                         <th style="text-align: right">考试名称：</th>
                         <td style="width:70%">
-                        	<select id="prj_code" name="prj_code" style="width:120px;">
+                        	<select id="prj_id" name="prj_id" style="width:120px;">
                         		{foreach from=$prjs item=prj}
-                        		<option value="{$prj.code}">{$prj.code}</option>
+                        		<option value="{$prj.prj_id}">{$prj.name}</option>
                         		{/foreach}
                         	</select>
                         </td>

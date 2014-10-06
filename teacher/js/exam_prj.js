@@ -42,6 +42,9 @@
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
+                onDblClickRow: function () {
+	            	  update();
+	              },
                 columns: [[
 				  { field: 'prj_id', title: 'ID', width: 60, align: 'center',  sortable: true,
 					  sorter:function(a,b){
@@ -66,6 +69,7 @@
     function add() {
         clear();
         $('#btn_edit_ok').show();
+        me.edit_window.window('setTitle',"新增考试名称");
         me.edit_window.window('open');
     }
     
@@ -83,6 +87,7 @@
         	$("#name").val(row.name);
         	
         	 $('#btn_edit_ok').show();
+        	 me.edit_window.window('setTitle',"修改考试名称");
              me.edit_window.window('open');
         } else {
             showError('请选择一条记录进行操作!');

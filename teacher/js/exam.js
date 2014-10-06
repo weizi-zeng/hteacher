@@ -45,7 +45,7 @@
                 fitColumns: true, 
                 remoteSort: false,  //列少设为true,列多设为false
                 autoRowHeight: false,
-                singleSelect:true,
+                singleSelect:false,
                 checkOnSelect:true,
                 pagination: true,
                 pageSize: 25,
@@ -54,9 +54,12 @@
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
+                onDblClickRow: function () {
+	            	  update();
+	              },
                 columns: [[
-				  { field: 'exam_id', title: 'ID', hidden: true },
-                  { field: 'prj_code', title: '考试名称', width: 120, sortable: true, align: 'center' },
+				  { field: 'exam_id', title: 'ID', checkbox: true },
+                  { field: 'prj_name', title: '考试名称', width: 120, sortable: true, align: 'center' },
                   { field: 'subject', title: '考试科目', width: 120, sortable: true, align: 'center' },
                   { field: 'teacher', title: '监考老师', width: 120, sortable: true, align: 'center' },
                   { field: 'examdate', title: '考试日期', width: 120, sortable: true, align: 'center' },
@@ -79,6 +82,7 @@
     //新增
     function add() {
         $('#btn_add_ok').show();
+        me.add_window.window('setTitle','添加考试安排');
         me.add_window.window('open');
     }
     
@@ -93,7 +97,7 @@
         	var row = rows[0];
         	
         	$("#exam_id").val(row.exam_id);
-        	$("#prj_code").val(row.prj_code);
+        	$("#prj_id").val(row.prj_id);
         	
         	$("#examdate").datebox("setValue",row.examdate);
            
@@ -104,7 +108,8 @@
         	$("#teacher").val(row.teacher);
         	$("#classroom").val(row.classroom);
 
-             me.edit_window.window('open');
+        	me.add_window.window('setTitle','修改考试安排');
+            me.edit_window.window('open');
              
         } else {
             showError('请选择一条记录进行操作!');
@@ -135,7 +140,7 @@
 //    	console.dir(exam_subjects);
     	
     	var params = {};
-    	params.exam_prj = $("#add_prj_code").val();
+    	params.exam_prj = $("#add_prj_id").val();
     	params.exam_subjects = exam_subjects;
     	
         if (me.add_form.form('validate')) {
@@ -196,24 +201,23 @@
         var ids = "";
         var rows = me.dgData.datagrid('getSelections'); 
         if (rows.length == 0) { 
-            showError('请选择一条记录进行操作!'); 
+            showError('请选择记录进行操作!'); 
             return;
         } 
         
-        if (rows.length>1) 
-        { 
-            showError('请选择一条记录进行操作!'); 
-            return;
-        } 
-        
-        ids=rows[0][me.idFiled];
+        var ids = '';
+        for(var i=0;i<rows.length;i++){
+        	ids += rows[i][me.idFiled];
+        	if(i<rows.length-1){
+        		ids += ',';
+        	}
+        }
         if (ids=="")
         {
             showError('选择的记录ID为空!');
             return;
         }
-        var name=rows[0]["prj_code"];
-        $.messager.confirm('提示信息', '确认要删除选择项？【'+ids+ ','+ name + '】', function (isClickedOk) {
+        $.messager.confirm('提示信息', '确认要删除选择项？共'+rows.length+"条数据", function (isClickedOk) {
             if (isClickedOk) {
                 $.ajax({
                     url: me.actionUrl+"?act=ajax_delete",
@@ -277,7 +281,7 @@
     		showError("请选择考试名称！");
     		return;
     	}
-    	window.location.href='exam.php?act=publish&prj_code='+exam_name;
+    	window.location.href='exam.php?act=publish&prj_id='+exam_name;
     }
     
     //短信通知
@@ -303,7 +307,7 @@
     
     //设置短信内容
     function setSmsContent(exam_name){
-    	$.post(me.actionUrl+"?act=getSmsContent", {"prj_code":exam_name}, function(r){
+    	$.post(me.actionUrl+"?act=getSmsContent", {"prj_id":exam_name}, function(r){
     		if(r.error==0){
     			$('#sms_content').val(r.msg);
     		}else {

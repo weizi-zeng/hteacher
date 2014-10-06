@@ -306,7 +306,7 @@ function get_duty_items($class_code)
 }
 
 /**
-* 根据班级代码获取所有值日项目
+* 根据班级代码获取所有考试名称
 *
 * @access  public
 * @param
@@ -319,6 +319,22 @@ function get_exam_prjs($class_code)
                 " FROM ".$GLOBALS['ecs']->table("exam_prj")." " .
                 " WHERE class_code= '" . $class_code."'";
 	return $GLOBALS['db']->getAll($sql);
+}
+
+/**
+* 根据ID获取考试名称
+*
+* @access  public
+* @param
+*
+* @return void
+*/
+function get_exam_prj_name($prj_id)
+{
+	$sql = "SELECT name ".
+                " FROM ".$GLOBALS['ecs']->table("exam_prj")." " .
+                " WHERE prj_id= '" . $prj_id."'";
+	return $GLOBALS['db']->getOne($sql);
 }
 
 /**

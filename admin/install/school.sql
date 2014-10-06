@@ -392,7 +392,7 @@ CREATE TABLE  `ht_exam_prj` (
 
 CREATE TABLE  `ht_exam` (
   `exam_id` int(10) unsigned NOT NULL auto_increment,
-  `prj_code` varchar(45) NOT NULL,
+  `prj_id` int(10) unsigned NOT NULL,
   `class_code` varchar(45) NOT NULL,
   `subject` varchar(45) NOT NULL,
   `teacher` varchar(45) NOT NULL,

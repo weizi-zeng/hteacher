@@ -149,7 +149,7 @@ elseif ($_REQUEST['act'] == 'exportRank')
 	$edate = empty($_REQUEST['search_edate']) ? '' : trim($_REQUEST['search_edate']);//截止日期
 	
 	$sql = "select d.student_code, s.name as student_name, sum(d.score) as total from ".$GLOBALS['ecs']->table("duty")." d 
-			left join ".$ecs->table("student")." s on s.code=d.student_code
+			left join ".$ecs->table("student")." s on s.code=d.student_code and s.class_code='".$class_code."' 
 			WHERE d.date_ between '".$sdate."' and '".$edate."'  and d.class_code='".$class_code."' 
  			group by d.student_code order by total desc";
 	$rows = $db->getAll($sql);

@@ -20,6 +20,13 @@ if ($_REQUEST['act'] == 'ajax_list')
 elseif ($_REQUEST['act'] == 'ajax_save')
 {
 	$id    = !empty($_REQUEST['subject_id'])        ? intval($_REQUEST['subject_id'])      : 0;
+	//判断重复
+	$isExit = $db->getRow("select * from ".$table." where subject='".$_REQUEST["subject"]."' and subject_id!=".$id." limit 1 ");
+	if($isExit){
+		make_json_error("科目“".$_REQUEST["subject"]."”已经存在！ID为：“".$isExit["subject_id"]."”");
+		exit;
+	}
+	
 	if($id==0){//insert
 		
 		$sql = "insert into ".$table

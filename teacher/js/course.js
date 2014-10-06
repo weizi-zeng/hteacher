@@ -51,6 +51,7 @@
     
     //保存
     function save(e) {
+    	console.dir($("#edit_form").serialize());
         $.ajax({
             url: me.actionUrl + '?act=ajax_save',
             data: $("#edit_form").serialize(),

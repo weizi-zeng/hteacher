@@ -48,7 +48,7 @@ elseif ($_REQUEST['act'] == 'import')
 		}
 
 		$i=1;
-		$arr['prj_code'] = trim($line_list[$i++]);
+		$arr['prj_id'] = trim($line_list[$i++]);
 		$arr['subject'] = trim($line_list[$i++]);
 		$arr['teacher'] = trim($line_list[$i++]);
 		$arr['examdate'] = trim($line_list[$i++]);
@@ -90,7 +90,7 @@ elseif ($_REQUEST['act'] == 'ajax_add')
 			}
 				
 			$sql = "insert into ".$ecs->table("exam")
-		." (prj_code,class_code,subject,
+		." (prj_id,class_code,subject,
 			teacher,examdate,stime,etime,classroom,created )
 		values 
 			('".$exam_prj."','".$_SESSION["class_code"]."',
@@ -100,7 +100,7 @@ elseif ($_REQUEST['act'] == 'ajax_add')
 			now())";
 
 			$db->query($sql);
-			admin_log(addslashes($_REQUEST["prj_code"].$_REQUEST["subject"]), 'add', 'exam');
+			admin_log(addslashes($_REQUEST["prj_id"].$_REQUEST["subject"]), 'add', 'exam');
 			$total++;
 	}
 	make_json_result("添加成功！共添加数据".$total."条!");
@@ -111,7 +111,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 {
 		$id    = !empty($_REQUEST['exam_id'])        ? intval($_REQUEST['exam_id'])      : 0;
 		$sql = "update ".$ecs->table("exam")
-		." set prj_code='".$_REQUEST["prj_code"]."',
+		." set prj_id='".$_REQUEST["prj_id"]."',
 			subject='".$_REQUEST["subject"]."',
 			teacher='".$_REQUEST["teacher"]."',
 			examdate='".$_REQUEST["examdate"]."',
@@ -121,15 +121,14 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 			where exam_id=".$id;
 		
 		$db->query($sql);
-		admin_log(addslashes($_REQUEST["prj_code"].$_REQUEST["subject"]), 'update', 'exam');
-		make_json_result("修改“".$id.",".$_REQUEST["prj_code"].$_REQUEST["subject"]."”成功！");
+		admin_log(addslashes($_REQUEST["prj_id"].$_REQUEST["subject"]), 'update', 'exam');
+		make_json_result("修改成功！");
 }
 
 elseif ($_REQUEST['act'] == 'ajax_delete')
 {
-	$id    = !empty($_REQUEST['exam_id'])        ? intval($_REQUEST['exam_id'])      : 0;
-	$sql = "delete from ".$ecs->table("exam")." where exam_id=".$id;
-	
+	$id    = !empty($_REQUEST['exam_id'])        ? trim($_REQUEST['exam_id'])      : "";
+	$sql = "delete from ".$ecs->table("exam")." where exam_id in (".$id.")";
 	$db->query($sql);
 	
 	admin_log($_REQUEST["exam_id"], 'delete', 'exam');
@@ -139,12 +138,12 @@ elseif ($_REQUEST['act'] == 'ajax_delete')
 
 elseif ($_REQUEST['act'] == 'getSmsContent')
 {
-	$prj_code    = !empty($_REQUEST['prj_code'])        ? trim($_REQUEST['prj_code'])      : "";
+	$prj_id    = !empty($_REQUEST['prj_id'])        ? trim($_REQUEST['prj_id'])      : "";
 	
-	$sql = "select * from ".$ecs->table("exam")." where prj_code='".$prj_code."'";
+	$sql = "select * from ".$ecs->table("exam")." where prj_id='".$prj_id."'";
 	$rows = $db->getAll($sql);
 	
-	$content = "【《".$prj_code."》考试安排】";
+	$content = "【《".$prj_id."》考试安排】";
 	foreach ($rows as $row){
 		$content.=$row["examdate"].','.$row["stime"].'-'.$row["etime"].'在'.$row["classroom"].'考试'.$row["subject"].'；';
 	}
@@ -154,12 +153,12 @@ elseif ($_REQUEST['act'] == 'getSmsContent')
 
 elseif ($_REQUEST['act'] == 'publish')
 {
-	$prj_code    = !empty($_REQUEST['prj_code'])        ? trim($_REQUEST['prj_code'])      : "";
+	$prj_id    = !empty($_REQUEST['prj_id'])        ? trim($_REQUEST['prj_id'])      : "";
 	
-	$sql = "select * from ".$ecs->table("exam")." where prj_code='".$prj_code."'";
+	$sql = "select * from ".$ecs->table("exam")." where prj_id='".$prj_id."'";
 	$rows = $db->getAll($sql);
 	
-	$title = "《".$prj_code."》考试安排";
+	$title = "《".get_exam_prj_name($prj_id)."》考试安排";
 	$notice = '<table cellspacing="0" cellpadding="0" style="width:100%"><tbody>';
 	$notice .= '<tr style="font-weight:bold;">';
 	$notice .= '<td style="text-align:center;width:15%;border:1px solid rgb(27, 240, 180)">考试科目</td>';
@@ -211,7 +210,7 @@ function exam_list()
 	if ($result === false)
 	{
 		/* 过滤条件 */
-		$filter['prj_code'] = empty($_REQUEST['search_prj']) ? '' : trim($_REQUEST['search_prj']);//名称
+		$filter['prj_id'] = empty($_REQUEST['search_prj']) ? '' : trim($_REQUEST['search_prj']);//名称
 		$filter['subject'] = empty($_REQUEST['search_subject']) ? '' : trim($_REQUEST['search_subject']);//科目
 		if (isset($_REQUEST['is_ajax']) && $_REQUEST['is_ajax'] == 1)
 		{
@@ -224,9 +223,9 @@ function exam_list()
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
 		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' ";
-		if ($filter['prj_code'])
+		if ($filter['prj_id'])
 		{
-			$ex_where .= " AND prj_code like '" . mysql_like_quote($filter['prj_code']) ."%'";
+			$ex_where .= " AND prj_id like '" . mysql_like_quote($filter['prj_id']) ."%'";
 		}
 		if ($filter['subject'])
 		{
@@ -258,6 +257,7 @@ function exam_list()
 	$list = $GLOBALS['db']->getAll($sql);
 	foreach($list as $key=>$val){
 		$list[$key]['setime']     = $val['stime']."-".$val['etime'];
+		$list[$key]['prj_name']     = get_exam_prj_name($val["prj_id"]);
 	}
 
 	$arr = array('rows' => $list, 'filter' => $filter,
@@ -271,12 +271,12 @@ function exam_list()
 function insert_datas($exams_list){
 
 	$sql = "insert into ".$GLOBALS['ecs']->table("exam")
-	." (prj_code,class_code,subject,
+	." (prj_id,class_code,subject,
 				teacher,examdate,stime,etime,classroom,created )
 			values ";
 	;
 	foreach ($exams_list as $k=>$v){
-		$sql .= "('".$v["prj_code"]."','".$v["class_code"]."',
+		$sql .= "('".$v["prj_id"]."','".$v["class_code"]."',
 		'".$v["subject"]."','".$v["teacher"]."',
 		'".$v["examdate"]."','".$v["stime"]."','".$v["etime"]."',
 		'".$v["classroom"]."',

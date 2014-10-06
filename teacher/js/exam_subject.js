@@ -41,6 +41,9 @@
                 border: false,
                 sortName: me.idFiled,
                 idField: me.idFiled,
+                onDblClickRow: function () {
+	            	  update();
+	              },
                 columns: [[
 				  { field: 'subject_id', title: 'ID', width: 60, align: 'center',  sortable: true,
 					  sorter:function(a,b){
@@ -59,6 +62,7 @@
     function add() {
         clear();
         $('#btn_edit_ok').show();
+        me.edit_window.window('setTitle',"新增考试科目");
         me.edit_window.window('open');
     }
     
@@ -76,6 +80,7 @@
         	$("#subject").val(row.subject);
         	
         	 $('#btn_edit_ok').show();
+        	 me.edit_window.window('setTitle',"修改考试科目");
              me.edit_window.window('open');
         } else {
             showError('请选择一条记录进行操作!');
@@ -113,9 +118,7 @@
     //清空界面数据
     function clear() {
     	$("#subject_id").val("");
-    	$("#sdate").val("");
-    	$("#sdate").val("");
-        
+    	$("#subject").val("");
         $('form').form('validate');
     }
 
