@@ -160,8 +160,7 @@ elseif ($_REQUEST['act'] == 'exportRank')
 		$content .= $v["student_code"].",".$v["student_name"].",".$v["total"].",".($i++)."\r\n";
 	}
 
-	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);//UTF8
-// 	$charset = "CP936";
+	$charset = empty($_POST['charset']) ? 'UTF8' : trim($_POST['charset']);
 
 	$file = ecs_iconv(EC_CHARSET, $charset, $content);
 	

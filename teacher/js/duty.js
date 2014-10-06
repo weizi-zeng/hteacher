@@ -55,7 +55,11 @@
 	              },
                 columns: [[
 				  { field: 'duty_id', title: 'ID', hidden:true },
-				  { field: 'student_code', title: '学生学号', width: 120, sortable: true, align: 'center' },
+				  { field: 'student_code', title: '学生学号', width: 120, sortable: true, align: 'center',
+					  sorter:function(a,b){  
+						  return parseInt(a)>parseInt(b)?1:-1;
+					  }
+				  },
                   { field: 'student_name', title: '学生姓名', width: 120, sortable: true, align: 'center' },
                   { field: 'duty_item', title: '量化项目', width: 120, sortable: true, align: 'center' },
                   { field: 'score', title: '记录分数', width: 100, sortable: true, align: 'center' },
@@ -265,15 +269,30 @@
     
     
     function exportdutys(){
+    	var charset = $("#charset").val();
+    	if (!charset) 
+        { 
+            showError('请选择导出所需的编码格式!'); 
+            $("#charset").focus();
+            return;
+        } 
     	var student_code = $("#search_student_code").val();
     	var duty_item = $("#search_name").val();
     	var sdate = $("#search_sdate").datebox('getValue');
     	var edate = $("#search_edate").datebox('getValue');
     	
-    	window.open("duty.php?act=exportdutys&order=asc&rows=2000&search_student_code="+student_code+"&search_name="+duty_item+"&search_sdate="+sdate+"&search_edate="+edate);
+    	window.open("duty.php?act=exportdutys&order=asc&rows=2000&search_student_code="+student_code+"&search_name="+duty_item+"&search_sdate="+sdate+"&search_edate="+edate+"&charset="+charset);
     }
     
     function exportRank(){
+    	var charset = $("#charset").val();
+    	if (!charset) 
+        { 
+            showError('请选择导出所需的编码格式!'); 
+            $("#charset").focus();
+            return;
+        } 
+    	
     	var sdate = $("#search_sdate").datebox('getValue');
     	if (!sdate) 
         { 
@@ -288,5 +307,5 @@
     		$("#search_edate").datebox('showPanel');
             return;
         } 
-    	window.open("duty.php?act=exportRank&order=asc&rows=2000&search_sdate="+sdate+"&search_edate="+edate);
+    	window.open("duty.php?act=exportRank&order=asc&rows=2000&search_sdate="+sdate+"&search_edate="+edate+"&charset="+charset);
     }

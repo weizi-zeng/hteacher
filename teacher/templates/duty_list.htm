@@ -64,9 +64,8 @@
             <a href="javascript:void(0)" onclick="add();" class="easyui-linkbutton" iconCls="icon-add" >新增</a>
             <a href="javascript:void(0)" onclick="update();" class="easyui-linkbutton" iconCls="icon-edit" >修改</a>
             <a href="javascript:void(0)" onclick="deleteduty();" class="easyui-linkbutton" iconCls="icon-remove" >删除</a>
-            <a href="javascript:void(0)" onclick="exportRank();" class="easyui-linkbutton" icon="icon-search">导出量化排名表</a>
          </div>
-    	 <div style="height:40px;margin-bottom:5px;" >
+    	 <div style="margin-bottom:5px;" >
           <form id="search_form" method="post">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
@@ -102,13 +101,32 @@
                         
                         <td style="text-align: left; width:150px;">
                         	<a href="javascript:void(0)" onclick="searchdutys();" class="easyui-linkbutton" icon="icon-search">查找</a>
-                        	<a href="javascript:void(0)" onclick="exportdutys();" class="easyui-linkbutton" iconCls="icon-application_get" >按条件导出</a>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                 </table>
            </form>
      	</div>
+    	<div style="margin-bottom:5px">
+    		<table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
+                	<tr>
+                		<td style="text-align: right; width:80px;">编码：</td>
+                		<td style="text-align: left; width:150px;">
+                			<select id="charset" style="width:110px;">
+                			<option value="">请选择导出编码格式...</option>
+                			<option value="UTF8">UTF8</option>
+                			<option value="GB2312">GB2312</option>
+                			<option value="GBK">GBK</option>
+                		</select>
+                		</td>
+                		<td style="text-align: left; width:160px;">
+                        	<a href="javascript:void(0)" onclick="exportRank();" title="按日期范围导出量化排名表" class="easyui-linkbutton" icon="icon-page_excel">导出排名</a>
+    						<a href="javascript:void(0)" onclick="exportdutys();" title="按查询条件导出量化明细" class="easyui-linkbutton" icon="icon-page_white_excel" >导出明细</a>
+                        </td>
+                        <td>&nbsp;</td>
+                	</tr>
+                </table>
+    	</div>
      </div>
         
     </div>
@@ -230,6 +248,6 @@
             </div>
         </div>
     </div>
-                
+  
 </body>
 </html>

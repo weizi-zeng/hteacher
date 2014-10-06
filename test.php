@@ -2,15 +2,11 @@
 
 define('IN_ECS',true);
 
-require(dirname(__FILE__) . '/includes/init.php');
+$school_code = "hteacher";
+$database = $school_code?$school_code:'hteacher';
+if($database!="hteacher" && !strpos($database, "_school")){
+	$database = $database.'_school';
+}
 
-$today = date("Y-m-d");
-
-$sdate = "2014-08-30";
-
-
-print_r($today>$sdate);
-
-
-
+echo $database;
 ?>

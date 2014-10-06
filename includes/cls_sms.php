@@ -129,7 +129,10 @@ class sms
 		 * 3、更新短信队列中的状态
 		 * 4、更新短信服务器的总条数记录
 		 */
-		$database = $school_code?$school_code.'_school':'hteacher';
+		$database = $school_code?$school_code:'hteacher';
+		if($database!="hteacher" && !strpos($database, "_school")){
+			$database = $database.'_school';
+		}
 		
 		$sql="insert into ".$database.".ht_sms (content,phones, status, class_code, creator, created ) 
 			values ('".$msg."','".$phones."',0,'".$class_code."','".$creator."',now())";

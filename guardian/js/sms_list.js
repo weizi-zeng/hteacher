@@ -36,7 +36,6 @@
                 columns: [[
 				  { field: 'sms_id', title: 'ID', hidden: true },
 				  { field: 'content', title: '短信内容', width: 420, sortable: true, align: 'left' },
-                  { field: 'phones', title: '发送电话', width: 220, sortable: true, align: 'center' },
                   { field: 'status', title: '短信状态', width: 80, sortable: true, align: 'center', 
                 	  formatter: function (value, rowData, rowIndex) {
                           switch (Number(value)) {

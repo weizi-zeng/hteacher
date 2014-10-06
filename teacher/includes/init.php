@@ -59,6 +59,7 @@ require(ROOT_PATH . 'includes/lib_time.php');
 require(ROOT_PATH . 'includes/lib_base.php');
 require(ROOT_PATH . 'includes/lib_common.php');
 require(ROOT_PATH . 'includes/lib_new_common.php');
+require(ROOT_PATH . 'includes/lib_sms_template.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php');
 

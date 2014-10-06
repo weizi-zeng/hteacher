@@ -294,4 +294,55 @@
     	window.location.href='./templates/studentTemplate.csv';
     }
     
+    //为家长直接重置登陆密码
+    function changePwd(){
+    	var ids = "";
+        var rows = me.dgData.datagrid('getSelections'); 
+        if (rows.length == 0) { 
+            showError('请选择一条记录进行操作!'); 
+            return;
+        } 
+        
+        if (rows.length>1) 
+        { 
+            showError('请选择一条记录进行操作!'); 
+            return;
+        } 
+        
+        ids=rows[0][me.idFiled];
+        if (ids=="")
+        {
+            showError('选择的记录ID为空!');
+            return;
+        }
+        var name=rows[0]["name"];
+        
+        var is_active=rows[0]["is_active"];
+        if(is_active==0){
+        	showError("您选择的用户还未注册，不能够为其重置密码！");
+        	return;
+        }
+        
+        $.messager.prompt('重置密码，注册学生：'+name, '请输入新密码:', function(pwd){
+        	if (pwd){
+        		$.ajax({
+                    url: me.actionUrl+"?act=ajax_changePwd",
+                    data: { "student_id": ids, "new_password":pwd },
+                    success: function (r) {
+                    	 if (r) {
+                         	if(r.error==0){
+                         		showInfo(r.content);
+                         	}else {
+                         		showError(r.message);
+                         	}
+                         }
+                    }
+                });
+        		
+        	}else {
+//        		showError('您输入的新密码无效，密码不能为空!'); 
+        	}
+        });
+    }
+    
     

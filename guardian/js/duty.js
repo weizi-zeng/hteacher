@@ -194,28 +194,17 @@
     
     
     function exportdutys(){
+    	var charset = $("#charset").val();
+    	if (!charset) 
+        { 
+            showError('请选择导出所需的编码格式!'); 
+            $("#charset").focus();
+            return;
+        } 
     	var student_code = $("#search_student_code").val();
     	var duty_item = $("#search_name").val();
     	var sdate = $("#search_sdate").datebox('getValue');
     	var edate = $("#search_edate").datebox('getValue');
     	
-    	window.open("duty.php?act=exportdutys&order=asc&rows=2000&search_student_code="+student_code+"&search_name="+duty_item+"&search_sdate="+sdate+"&search_edate="+edate);
-    }
-    
-    function exportRank(){
-    	var sdate = $("#search_sdate").datebox('getValue');
-    	if (!sdate) 
-        { 
-            showError('请选择起始日期!'); 
-            $("#search_sdate").datebox('showPanel');
-            return;
-        } 
-    	var edate = $("#search_edate").datebox('getValue');
-    	if (!edate) 
-        { 
-    		showError('请选择截止日期!'); 
-    		$("#search_edate").datebox('showPanel');
-            return;
-        } 
-    	window.open("duty.php?act=exportRank&order=asc&rows=2000&search_sdate="+sdate+"&search_edate="+edate);
+    	window.open("duty.php?act=exportdutys&order=asc&rows=2000&search_student_code="+student_code+"&search_name="+duty_item+"&search_sdate="+sdate+"&search_edate="+edate+"&charset="+charset);
     }

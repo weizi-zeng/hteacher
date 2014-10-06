@@ -149,6 +149,29 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	
 }
 
+elseif ($_REQUEST['act'] == 'ajax_changePwd')
+{
+	$id    = !empty($_REQUEST['student_id'])        ? intval($_REQUEST['student_id'])      : 0;
+	$new_password    = !empty($_REQUEST['new_password'])        ? trim($_REQUEST['new_password'])      : "";
+	
+	$sql = "update ".$ecs->table("student")." set password='".md5($new_password)."' where student_id=".$id;
+	$db->query($sql);
+	admin_log($_REQUEST["student_id"], 'ajax_changePwd', 'student');
+	
+	//发送短信提醒
+	$guardian = $db->getRow("select * from ".$ecs->table("student")." where student_id=".$id);
+	require_once(ROOT_PATH . '/includes/cls_sms.php');
+	$content = sms_tmp_change_pwd_by_classAdmin($guardian, $new_password, $_SESSION["admin_name"]);
+	$sms = new sms();
+	$res = $sms->send($guardian["guardian_phone"], $content, $school_code, $guardian["class_code"], $_SESSION["admin_name"]);
+	
+	if($res["error"]!=0){
+		make_json_error("密码更新成功！但是短信发送失败："+$res["msg"]);
+		exit;
+	}
+	make_json_result("密码更新成功！");
+}
+
 elseif ($_REQUEST['act'] == 'ajax_delete')
 {
 	$id    = !empty($_REQUEST['student_id'])        ? intval($_REQUEST['student_id'])      : 0;

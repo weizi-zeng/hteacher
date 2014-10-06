@@ -72,6 +72,7 @@ require(ROOT_PATH . 'includes/cls_error.php');
 require(ROOT_PATH . 'includes/lib_time.php');
 require(ROOT_PATH . 'includes/lib_base.php');
 require(ROOT_PATH . 'includes/lib_common.php');
+require(ROOT_PATH . 'includes/lib_sms_template.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/lib_main.php');
 require(ROOT_PATH . ADMIN_PATH . '/includes/cls_exchange.php');
 
@@ -350,8 +351,10 @@ if ($_REQUEST['act'] == 'register')
 	}
 	
 	//进行注册
-	register_system($guardian, $_POST['school_code'], $_POST['regCode'], $_POST['password']);
-	
+	$result = register_system($guardian, $_POST['school_code'], $_POST['regCode'], $_POST['password']);
+	if($result["error"]!=0){
+		die($result["msg"]);
+	}
 	ecs_header("Location: login.php?act=signin&username=".$guardian["guardian_phone"]."&password=".$_POST['password']."&status=guardian\n");
 	exit;
 }
@@ -499,5 +502,11 @@ function register_system($guardian,$school,$regCode,$password){
 	
 	$sql = "update hteacher.ht_license set is_active=1, regtime=now() where license='$regCode'";
 	$GLOBALS["db"]->query($sql);
+	
+	//发送短信提醒
+	require_once(ROOT_PATH . '/includes/cls_sms.php');
+	$content = sms_tmp_reg_success($guardian, $password, $regCode);
+	$sms = new sms();
+	return $sms->send($guardian["guardian_phone"], $content, $school, $guardian["class_code"], "system");
 }
 ?>
