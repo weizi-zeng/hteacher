@@ -119,6 +119,7 @@ switch ($action)
 		$smarty->assign('schools', $schools);
 		
 		$sms_list = sms_list();
+		
 		$smarty->assign('sms_list',    $sms_list['sms_list']);
 		
 		$smarty->assign('filter',       $sms_list['filter']);
@@ -196,6 +197,9 @@ function sms_list()
 	}
 
 	$sms_list = $GLOBALS['db']->getAll($sql);
+	foreach ($sms_list as $k=>$v){
+		$sms_list[$k]["phones"] = str_replace(",", "<br/>", $v["phones"]);
+	}
 
 	$arr = array('sms_list' => $sms_list, 'filter' => $filter,
         'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);

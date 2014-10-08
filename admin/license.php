@@ -36,6 +36,10 @@ if ($_REQUEST['act']== 'createLicense')
     /* 检查权限 */
     admin_priv('license_manage');
 	
+    $sdate = empty($_REQUEST['sdate'])?"":trim($_REQUEST['sdate']);
+    $edate = empty($_REQUEST['edate'])?"":trim($_REQUEST['edate']);
+    $sum = empty($_REQUEST['sum'])?0:intval($_REQUEST['sum']);
+    
 	$license = create($sdate, $edate, $sum);
 	
 	//记录日志
@@ -270,7 +274,6 @@ function create($sdate, $edate, $sum=500){
 	$sql = sub_str($sql, str_len($sql)-1, false);
 	
 	$GLOBALS['db']->query($sql);
-	
 	return $license;
 }
 

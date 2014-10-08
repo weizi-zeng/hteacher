@@ -137,6 +137,7 @@ h1 .action-span1 {
 .list-div td {
   background: #FFF;
   line-height: 22px;
+  text-align:center;
 }
 
 .list-div td.first-cell{
