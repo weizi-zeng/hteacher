@@ -262,3 +262,8 @@ input[type=checkbox]
 .navlist a,.userOpera a {
 	color:black;
 }
+
+.warn
+{
+	color:red;
+}

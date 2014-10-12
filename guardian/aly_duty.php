@@ -1,6 +1,6 @@
 <?php 
 define('IN_ECS', true);
-
+require(dirname(__FILE__) . '/includes/init.php');
 ?> 
 
 
@@ -22,18 +22,17 @@ define('IN_ECS', true);
     <script src="../resource/easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
 
     <script src="js/common.js" type="text/javascript"></script>
-    <script src="js/score.js" type="text/javascript"></script>
     
     <script type="text/javascript">
+	    $(function(){
+			getGraph();
+		});
 
 		function getGraph(){
-			var student_code = $("#search_student_code").val();
-			if(!student_code){
-				showError('请选择学生学号!'); 
-				return; 
-			}
-			
-			var htm = '<iframe src="graph.php?act=duty&student_code='+student_code+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
+			var graph_size = $("#graph_size").val();
+			var graph_width = graph_size.split('*')[0];
+			var graph_height = graph_size.split('*')[1];
+			var htm = '<iframe src="graph.php?act=duty&graph_width='+graph_width+'&graph_height='+graph_height+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
 			$("#graph_load").html(htm);
 		}
     
@@ -51,19 +50,21 @@ define('IN_ECS', true);
           <form id="search_form" method="post" action="analysis.php?act=score_trend" style="margin-top:10px;">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
-                    	<td style="text-align: right; width:80px;">学生学号：</td>
-                        <td style="text-align: left; width:230px;">
-                        	<select id="search_student_code" name="search_student_code" style="width:220px;">
-                        		<option value="">所有...</option>
-                        		<?php 
-                        		require(dirname(__FILE__) . '/includes/init.php');
-                        		$student = get_student($class_code, $_SESSION["student_code"]);
-                        				?>
-                        				<option value="<?=$student["code"] ?>"><?=$student["code"] ."-".$student["name"] ?></option>
-                        				<?php 
-                        		?>
+                        <td style="text-align: right; width:80px;">图像大小：</td>
+                        <td style="text-align: left; width:124px;">
+                        	<select id="graph_size" name="graph_size" style="width:120px;">
+                        		<option value="400*300">400*300</option>
+                        		<option value="800*600" selected>800*600</option>
+                        		<option value="900*600">900*600</option>
+                        		<option value="1200*600">1200*600</option>
+                        		<option value="1200*900">1200*900</option>
+                        		<option value="1600*600">1600*600</option>
+                        		<option value="1600*1200">1600*1200</option>
+                        		<option value="2000*600">2000*600</option>
+                        		<option value="2000*1500">2000*1500</option>
                         	</select>
                         </td>
+                        
                         
                         <td style="text-align: left; width:430px;">
                         	<a href="javascript:void(0)" onclick="getGraph();" class="easyui-linkbutton" icon="icon-search">查看量化趋势图</a>

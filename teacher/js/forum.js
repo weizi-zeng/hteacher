@@ -136,12 +136,15 @@
             showError('选择的记录ID为空!');
             return;
         }
+        
+        console.dir(rows[0]);
         var title=rows[0]["title"];
-        var user_id=rows[0]["user_id"];
-        if(user_id!=$("#user_id").val()){
-        	showError("只能删除自己创建的主题！");
-        	return;
-        }
+        //班主任可以直接删除所有的帖子
+//        var user_id=rows[0]["user_id"];
+//        if(user_id!=$("#user_id").val()){
+//        	showError("只能删除自己创建的主题！");
+//        	return;
+//        }
         $.messager.confirm('提示信息', '确认要删除选择项？【'+ids+ ','+ title + '】', function (isClickedOk) {
            if (isClickedOk) {
                 $.ajax({

@@ -18,7 +18,7 @@ elseif ($_REQUEST['act'] == 'import')
 	$exams_list = array();
 	$data = file($_FILES["importFile"]["tmp_name"]);
 	
-	$bigan_flag = false;
+	$begin_flag = false;
 	foreach ($data AS $line)
 	{
 		// 转换编码
@@ -31,16 +31,16 @@ elseif ($_REQUEST['act'] == 'import')
 		$arr    = array();
 		$line_list = explode(",",$line);
 
-		if($bigan_flag===false){
+		if($begin_flag===false){
 			foreach($line_list as $k=>$v){
 				//考试编号
 				if(strpos($v, "科目")>-1){
-					$bigan_flag = true;
+					$begin_flag = true;
 					$line_number++;
 					break;
 				}
 			}
-			if(!$bigan_flag){
+			if(!$begin_flag){
 				//定位起始行
 				$line_number++;
 			}
@@ -143,9 +143,9 @@ elseif ($_REQUEST['act'] == 'getSmsContent')
 	$sql = "select * from ".$ecs->table("exam")." where prj_id='".$prj_id."'";
 	$rows = $db->getAll($sql);
 	
-	$content = "【《".$prj_id."》考试安排】";
+	$content = "【《".get_exam_prj_name($prj_id)."》考试安排】";
 	foreach ($rows as $row){
-		$content.=$row["examdate"].','.$row["stime"].'-'.$row["etime"].'在'.$row["classroom"].'考试'.$row["subject"].'；';
+		$content.=$row["examdate"].','.substr($row["stime"],0,5).'-'.substr($row["etime"],0,5).'在'.$row["classroom"].'考试'.$row["subject"].'；';
 	}
 	make_json(array("error"=>0,"msg"=>$content));
 }

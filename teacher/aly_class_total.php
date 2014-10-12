@@ -1,6 +1,6 @@
 <?php 
 define('IN_ECS', true);
-
+require(dirname(__FILE__) . '/includes/init.php');
 ?> 
 
 
@@ -21,19 +21,20 @@ define('IN_ECS', true);
     <script src="../resource/easyui/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../resource/easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
 
-    <script src="js/common.js" type="text/javascript"></script>
-    <script src="js/score.js" type="text/javascript"></script>
-    
+	<script src="js/common.js" type="text/javascript"></script>
+
     <script type="text/javascript">
 
 		function getGraph(){
-			var prj_code = $("#search_prj_code").val();
-			if(!prj_code){
+			var prj_id = $("#search_prj_id").val();
+			if(!prj_id){
 				showError('请选择考试名称!'); 
 				return; 
 			}
-			
-			var htm = '<iframe src="graph.php?act=class_total&prj_code='+prj_code+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
+			var graph_size = $("#graph_size").val();
+			var graph_width = graph_size.split('*')[0];
+			var graph_height = graph_size.split('*')[1];
+			var htm = '<iframe src="graph.php?act=class_total&prj_id='+prj_id+'&graph_width='+graph_width+'&graph_height='+graph_height+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
 			$("#graph_load").html(htm);
 		}
     
@@ -52,19 +53,33 @@ define('IN_ECS', true);
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
                     	<td style="text-align: right; width:80px;">考试名称：</td>
-                        <td style="text-align: left; width:230px;">
-                        	<select id="search_prj_code" style="width:220px;">
+                        <td style="text-align: left; width:124px;">
+                        	<select id="search_prj_id" style="width:120px;">
                         		<option value="">所有...</option>
                         		<?php 
-                        		require(dirname(__FILE__) . '/includes/init.php');
-                        		$exam = get_exam_prjs($class_code);
+                        			$exam = get_exam_prjs($class_code);
                         		
                         			foreach($exam as $k=>$v){
                         				?>
-                        				<option value="<?=$v["code"]?>"><?=$v["code"]?></option>
+                        				<option value="<?=$v["prj_id"]?>"><?=$v["name"]?></option>
                         				<?php 
                         			}
                         		?>
+                        	</select>
+                        </td>
+                        
+                        <td style="text-align: right; width:80px;">图像大小：</td>
+                        <td style="text-align: left; width:124px;">
+                        	<select id="graph_size" name="graph_size" style="width:120px;">
+                        		<option value="400*300">400*300</option>
+                        		<option value="800*600" selected>800*600</option>
+                        		<option value="900*600">900*600</option>
+                        		<option value="1200*600">1200*600</option>
+                        		<option value="1200*900">1200*900</option>
+                        		<option value="1600*600">1600*600</option>
+                        		<option value="1600*1200">1600*1200</option>
+                        		<option value="2000*600">2000*600</option>
+                        		<option value="2000*1500">2000*1500</option>
                         	</select>
                         </td>
                         

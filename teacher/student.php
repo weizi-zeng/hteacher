@@ -24,7 +24,7 @@ elseif ($_REQUEST['act'] == 'import')
 	$students_list = array();
 	$data = file($_FILES["importFile"]["tmp_name"]);
 	
-	$bigan_flag = false;
+	$begin_flag = false;
 	foreach ($data AS $line)
 	{
 		// 转换编码
@@ -38,15 +38,15 @@ elseif ($_REQUEST['act'] == 'import')
 		$arr    = array();
 		$line_list = explode(",",$line);
 		
-		if($bigan_flag===false){
+		if($begin_flag===false){
 			foreach($line_list as $k=>$v){//学生姓名
 				if(strpos($v, "学生姓名")>-1){
-					$bigan_flag = true;
+					$begin_flag = true;
 					$line_number++;
 					break;
 				}
 			}
-			if(!$bigan_flag){	//定位起始行
+			if(!$begin_flag){	//定位起始行
 				$line_number++;
 			}
 			continue;

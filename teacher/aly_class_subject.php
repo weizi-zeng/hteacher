@@ -1,6 +1,6 @@
 <?php 
 define('IN_ECS', true);
-
+require(dirname(__FILE__) . '/includes/init.php');
 ?> 
 
 
@@ -20,20 +20,28 @@ define('IN_ECS', true);
     <script src="../resource/easyui/jquery.min.js" type="text/javascript"></script>
     <script src="../resource/easyui/jquery.easyui.min.js" type="text/javascript"></script>
     <script src="../resource/easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
-
-    <script src="js/common.js" type="text/javascript"></script>
-    <script src="js/score.js" type="text/javascript"></script>
     
+	<script src="js/common.js" type="text/javascript"></script>
+	
     <script type="text/javascript">
 
 		function getGraph(){
-			var exam_code = $("#search_exam_code").val();
-			if(!exam_code){
-				showError('请选择考试编号!'); 
+			var prj_id = $("#search_prj_id").val();
+			if(!prj_id){
+				showError('请选择考试名称!'); 
 				return; 
 			}
 			
-			var htm = '<iframe src="graph.php?act=class_subject&exam_code='+exam_code+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
+			var subject = $("#search_subject").val();
+			if(!subject){
+				showError('请选择考试科目!'); 
+				return; 
+			}
+
+			var graph_size = $("#graph_size").val();
+			var graph_width = graph_size.split('*')[0];
+			var graph_height = graph_size.split('*')[1];
+			var htm = '<iframe src="graph.php?act=class_subject&subject='+subject+'&prj_id='+prj_id+'&graph_width='+graph_width+'&graph_height='+graph_height+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
 			$("#graph_load").html(htm);
 		}
     
@@ -51,24 +59,52 @@ define('IN_ECS', true);
           <form id="search_form" method="post" action="analysis.php?act=score_trend" style="margin-top:10px;">
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
-                    	<td style="text-align: right; width:80px;">考试编号：</td>
-                        <td style="text-align: left; width:230px;">
-                        	<select id="search_exam_code" name="search_exam_code" style="width:320px;">
+                    	<td style="text-align: right; width:80px;">考试名称：</td>
+                        <td style="text-align: left; width:122px;">
+                        	<select id="search_prj_id" name="search_prj_id" style="width:120px;">
                         		<option value="">所有...</option>
                         		<?php 
-                        		require(dirname(__FILE__) . '/includes/init.php');
-                        		$exam = get_exams($class_code);
-                        		
-                        			foreach($exam as $k=>$v){
+                        			$prjs = get_exam_prjs($class_code);
+                        			foreach($prjs as $k=>$v){
                         				?>
-                        				<option value="<?=$v["code"]?>"><?=$v["code"]."-".$v["subject"]."-".$v["prj_code"]?></option>
+                        				<option value="<?=$v["prj_id"]?>"><?=$v["name"]?></option>
                         				<?php 
                         			}
                         		?>
                         	</select>
                         </td>
                         
-                        <td style="text-align: left; width:430px;">
+                    	<td style="text-align: right; width:80px;">考试科目：</td>
+                        <td style="text-align: left; width:124px;">
+                        	<select id="search_subject" name="search_subject" style="width:120px;">
+                        		<option value="">所有...</option>
+                        		<?php 
+	                        		$exam = get_exam_subjects();
+                        			foreach($exam as $k=>$v){
+                        				?>
+                        				<option value="<?=$v["subject"]?>"><?=$v["subject"]?></option>
+                        				<?php 
+                        			}
+                        		?>
+                        	</select>
+                        </td>
+                        
+                        <td style="text-align: right; width:80px;">图像大小：</td>
+                        <td style="text-align: left; width:124px;">
+                        	<select id="graph_size" name="graph_size" style="width:120px;">
+                        		<option value="400*300">400*300</option>
+                        		<option value="800*600" selected>800*600</option>
+                        		<option value="900*600">900*600</option>
+                        		<option value="1200*600">1200*600</option>
+                        		<option value="1200*900">1200*900</option>
+                        		<option value="1600*600">1600*600</option>
+                        		<option value="1600*1200">1600*1200</option>
+                        		<option value="2000*600">2000*600</option>
+                        		<option value="2000*1500">2000*1500</option>
+                        	</select>
+                        </td>
+                        
+                        <td style="text-align: left; width:180px;">
                         	<a href="javascript:void(0)" onclick="getGraph();" class="easyui-linkbutton" icon="icon-search">查看班级成绩柱形图</a>
                         </td>
                         <td>&nbsp;</td>

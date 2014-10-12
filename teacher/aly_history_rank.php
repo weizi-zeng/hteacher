@@ -1,6 +1,6 @@
 <?php 
 define('IN_ECS', true);
-
+require(dirname(__FILE__) . '/includes/init.php');
 ?> 
 
 
@@ -32,9 +32,8 @@ define('IN_ECS', true);
 				showError('请选择学生学号!'); 
 				return; 
 			}
-
-			
-			var htm = '<iframe src="graph.php?act=history_rank&student_code='+student_code+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
+			var subject = $("#search_subject").val();
+			var htm = '<iframe src="graph.php?act=history_rank&student_code='+student_code+'&subject='+subject+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
 			$("#graph_load").html(htm);
 		}
     
@@ -53,13 +52,11 @@ define('IN_ECS', true);
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
                     	<td style="text-align: right; width:80px;">学生学号：</td>
-                        <td style="text-align: left; width:230px;">
-                        	<select id="search_student_code" name="search_student_code" style="width:220px;">
+                        <td style="text-align: left; width:124px;">
+                        	<select id="search_student_code" name="search_student_code" style="width:120px;">
                         		<option value="">所有...</option>
                         		<?php 
-                        		require(dirname(__FILE__) . '/includes/init.php');
-                        		$students = get_students($class_code);
-                        		
+                        			$students = get_students($class_code);
                         			foreach($students as $k=>$v){
                         				?>
                         				<option value="<?=$v["code"]?>"><?=$v["code"]."-".$v["name"]?></option>
@@ -69,7 +66,23 @@ define('IN_ECS', true);
                         	</select>
                         </td>
                         
-                        <td style="text-align: left; width:430px;">
+                        
+                        <td style="text-align: right; width:80px;">考试科目：</td>
+                        <td style="text-align: left; width:124px;">
+                        	<select id="search_subject" name="search_subject" style="width:120px;">
+                        		<option value="">所有...</option>
+                        		<?php 
+	                        		$exam = get_exam_subjects();
+                        			foreach($exam as $k=>$v){
+                        				?>
+                        				<option value="<?=$v["subject"]?>"><?=$v["subject"]?></option>
+                        				<?php 
+                        			}
+                        		?>
+                        	</select>
+                        </td>
+                        
+                        <td style="text-align: left; width:180px;">
                         	<a href="javascript:void(0)" onclick="getGraph();" class="easyui-linkbutton" icon="icon-search">查看历史排名趋势图</a>
                         </td>
                         <td>&nbsp;</td>

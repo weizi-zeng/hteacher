@@ -1,4 +1,5 @@
 alter table hteacher.ht_admin_user add column name varchar(45) default '' after user_name;
+alter table hteacher.ht_admin_user add column memo varchar(32) default '' ;
 
 alter table ht_guardian add column student_code varchar(20) default '' after student_id;
 
@@ -25,3 +26,4 @@ CREATE TABLE  `hteacher`.`ht_education` (
   `created` datetime NOT NULL,
   PRIMARY KEY  (`education_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

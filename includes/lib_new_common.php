@@ -169,11 +169,14 @@ function getWeekName($weekday){
 *
 * @return void
 */
-function get_students($class_code)
+function get_students($class_code, $orderby='')
 {
 	$sql = "SELECT * ".
                 " FROM ".$GLOBALS['ecs']->table("student")." " .
                 " WHERE class_code= '" . $class_code."'";
+	if($orderby){
+		$sql .= ' order by '.$orderby;
+	}
 	return $GLOBALS['db']->getAll($sql);
 }
 
@@ -204,29 +207,15 @@ function get_guardian($class_code, $student_code)
 *
 * @return void
 */
-function get_exams($class_code)
-{
-	$sql = "SELECT * ".
-                " FROM ".$GLOBALS['ecs']->table("exam")." " .
-                " WHERE class_code= '" . $class_code."' order by code";
-
-	return $GLOBALS['db']->getAll($sql);
-}
-
-/**
-* 根据班级代码获取所有考试
-*
-* @access  public
-* @param
-*
-* @return void
-*/
-function get_subjects($class_code)
+function get_subjects($class_code, $prj_id='')
 {
 	$sql = "SELECT distinct subject ".
                 " FROM ".$GLOBALS['ecs']->table("exam")." " .
                 " WHERE class_code= '" . $class_code."'";
-
+	if($prj_id){
+		$sql.=" AND prj_id='$prj_id'";
+	}
+// 	echo $sql;
 	return $GLOBALS['db']->getAll($sql);
 }
 
@@ -241,28 +230,12 @@ function replace_quote($data){
 }
 
 
-/**
-* 获取这个项目所有的考试科目
-* @param unknown_type $exam_name
-*/
-function get_subjects_by_exam($class_code, $exam_name){
-	$sql = "SELECT code, subject ".
-	                " FROM ".$GLOBALS['ecs']->table("exam")." " .
-	                " WHERE class_code= '" . $class_code."' and prj_code='".$exam_name."' order by subject ";
-	
-	return $GLOBALS['db']->getAll($sql);
-}
-
-function get_scores_by_exam($class_code, $exam_name="", $exam_code="", $student_code="", $order_by="", $exam_subject=""){
+function get_scores_by_exam($class_code, $prj_id="", $student_code="", $exam_subject="", $order_by=""){
 	
 	$ex_where = " WHERE s.class_code='".$class_code."' ";
-	if ($exam_name)
+	if ($prj_id)
 	{
-		$ex_where .= " AND  e.prj_code='".$exam_name."'";
-	}
-	if ($exam_code)
-	{
-		$ex_where .= " AND  e.code='".$exam_code."'";
+		$ex_where .= " AND  s.prj_id='".$prj_id."'";
 	}
 	if ($student_code)
 	{
@@ -270,20 +243,44 @@ function get_scores_by_exam($class_code, $exam_name="", $exam_code="", $student_
 	}
 	if ($exam_subject)
 	{
-		$ex_where .= " AND  e.subject='".$exam_subject."'";
+		$ex_where .= " AND  s.subject='".$exam_subject."'";
 	}
 	if ($order_by)
 	{
 		$ex_where .= " order by ".$order_by;
 	}
 	
-	$sql = "SELECT s.score_id, s.exam_code, e.prj_code as prj_code,
-			         	e.subject as exam_subject, s.student_code, s.score,
-			         	st.name as student_name, s.add_score, s.created ".
+	$sql = "SELECT s.*, st.name as student_name , prj.name as prj_name ".
 	                " FROM " . $GLOBALS['ecs']->table("score")  ." s 
-					left join ".$GLOBALS['ecs']->table("exam") ." e on s.exam_code=e.code 
-					left join ".$GLOBALS['ecs']->table("student") ." st on s.student_code=st.code
-					". $ex_where ;
+	                left join ".$GLOBALS['ecs']->table("exam_prj")." prj on s.prj_id=prj.prj_id 
+					left join ".$GLOBALS['ecs']->table("student") ." st on s.student_code=st.code and st.class_code='".$class_code."'
+ 					". $ex_where ;
+	
+	return $GLOBALS['db']->getAll($sql);
+}
+
+/***
+ * 获取年级排名数据
+ */
+function get_grade_ranks($class_code, $prj_id="", $student_code="", $order_by=""){
+	$ex_where = " WHERE s.class_code='".$class_code."' ";
+	if ($prj_id)
+	{
+		$ex_where .= " AND  s.prj_id='".$prj_id."'";
+	}
+	if ($student_code)
+	{
+		$ex_where .= " AND  s.student_code='".$student_code."'";
+	}
+	if ($order_by)
+	{
+		$ex_where .= " order by ".$order_by;
+	}
+	$sql = "SELECT s.*, st.name as student_name , prj.name as prj_name ".
+		                " FROM " . $GLOBALS['ecs']->table("grade_rank")  ." s 
+		                left join ".$GLOBALS['ecs']->table("exam_prj")." prj on s.prj_id=prj.prj_id 
+						left join ".$GLOBALS['ecs']->table("student") ." st on s.student_code=st.code and st.class_code='".$class_code."'
+	 					". $ex_where ;
 	
 	return $GLOBALS['db']->getAll($sql);
 }
@@ -317,7 +314,7 @@ function get_exam_prjs($class_code)
 {
 	$sql = "SELECT * ".
                 " FROM ".$GLOBALS['ecs']->table("exam_prj")." " .
-                " WHERE class_code= '" . $class_code."'";
+                " WHERE class_code= '" . $class_code."' ";
 	return $GLOBALS['db']->getAll($sql);
 }
 

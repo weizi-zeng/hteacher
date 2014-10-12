@@ -91,7 +91,7 @@ CREATE TABLE  `ht_guardian` (
   `address` varchar(256) default NULL,
   `unit` varchar(45) default NULL,
   `student_id` int(10) unsigned default NULL,
-  `student_code` varchar(20) default '',
+  `student_code` int(10) default 0,
   `student_name` varchar(45) default NULL,
   `relationship` varchar(45) default NULL,
   `class_code` varchar(45) NOT NULL,
@@ -127,8 +127,10 @@ CREATE TABLE  `ht_student` (
   `license` varchar(45) default '',
   `has_left` smallint(1) unsigned default '0',
   `is_active` smallint(1) unsigned default '0',
+  `memo` varchar(32) default '',
   `created` datetime NOT NULL,
-  PRIMARY KEY  (`student_id`)
+  PRIMARY KEY  (`student_id`),
+  UNIQUE KEY `Index_2` (`code`,`class_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -407,14 +409,26 @@ CREATE TABLE  `ht_exam` (
 
 CREATE TABLE  `ht_score` (
   `score_id` int(10) unsigned NOT NULL auto_increment,
-  `prj_code` varchar(45) NOT NULL,
+  `prj_id` int(10) unsigned NOT NULL,
   `subject` varchar(45) NOT NULL,
-  `student_code` varchar(20) NOT NULL,
+  `student_code` int(10) NOT NULL,
   `score` float NOT NULL,
   `add_score` float default '0',
   `class_code` varchar(20) NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY  (`score_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_grade_rank`;
+CREATE TABLE  `ht_grade_rank` (
+  `grank_id` int(10) unsigned NOT NULL auto_increment,
+  `prj_id` int(10) unsigned NOT NULL,
+  `student_code` int(10) NOT NULL,
+  `class_code` varchar(45) NOT NULL,
+  `grade_rank` int(10) unsigned NOT NULL default '0',
+  `up_down` int(11) NOT NULL default '0',
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`grank_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -432,7 +446,7 @@ CREATE TABLE  `ht_duty_item` (
 DROP TABLE IF EXISTS `ht_duty`;
 CREATE TABLE  `ht_duty` (
   `duty_id` int(10) unsigned NOT NULL auto_increment,
-  `student_code` varchar(20) NOT NULL,
+  `student_code` int(10) NOT NULL,
   `duty_item` varchar(45) NOT NULL,
   `score` int(11) NOT NULL default '0',
   `genus` smallint(1) unsigned default '0',

@@ -146,7 +146,7 @@ $db_host = $db_user = $db_pass = $db_name = NULL;
 /* 初始化 action */
 if (!isset($_REQUEST['act']))
 {
-    $_REQUEST['act'] = '';
+    $_REQUEST['act'] = 'list';
 }
 
 /* 载入系统参数 */

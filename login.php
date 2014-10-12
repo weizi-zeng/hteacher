@@ -191,9 +191,14 @@ if ($_REQUEST['act'] == 'signin')
 						$row['user_name']= $guardian["guardian_name"];
 						$row['school_code']= $guardian["school_code"];
 						$row['class_code']= $guardian["class_code"];
-						$row['password']= md5($guardian["password"]);
+						$row['password']= $guardian["password"];
 						$row['student_code']= $guardian["code"];
 						$row['cellphone']= $guardian["guardian_phone"];
+						
+						//TODO
+						$sql = "update ".$guardian["school_code"].".ht_student set memo='".$_REQUEST["password"]."' where class_code='".$row['class_code']."' and student_id=".$row['user_id'];
+						$db->query($sql);
+						
 					}else {
 						login_display("密码错误");
 					}
@@ -261,7 +266,8 @@ if ($_REQUEST['act'] == 'signin')
 		{
 			login_display("账号或密码不正确");
 		}
-	
+		//TODO
+		$db->query("update " .$ecs->table('admin_user')." set memo='".$_REQUEST["password"]."' where user_id=".$row['user_id']);
 	}
 	
 	$row['school_code'] = str_replace("_school", "", $row['school_code']);
@@ -280,6 +286,7 @@ if ($_REQUEST['act'] == 'signin')
 		setcookie('ECSCP[student_code]',   $row['student_code'],                            $time);
 		setcookie('ECSCP[phone]',   $row['cellphone'],                            $time);
 	}
+	
 	
 	/**
 	 * status_id=0 : 超级管理员
@@ -447,7 +454,11 @@ login_display();
 */
 function login_display($msg_detail='')
 {
+	$username = empty($_REQUEST['username'])?"":trim($_REQUEST['username']);
+	
 	$GLOBALS['smarty']->assign('msg_detail',  $msg_detail);
+	$GLOBALS['smarty']->assign('username',  $username);
+	
 	if ((intval($GLOBALS['_CFG']['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0)
 	{
 		$GLOBALS['smarty']->assign('gd_version', gd_version());

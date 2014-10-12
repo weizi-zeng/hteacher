@@ -337,21 +337,14 @@
 			  { field: 'student_id', title: 'ID', checkbox: true },
 			  { field: 'code', title: '学号', width: 80, sortable: true, align: 'center' },
               { field: 'name', title: '姓名', width: 80, sortable: true, align: 'center' },
-              { field: 'is_active', title: '是否已注册', width: 80, sortable: true, align: 'center',
-            	  formatter: function (value, rowData, rowIndex) {
-            		  return value==1?"是":"否";
-            	  },
-            	  styler: function(value,row,index){
-        				if (value==0){
-        					return 'color:red;';
-        				}
-        			 }
-              },
               { field: 'address', title: '住址', width: 220, sortable: true, align: 'center' },
               { field: 'guardian_name', title: '家长', width: 80, sortable: true, align: 'center' },
               { field: 'guardian_phone', title: '家长电话', width: 120, sortable: true, align: 'center' },
               ]],
               toolbar: "#student_toolbar",
+              onBeforeLoad: function (param) {
+            	  param["search_is_active"] = 1;
+              }
         });
 
 }

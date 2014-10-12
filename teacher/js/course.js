@@ -48,10 +48,17 @@
         	$("#search_btn").linkbutton('disable');
         }
 
+    function test(){
+    	$("#edit_form").find("input").each(function(i,e){
+    		if($(e).attr("name")!="course_id"){
+    			$(e).val($(e).attr("name"));
+    		}
+    	});
+    }
     
     //保存
     function save(e) {
-    	console.dir($("#edit_form").serialize());
+//    	test();
         $.ajax({
             url: me.actionUrl + '?act=ajax_save',
             data: $("#edit_form").serialize(),

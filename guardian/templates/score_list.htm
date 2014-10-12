@@ -21,7 +21,20 @@
 
     <script type="text/javascript">
        //公共变量初始化
+       
     </script>
+	<style type="text/css">
+	   	#add_window table{
+	   		border:1px solid rgb(104, 212, 253);
+	   	}
+	   	#add_window td{
+	   		font-size:10px;
+	   		text-align:left;
+	   	}
+	   	input[type=checkbox]{
+	   		width:24px;
+	   	}
+    </style>
 </head>
 <body class="easyui-layout">
     <noscript>
@@ -34,7 +47,7 @@
      <!-- 固定写法，用于加载ajax正在处理提示 -->
     <div id="loadingDiv" style="display:none;"></div>
     
-    <div title="数据列表" region="center" style="height:300px;" border="false">
+    <div region="center" style="height:300px;" border="false">
     	<table id="dgData" style="height:400px"></table>
     
      	<div id="toolbar" style="padding:5px;height:auto">
@@ -45,35 +58,52 @@
                     	
                         <td style="text-align: right; width:80px;">考试名称：</td>
                         <td style="text-align: left; width:130px;">
-                        	<select id="search_prj_code" name="search_prj_code" style="width:120px;">
+                        	<select id="search_prj_id" name="search_prj_id" style="width:120px;">
                         		<option value="">所有...</option>
                         		{foreach from=$prjs item=prj}
-                        		<option value="{$prj.code}">{$prj.code}</option>
+                        		<option value="{$prj.prj_id}">{$prj.name}</option>
                         		{/foreach}
                         	</select>
                         </td>
                         
-                        <td style="text-align: right; width:80px;">考试编号：</td>
+                        <td style="text-align: right; width:80px;">考试科目：</td>
                         <td style="text-align: left; width:130px;">
-                        	<select id="search_exam_code" name="search_exam_code" style="width:120px;">
+                        	<select id="search_exam_subject" name="search_exam_subject" style="width:120px;">
                         		<option value="">所有...</option>
-                        		{foreach from=$exam_codes item=exam_code}
-                        		<option value="{$exam_code}">{$exam_code}</option>
+                        		{foreach from=$exam_subjects item=exam_subject}
+                        		<option value="{$exam_subject.subject}">{$exam_subject.subject}</option>
                         		{/foreach}
                         	</select>
                         </td>
                         
                         <td style="text-align: left; width:430px;">
                         	<a href="javascript:void(0)" onclick="searchscores();" class="easyui-linkbutton" icon="icon-search">查找</a>
-                        	<a href="javascript:void(0)" onclick="exportscoresbystudentcode();" class="easyui-linkbutton" iconCls="icon-application_get" >导出</a>
                         </td>
                         <td>&nbsp;</td>
                     </tr>
                 </table>
            </form>
      	</div>
+     	<div style="margin-bottom:5px">
+    		<table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
+                	<tr>
+                		<td style="text-align: right; width:80px;">导出编码：</td>
+                		<td style="text-align: left; width:130px;">
+                			<select id="charset" style="width:120px;">
+	                			<option value="">请选择编码格式...</option>
+	                			<option value="UTF8">UTF8</option>
+	                			<option value="GB2312">GB2312</option>
+	                			<option value="GBK">GBK</option>
+	                		</select>
+                		</td>
+                		<td style="text-align: left; width:400px;">
+                			<a href="javascript:void(0)" onclick="exportbyprj();" title="考试名称为导出参数" class="easyui-linkbutton" iconCls="icon-application_get" >按考试名称导出</a>
+				            <a href="javascript:void(0)" onclick="exportbyquery();" title="考试名称，考试科目，学生学号为导出参数" class="easyui-linkbutton" iconCls="icon-application_get" >按查询条件导出</a></td>
+                        <td>&nbsp;</td>
+                	</tr>
+                </table>
+    	</div>
      </div>
-        
     </div>
     
 </body>

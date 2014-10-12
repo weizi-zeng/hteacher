@@ -1,6 +1,8 @@
+
+
 <?php 
 define('IN_ECS', true);
-
+require(dirname(__FILE__) . '/includes/init.php');
 ?> 
 
 
@@ -32,8 +34,12 @@ define('IN_ECS', true);
 				showError('请选择学生学号!'); 
 				return; 
 			}
-			
-			var htm = '<iframe src="graph.php?act=history_score&student_code='+student_code+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
+
+			var subject = $("#search_subject").val();
+			var graph_size = $("#graph_size").val();
+			var graph_width = graph_size.split('*')[0];
+			var graph_height = graph_size.split('*')[1];
+			var htm = '<iframe src="graph.php?act=history_score&student_code='+student_code+'&subject='+subject+'&graph_width='+graph_width+'&graph_height='+graph_height+'" scrolling="auto" frameborder="0" style="width:100%;height:100%;"></iframe>';
 			$("#graph_load").html(htm);
 		}
     
@@ -52,13 +58,11 @@ define('IN_ECS', true);
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
                     <tr>
                     	<td style="text-align: right; width:80px;">学生学号：</td>
-                        <td style="text-align: left; width:230px;">
-                        	<select id="search_student_code" name="search_student_code" style="width:220px;">
+                        <td style="text-align: left; width:124px;">
+                        	<select id="search_student_code" name="search_student_code" style="width:120px;">
                         		<option value="">所有...</option>
                         		<?php 
-                        		require(dirname(__FILE__) . '/includes/init.php');
-                        		$students = get_students($class_code);
-                        		
+                        			$students = get_students($class_code);
                         			foreach($students as $k=>$v){
                         				?>
                         				<option value="<?=$v["code"]?>"><?=$v["code"]."-".$v["name"]?></option>
@@ -68,7 +72,37 @@ define('IN_ECS', true);
                         	</select>
                         </td>
                         
-                        <td style="text-align: left; width:430px;">
+                        <td style="text-align: right; width:80px;">考试科目：</td>
+                        <td style="text-align: left; width:124px;">
+                        	<select id="search_subject" name="search_subject" style="width:120px;">
+                        		<option value="">所有...</option>
+                        		<?php 
+	                        		$exam = get_exam_subjects();
+                        			foreach($exam as $k=>$v){
+                        				?>
+                        				<option value="<?=$v["subject"]?>"><?=$v["subject"]?></option>
+                        				<?php 
+                        			}
+                        		?>
+                        	</select>
+                        </td>
+                        
+                         <td style="text-align: right; width:80px;">图像大小：</td>
+                        <td style="text-align: left; width:124px;">
+                        	<select id="graph_size" name="graph_size" style="width:120px;">
+                        		<option value="400*300">400*300</option>
+                        		<option value="800*600" selected>800*600</option>
+                        		<option value="900*600">900*600</option>
+                        		<option value="1200*600">1200*600</option>
+                        		<option value="1200*900">1200*900</option>
+                        		<option value="1600*600">1600*600</option>
+                        		<option value="1600*1200">1600*1200</option>
+                        		<option value="2000*600">2000*600</option>
+                        		<option value="2000*1500">2000*1500</option>
+                        	</select>
+                        </td>
+                        
+                        <td style="text-align: left; width:180px;">
                         	<a href="javascript:void(0)" onclick="getGraph();" class="easyui-linkbutton" icon="icon-search">查看历史成绩趋势图</a>
                         </td>
                         <td>&nbsp;</td>

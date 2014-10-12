@@ -173,7 +173,6 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 			where course_id=".$id;
 		
 		$db->query($sql);
-		$id = $db->insert_id();
 				
 		admin_log(addslashes($_REQUEST["subject"]), 'update', 'course');
 		make_json_result("《".$_REQUEST["search_semster"]."课程表》保存成功！", $id);

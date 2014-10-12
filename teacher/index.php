@@ -607,13 +607,14 @@ function get_menus_by_status($status){
 				array(id=>"33", title=>"考试安排", url=>"exam.php?act=list"),
 				array(id=>"34", title=>"考试成绩", url=>"score.php?act=list"),
 				array(id=>"35", title=>"年级排名", url=>"grade_rank.php?act=list"),
-				array(id=>"36", title=>"成绩发布", url=>"score_publish.php?act=list")
+				array(id=>"36", title=>"成绩汇总", url=>"score_summary.php?act=list"),
+				array(id=>"37", title=>"成绩发布", url=>"score_publish.php?act=list")
 			)),
 			array(id=>"4", title=>"成绩分析",submenus=>array(
 				array(id=>"41", title=>"班级单科成绩分析", url=>"aly_class_subject.php?act=list"),
 				array(id=>"42", title=>"班级总分成绩分析", url=>"aly_class_total.php?act=list"),
 				array(id=>"43", title=>"个人历史成绩分析", url=>"aly_history_score.php?act=list"),
-				array(id=>"44", title=>"个人历史名次分析", url=>"aly_history_rank.php?act=list")
+// 				array(id=>"44", title=>"个人历史名次分析", url=>"aly_history_rank.php?act=list")
 			)),
 			array(id=>"5", title=>"量化管理",submenus=>array(
 				array(id=>"51", title=>"量化项目", url=>"duty_item.php?act=list"),

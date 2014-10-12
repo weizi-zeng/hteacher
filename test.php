@@ -2,10 +2,11 @@
 
 define('IN_ECS',true);
 
-$str = "afb0bf782a62a532da36beb4a23a7dcd";
-echo $str; echo '<br>';
+$str2 = intval("-24");
 
-echo md5("8MPUhm");echo '<br>';
+
+echo $str2; echo '<br>';
+
 
 
 
