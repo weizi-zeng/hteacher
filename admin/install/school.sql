@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS `ht_response`;
 DROP TABLE IF EXISTS `ht_message`;
 DROP TABLE IF EXISTS `ht_notice`;

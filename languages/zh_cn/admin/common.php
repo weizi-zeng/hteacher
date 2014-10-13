@@ -155,8 +155,8 @@ $_LANG['05_class_list'] = '班级列表';
 $_LANG['06_class_add'] = '添加班级';
 $_LANG['07_schoolAdmin_list'] = '学校管理员列表';
 $_LANG['08_schoolAdmin_add'] = '添加学校管理员';
-$_LANG['09_classAdmin_list'] = '班主任列表';
-$_LANG['10_classAdmin_add'] = '添加班主任';
+$_LANG['09_classAdmin_list'] = '班级管理员列表';
+$_LANG['10_classAdmin_add'] = '添加班级管理员';
 
 /*系统留言*/
 $_LANG['02_schoolAdmin_msg'] = '学校管理员意见';

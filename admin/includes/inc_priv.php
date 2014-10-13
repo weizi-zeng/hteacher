@@ -25,6 +25,7 @@ if (!defined('IN_ECS'))
 //     $purview['06_class_add']         = 'class_manage';
     $purview['07_schoolAdmin_list']        = 'schoolAdmin_manage';
     $purview['08_schoolAdmin_add']         = 'schoolAdmin_manage';
+    $purview['09_classAdmin_list']        = 'schoolAdmin_manage';
 //     $purview['09_classAdmin_list']        = 'classAdmin_manage';
 //     $purview['10_classAdmin_add']         = 'classAdmin_manage';
     

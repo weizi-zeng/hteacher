@@ -127,8 +127,8 @@ elseif ($_REQUEST['act'] == 'insert')
     
      $password  = md5($_POST['password']);
     
-     $sql = "INSERT INTO ".$table." (user_name, name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id, school_code, class_code) ".
-               "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['name'])."','".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '2', '".$_SESSION["school_code"]."', '".$code."')";
+     $sql = "INSERT INTO ".$table." (user_name, name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id, school_code, class_code, creator_id) ".
+               "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['name'])."','".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '2', '".$_SESSION["school_code"]."', '".$code."','".$_SESSION["admin_id"]."')";
     
     $db->query($sql);
     

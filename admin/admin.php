@@ -112,8 +112,8 @@ elseif ($_REQUEST['act'] == 'insert')
     
     $password  = md5($_POST['password']);
     
-    $sql = "INSERT INTO ".$ecs->table('admin_user')." (user_name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id) ".
-           "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '0')";
+    $sql = "INSERT INTO ".$ecs->table('admin_user')." (user_name, email, cellphone, password, add_time, nav_list, action_list, role_id, status_id, creator_id) ".
+           "VALUES ('".trim($_POST['user_name'])."', '".trim($_POST['email'])."', '".trim($_POST['cellphone'])."','$password', '$add_time', '', 'all', '0', '0','".$_SESSION["admin_id"]."')";
 
     $db->query($sql);
     

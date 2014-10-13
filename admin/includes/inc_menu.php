@@ -68,6 +68,7 @@ $modules['08_schools']['04_school_add']              = 'school.php?act=add';
 // $modules['08_schools']['06_class_add']         = 'integrate.php?act=list';
 $modules['08_schools']['07_schoolAdmin_list']            = 'schoolAdmin.php?act=list';
 $modules['08_schools']['08_schoolAdmin_add']           = 'schoolAdmin.php?act=add';
+$modules['08_schools']['09_classAdmin_list']            = 'classAdmin.php?act=list';
 // $modules['08_schools']['09_classAdmin_list']    = 'user_account_manage.php?act=list';
 // $modules['08_schools']['10_classAdmin_add']    = 'user_account_manage.php?act=list';
 
