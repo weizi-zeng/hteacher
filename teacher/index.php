@@ -40,13 +40,13 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 		班级相册
 	 */
 	//通知通告
-	$sql = "select * from ".$ecs->table("notice")." where class_code='".$_SESSION["class_code"]."' order by notice_id desc limit 10";
+	$sql = "select * from ".$ecs->table("notice")." where class_code='".$_SESSION["class_code"]."' order by notice_id desc limit 20";
 	$notices = $db->getAll($sql);
 	$smarty->assign('notices', $notices);
 	
 	//意见箱回复
 	$feedbackTable = "hteacher.ht_feedback";
-	$sql = "select * from ".$feedbackTable." where parent_id = '0' and user_id='".$_SESSION["admin_id"]."' and msg_status=2 order by msg_id desc limit 10";
+	$sql = "select * from ".$feedbackTable." where parent_id = '0' and user_id='".$_SESSION["admin_id"]."' and msg_status=2 order by msg_id desc limit 20";
 	$msg_list = $db->getAll($sql);
 	foreach ($msg_list AS $key => $value)
 	{
@@ -59,12 +59,12 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	$smarty->assign('msg_list', $msg_list);
 	
 	//短信
-	$sql = "select * from ".$ecs->table("sms")." where class_code='".$_SESSION["class_code"]."' order by sms_id desc limit 10";
+	$sql = "select * from ".$ecs->table("sms")." where class_code='".$_SESSION["class_code"]."' order by sms_id desc limit 20";
 	$sms = $db->getAll($sql);
 	$smarty->assign('sms', $sms);
 	
 	//讨论信息
-	$sql = "select * from ".$ecs->table("forum")." where parent_id=0 and is_active=1 order by forum_id desc limit 10";
+	$sql = "select * from ".$ecs->table("forum")." where parent_id=0 and is_active=1 order by forum_id desc limit 20";
 	$forums = $db->getAll($sql);
 	$smarty->assign('forums', $forums);
 	

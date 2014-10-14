@@ -84,46 +84,48 @@ elseif ($_REQUEST['act'] == 'publish')
 	$subjects = get_subjects($class_code, $prj_id);//获取这个项目所有的考试科目
 	
 	$title = "《".$prj_name."》考试成绩单";
-	$notice = '<table cellspacing="0" cellpadding="0" style="width:100%"><tbody>';
+	$notice = '<table class="score_table" ><tbody>';
 	$notice .= '<tr style="font-weight:bold;">';
-	$notice .= '<td style="text-align:center;width:5%;border:1px solid rgb(27, 240, 180)">学号</td>';
-	$notice .= '<td style="text-align:center;width:10%;border:1px solid rgb(27, 240, 180)">姓名</td>';
+	$notice .= '<td style="width:5%;">学号</td>';//width:5%;
+	$notice .= '<td style="width:10%;">姓名</td>';
 	foreach($subjects as $k=>$v){
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v["subject"].'</td>';
+		$notice .= '<td >'.$v["subject"].'</td>';
 	}
-	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">总分</td>';
-	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">班级排名</td>';
-	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级排名</td>';
-	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级进退</td>';
+	$notice .= '<td style="width:8%;">总分</td>';
+	$notice .= '<td style="width:8%;">班级排名</td>';
+	$notice .= '<td style="width:8%;">年级排名</td>';
+	$notice .= '<td style="width:8%;">年级进退</td>';
 	$notice .= '</tr>';
 	
 	$res = scoreStatistics($class_code, $prj_id);
 	
 	foreach($res as $k=>$v){
 		$notice .= '<tr>';
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['student_code'].'</td>';//学号,姓名
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v["student_name"].'</td>';
+		$notice .= '<td >'.$v['student_code'].'</td>';//学号,姓名
+		$notice .= '<td >'.$v["student_name"].'</td>';
 		foreach($subjects as $sv){
 			$hasScore = false;
 			foreach ($v as $sub=>$score){
 				if($sub==$sv['subject']){
-					$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$score.'</td>';
+					$notice .= '<td >'.$score.'</td>';
 					$hasScore = true;
 					break;
 				}
 			}
 			if(!$hasScore){
 				//如果没有对应科目的成绩，返回空数据
-				$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)"></td>';
+				$notice .= '<td ></td>';
 			}
 		}
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['total'].'</td>';
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['class_rank'].'</td>';
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['grade_rank'].'</td>';
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['up_down'].'</td>';
+		$notice .= '<td >'.$v['total'].'</td>';
+		$notice .= '<td >'.$v['class_rank'].'</td>';
+		$notice .= '<td >'.$v['grade_rank'].'</td>';
+		$notice .= '<td >'.$v['up_down'].'</td>';
 		$notice .= '</tr>';
 	}
 	$notice .= "</tbody></table>";
+	
+// 	echo $notice;die();
 	
 	$sql = "INSERT INTO ".$ecs->table('notice')."(title, urgency, class_code, content, author, ".
 				                "is_active, created) ".

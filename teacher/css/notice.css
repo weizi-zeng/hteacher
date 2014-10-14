@@ -1312,3 +1312,10 @@ h6 span {
     float: left;
     width: 300px;
 }
+.score_table {
+	width:100%;
+}
+.score_table td{
+	text-align:center;
+	border:1px solid rgb(27, 240, 180)
+}
