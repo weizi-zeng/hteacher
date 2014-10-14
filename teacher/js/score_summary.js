@@ -44,6 +44,7 @@ function loadGrid() {
         			html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+subjects[i].subject+'</td>';
         		}
         		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">总分</td>';
+        		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">班级排名</td>';
         		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级排名</td>';
         		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级进退</td>';
         		html += '</tr>';
@@ -70,6 +71,11 @@ function loadGrid() {
         				}
         			}
         			html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+st.total+'</td>';
+        			if(st.class_rank){
+        				html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+st.class_rank+'</td>';
+        			}else {
+        				html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)"></td>';
+        			}
         			if(st.grade_rank){
         				html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+st.grade_rank+'</td>';
         			}else {

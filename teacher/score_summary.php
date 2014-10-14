@@ -119,11 +119,11 @@ elseif ($_REQUEST['act'] == 'export')
 		{
 			$content .= $v["subject"].',';
 		}
-		$content .="总分,年级排名,年级进退\r\n";
+		$content .="总分,班级排名,年级排名,年级进退\r\n";
 		
 		$res = scoreStatistics($class_code, $prj_id);
 		foreach($res as $s=>$v){
-			$content .= $s.','.$v['student_name'].',';//学号,姓名
+			$content .= $v['student_code'].','.$v['student_name'].',';//学号,姓名
 			
 			foreach ($subjects as $subject){
 				$hasScore = false;
@@ -140,6 +140,7 @@ elseif ($_REQUEST['act'] == 'export')
 			}
 			
 			$content .= $v['total'].',';
+			$content .= $v['class_rank'].',';
 			$content .= $v['grade_rank'].',';
 			$content .= $v['up_down']."\r\n";
 		}
@@ -248,10 +249,33 @@ function scoreStatistics($class_code, $prj_id){
 		$res[$s['code']]['grade_rank'] = $s['grade_rank'];//年级排名，年级进退
 		$res[$s['code']]['up_down'] = $s['up_down'];//年级排名，年级进退
 	}
-	
+	$res = set_rank($res);
 // 	print_r($res);
 	return $res;
 }
+
+
+//根据总分获取班级排名
+function set_rank($scores){
+	//根据总分获取班级排名
+	$ranks = array();
+	foreach($scores as $sc1=>$sv1){
+		$class_rank = 1;
+		foreach($scores as $sc2=>$sv2){
+			if($sv1['total']<$sv2['total']){
+				$class_rank++;
+			}
+		}
+		$scores[$sc1]['class_rank'] = $class_rank;
+		$ranks[$sc1] = $class_rank;
+	}
+
+	//按班级排名进行降序排序
+	array_multisort($ranks, SORT_NUMERIC, SORT_ASC, $scores);
+
+	return $scores;
+}
+
 
 /**
  * 删除指定考试名称的所有成绩和排名

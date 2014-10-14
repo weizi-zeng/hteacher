@@ -182,6 +182,9 @@ function showError(message) {
 function showInfo(message) {
     $.messager.alert("提示信息", message, "info");
 }
+function showConfirm(message, callback) {
+    $.messager.confirm("请确认", message, callback);
+}
 
 String.prototype.format = function () {
     var args = arguments;

@@ -41,11 +41,11 @@ elseif ($_REQUEST['act'] == 'export')
 		{
 			$content .= $v["subject"].',';
 		}
-		$content .="总分,年级排名,年级进退\r\n";
+		$content .="总分,班级排名,年级排名,年级进退\r\n";
 		
 		$res = scoreStatistics($class_code, $prj_id);
 		foreach($res as $s=>$v){
-			$content .= $s.','.$v['student_name'].',';//学号,姓名
+			$content .= $v['student_code'].','.$v['student_name'].',';//学号,姓名
 			
 			foreach ($subjects as $subject){
 				$hasScore = false;
@@ -62,6 +62,7 @@ elseif ($_REQUEST['act'] == 'export')
 			}
 			
 			$content .= $v['total'].',';
+			$content .= $v['class_rank'].',';
 			$content .= $v['grade_rank'].',';
 			$content .= $v['up_down']."\r\n";
 		}
@@ -91,6 +92,7 @@ elseif ($_REQUEST['act'] == 'publish')
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v["subject"].'</td>';
 	}
 	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">总分</td>';
+	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">班级排名</td>';
 	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级排名</td>';
 	$notice .= '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级进退</td>';
 	$notice .= '</tr>';
@@ -99,12 +101,12 @@ elseif ($_REQUEST['act'] == 'publish')
 	
 	foreach($res as $k=>$v){
 		$notice .= '<tr>';
-		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$k.'</td>';//学号,姓名
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['student_code'].'</td>';//学号,姓名
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v["student_name"].'</td>';
 		foreach($subjects as $sv){
 			$hasScore = false;
 			foreach ($v as $sub=>$score){
-				if($sub==$subject['subject']){
+				if($sub==$sv['subject']){
 					$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$score.'</td>';
 					$hasScore = true;
 					break;
@@ -116,6 +118,7 @@ elseif ($_REQUEST['act'] == 'publish')
 			}
 		}
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['total'].'</td>';
+		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['class_rank'].'</td>';
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['grade_rank'].'</td>';
 		$notice .= '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'.$v['up_down'].'</td>';
 		$notice .= '</tr>';
@@ -143,7 +146,7 @@ elseif ($_REQUEST['act'] == 'sendSMS')
 	$prj_name = get_exam_prj_name($prj_id);
 	$subjects = get_subjects($class_code, $prj_id);//获取这个项目所有的考试科目
 	if(!$subjects){
-		die('<p style="color:red;">您选择的考试名称《'.$prj_name.'》下面没有成绩数据，清选择有效的考试名称！</p>');
+		die('<p style="color:red;">您选择的考试名称《'.$prj_name.'》下面没有成绩数据，请选择有效的考试名称！</p>');
 	}
 	
 	$res = scoreStatistics($class_code, $prj_id);
@@ -152,7 +155,7 @@ elseif ($_REQUEST['act'] == 'sendSMS')
 	foreach($res as $k=>$v){
 		
 		///给注册了的用户发送短信
-		$sql = "select * from ".$GLOBALS["ecs"]->table("student")." where code='".$k."' limit 1";
+		$sql = "select * from ".$GLOBALS["ecs"]->table("student")." where code='".$v['student_code']."' limit 1";
 		$row = $GLOBALS["db"]->getRow($sql);
 		
 		$content = '亲爱的'.$row["guardian_name"].'家长,您的孩子'.$v["student_name"].'，在本次《'.$prj_name.'》中的成绩如下：';
@@ -250,8 +253,31 @@ function scoreStatistics($class_code, $prj_id){
 		$res[$s['code']]['up_down'] = $s['up_down'];//年级排名，年级进退
 	}
 	
+	$res = set_rank($res);
 // 	print_r($res);
 	return $res;
+}
+
+
+//根据总分获取班级排名
+function set_rank($scores){
+	//根据总分获取班级排名
+	$ranks = array();
+	foreach($scores as $sc1=>$sv1){
+		$class_rank = 1;
+		foreach($scores as $sc2=>$sv2){
+			if($sv1['total']<$sv2['total']){
+				$class_rank++;
+			}
+		}
+		$scores[$sc1]['class_rank'] = $class_rank;
+		$ranks[$sc1] = $class_rank;
+	}
+	
+	//按班级排名进行降序排序
+	array_multisort($ranks, SORT_NUMERIC, SORT_ASC, $scores);
+	
+	return $scores;
 }
 
 ?>

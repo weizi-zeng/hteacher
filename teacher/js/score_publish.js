@@ -39,6 +39,7 @@ function loadGrid() {
         			html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+subjects[i].subject+'</td>';
         		}
         		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">总分</td>';
+        		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">班级排名</td>';
         		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级排名</td>';
         		html += '<td style="text-align:center;width:8%;border:1px solid rgb(27, 240, 180)">年级进退</td>';
         		html += '</tr>';
@@ -65,6 +66,11 @@ function loadGrid() {
         				}
         			}
         			html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+st.total+'</td>';
+        			if(st.class_rank){
+        				html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+st.class_rank+'</td>';
+        			}else {
+        				html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)"></td>';
+        			}
         			if(st.grade_rank){
         				html += '<td style="text-align:center;border:1px solid rgb(27, 240, 180)">'+st.grade_rank+'</td>';
         			}else {
@@ -114,7 +120,8 @@ function publishScore(){
 		showError("请选择考试名称！");
 		return;
 	}
-	window.location.href='score_publish.php?act=publish&prj_id='+prj_id;
+		window.open('score_publish.php?act=publish&prj_id='+prj_id);
+//	window.location.href='score_publish.php?act=publish&prj_id='+prj_id;
 }
 
 //短信通知
@@ -124,6 +131,10 @@ function sendSMS(){
 		showError("请选择考试名称！");
 		return;
 	}
-	window.open('score_publish.php?act=sendSMS&prj_id='+prj_id);
+	showConfirm("确认发送短信？", function(r){
+		if(r){
+			window.open('score_publish.php?act=sendSMS&prj_id='+prj_id);
+		}
+	});
 }
     

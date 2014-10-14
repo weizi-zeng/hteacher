@@ -39,7 +39,7 @@
                 url: me.actionUrl + '?act=ajax_list', //me.actionUrl + '?Method=List', 
                 method: 'post',
                 fitColumns: true, 
-                singleSelect:true,
+                singleSelect:false,
                 remoteSort: false,  //列少设为true,列多设为false
                 autoRowHeight: false,
                 checkOnSelect:true,
@@ -54,7 +54,7 @@
 	            	  update();
 	              },
                 columns: [[
-				  { field: 'duty_id', title: 'ID', hidden:true },
+				  { field: 'duty_id', title: 'ID', checkbox:true },
 				  { field: 'student_code', title: '学生学号', width: 120, sortable: true, align: 'center',
 					  sorter:function(a,b){  
 						  return parseInt(a)>parseInt(b)?1:-1;
@@ -230,19 +230,19 @@
             return;
         } 
         
-        if (rows.length>1) 
-        { 
-            showError('请选择一条记录进行操作!'); 
-            return;
-        } 
-        
-        ids=rows[0][me.idFiled];
+        var ids = '';
+        for(var i=0;i<rows.length;i++){
+        	ids += rows[i][me.idFiled];
+        	if(i<rows.length-1){
+        		ids += ',';
+        	}
+        }
         if (ids=="")
         {
             showError('选择的记录ID为空!');
             return;
         }
-        $.messager.confirm('提示信息', '确认要删除选择项？【'+ids+ ','+rows[0]["student_code"] +','+rows[0]["duty_item"]+'】', function (isClickedOk) {
+        $.messager.confirm('提示信息', '确认要删除选择项？', function (isClickedOk) {
             if (isClickedOk) {
                 $.ajax({
                     url: me.actionUrl+"?act=ajax_delete",
@@ -308,4 +308,17 @@
             return;
         } 
     	window.open("duty.php?act=exportRank&order=asc&rows=2000&search_sdate="+sdate+"&search_edate="+edate+"&charset="+charset);
+    }
+    
+    
+    function all_student_check(o){
+    	if(o.checked){
+    		$("input[name=student_code]").each(function(i,e){
+    			e.checked = true;
+    		});
+    	}else {
+    		$("input[name=student_code]").each(function(i,e){
+    			e.checked = false;
+    		});
+    	}
     }

@@ -381,20 +381,26 @@ function send(e){
 	}
 	var copy = $('#sms_copy').get(0).checked?1:0;
 	
-	var param = {"phones":phones, "content":content, "copy":copy};
-	$.post("sms.php?act=send", param, function(r){
-		clearLoading();
-		if(r.error==0){
-			showInfo("短信发送成功！");
-			$('#send_sms_window').window('close');
-		}else {
-			showError("短信发送失败！"+r.msg);
+	showConfirm("确认发送短信？", function(r){
+		if(r){
+			
+			var param = {"phones":phones, "content":content, "copy":copy};
+			$.post("sms.php?act=send", param, function(r){
+				clearLoading();
+				if(r.error==0){
+					showInfo("短信发送成功！");
+					$('#send_sms_window').window('close');
+				}else {
+					showError("短信发送失败！"+r.msg);
+				}
+				
+				$("#sms_send").linkbutton('enable');
+			});
+			showLoading(e,"正在发送短信，请稍等...");
+			$("#sms_send").linkbutton('disable');
+			
 		}
-		
-		$("#sms_send").linkbutton('enable');
 	});
-	showLoading(e,"正在发送短信，请稍等...");
-	$("#sms_send").linkbutton('disable');
 }
 
 //检查短信内容是否超过512个字符

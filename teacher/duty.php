@@ -113,8 +113,8 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 
 elseif ($_REQUEST['act'] == 'ajax_delete')
 {
-	$id    = !empty($_REQUEST['duty_id'])        ? intval($_REQUEST['duty_id'])      : 0;
-	$sql = "delete from ".$ecs->table("duty")." where duty_id=".$id;
+	$id    = !empty($_REQUEST['duty_id'])        ? trim($_REQUEST['duty_id'])      : "";
+	$sql = "delete from ".$ecs->table("duty")." where duty_id in (".$id.")";
 	
 	$db->query($sql);
 	

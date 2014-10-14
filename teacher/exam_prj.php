@@ -62,12 +62,24 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 elseif ($_REQUEST['act'] == 'ajax_delete')
 {
 	$id    = !empty($_REQUEST['prj_id'])        ? intval($_REQUEST['prj_id'])      : 0;
-	$sql = "delete from ".$ecs->table("exam_prj")." where prj_id=".$id;
 	
+	//如果做了考试安排，则不能删除
+	$subjects = get_subjects($class_code, $id);
+	if(count($subjects)>0){
+		make_json_error("《".get_exam_prj_name($id)."》已经做了考试安排，不能直接删除！");
+		exit;
+	}
+	
+	$sql = "select count(1) from ".$ecs->table("score")." where prj_id=".$id;
+	if($db->getOne($sql)){
+		make_json_error("《".get_exam_prj_name($id)."》已经在成绩录入中已使用，不能直接删除！");
+		exit;
+	}
+	
+	$sql = "delete from ".$ecs->table("exam_prj")." where prj_id=".$id;
 	$db->query($sql);
 	
 	admin_log($_REQUEST["prj_id"], 'delete', 'exam_prj');
-	
 	make_json_result("删除成功！");
 }
 
