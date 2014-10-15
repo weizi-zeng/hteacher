@@ -31,16 +31,15 @@
                 nowrap: false,  //折行
                 border: false,
                 singleSelect:true,
-                //sortName: me.idFiled,
-                //idField: me.idFiled,
                 columns: [[
 				  { field: 'sms_id', title: 'ID', hidden: true },
 				  { field: 'content', title: '短信内容', width: 420, sortable: true, align: 'left' },
 				  { field: 'phones', title: '发送电话', width: 100, sortable: true, align: 'center',
-					  formatter: function (value, rowData, rowIndex) {
-						  var v = value.replace(/,/g,"<br/>");
-						  return v;
-                      }
+					  styler: function(value,row,index){
+						  if(value.length>30){
+							  return 'overflow:auto;';
+						  }
+					  }
                   },
                   { field: 'status', title: '短信状态', width: 80, sortable: true, align: 'center', 
                 	  formatter: function (value, rowData, rowIndex) {

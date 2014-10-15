@@ -26,7 +26,7 @@
 <div class="list-div" id="listDiv">
 {/if}
 <!--用户列表部分-->
-<table cellpadding="3" cellspacing="1">
+<table cellpadding="3" cellspacing="1" class="sms_list_table">
   <tr>
     <th>
       ID
@@ -45,7 +45,7 @@
   <tr>
     <td>{$sms.sms_id}</td>
     <td class="first-cell">{$sms.content|escape}</td>
-    <td>{$sms.phones}</td>
+    <td class="phones_style">{$sms.phones}</td>
     <td>{$sms.status}</td>
     <td>{$sms.num}</td>
     <td>{$sms.class_code}</td>
