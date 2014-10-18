@@ -45,16 +45,10 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	$smarty->assign('notices', $notices);
 	
 	//意见箱回复
-	$feedbackTable = "hteacher.ht_feedback";
-	$sql = "select * from ".$feedbackTable." where parent_id = '0' and user_id='".$_SESSION["admin_id"]."' and msg_status=2 order by msg_id desc limit 20";
+	$sql = "select * from ".$ecs->table("message")." where to_type='admin' and to_='".$_SESSION["admin_id"]."' order by message_id desc limit 20";
 	$msg_list = $db->getAll($sql);
-	foreach ($msg_list AS $key => $value)
-	{
-		$reply = $db->getOne("select msg_content  from ".$feedbackTable. " where parent_id=".$value["msg_id"]." limit 1");
-		$msg_list[$key]['msg_status'] = $reply?1:0;
-		$msg_list[$key]['msg_reply'] = $reply;
-		$msg_list[$key]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['msg_time']);
-		$msg_list[$key]['msg_type'] = $GLOBALS['_LANG']['type'][$value['msg_type']];
+	foreach($msg_list as $k=>$msg){
+		$msg_list[$k]['from_user'] = get_user_name($msg['from_'], $msg['from_type']);
 	}
 	$smarty->assign('msg_list', $msg_list);
 	
@@ -592,43 +586,57 @@ elseif ($_REQUEST['act'] == 'send_mail')
 function get_menus_by_status($status){
 	if($status==2){
 		return array(
-			array(id=>"1", title=>"基础信息",submenus=>array(
-				array(id=>"12", title=>"学生花名册", url=>"student.php?act=list"),
-				array(id=>"13", title=>"家长信息管理", url=>"guardian.php?act=list"),
-				array(id=>"14", title=>"教师信息管理", url=>"teacher.php?act=list"),
-				array(id=>"15", title=>"课程安排表", url=>"course.php?act=list")
+			array(id=>"10", title=>"基础信息",submenus=>array(
+				array(id=>"102", title=>"学生花名册", url=>"student.php?act=list"),
+				array(id=>"103", title=>"家长信息管理", url=>"guardian.php?act=list"),
+				array(id=>"104", title=>"教师信息管理", url=>"teacher.php?act=list"),
+				array(id=>"105", title=>"课程安排表", url=>"course.php?act=list")
 			)),
-			array(id=>"2", title=>"班级公告",submenus=>array(
-				array(id=>"21", title=>"通知通告", url=>"notice.php?act=list")
+			array(id=>"30", title=>"成绩管理",submenus=>array(
+				array(id=>"301", title=>"考试名称", url=>"exam_prj.php?act=list"),
+				array(id=>"302", title=>"考试科目", url=>"exam_subject.php?act=list"),
+				array(id=>"303", title=>"考试安排", url=>"exam.php?act=list"),
+				array(id=>"304", title=>"考试成绩", url=>"score.php?act=list"),
+				array(id=>"305", title=>"年级排名", url=>"grade_rank.php?act=list"),
+				array(id=>"306", title=>"成绩汇总", url=>"score_summary.php?act=list"),
+				array(id=>"307", title=>"成绩发布", url=>"score_publish.php?act=list")
 			)),
-			array(id=>"3", title=>"成绩管理",submenus=>array(
-				array(id=>"31", title=>"考试名称", url=>"exam_prj.php?act=list"),
-				array(id=>"32", title=>"考试科目", url=>"exam_subject.php?act=list"),
-				array(id=>"33", title=>"考试安排", url=>"exam.php?act=list"),
-				array(id=>"34", title=>"考试成绩", url=>"score.php?act=list"),
-				array(id=>"35", title=>"年级排名", url=>"grade_rank.php?act=list"),
-				array(id=>"36", title=>"成绩汇总", url=>"score_summary.php?act=list"),
-				array(id=>"37", title=>"成绩发布", url=>"score_publish.php?act=list")
+			array(id=>"40", title=>"成绩分析",submenus=>array(
+				array(id=>"401", title=>"班级单科成绩分析", url=>"aly_class_subject.php?act=list"),
+				array(id=>"402", title=>"班级总分成绩分析", url=>"aly_class_total.php?act=list"),
+				array(id=>"403", title=>"个人历史成绩分析", url=>"aly_history_score.php?act=list"),
+// 				array(id=>"404", title=>"个人历史名次分析", url=>"aly_history_rank.php?act=list")
 			)),
-			array(id=>"4", title=>"成绩分析",submenus=>array(
-				array(id=>"41", title=>"班级单科成绩分析", url=>"aly_class_subject.php?act=list"),
-				array(id=>"42", title=>"班级总分成绩分析", url=>"aly_class_total.php?act=list"),
-				array(id=>"43", title=>"个人历史成绩分析", url=>"aly_history_score.php?act=list"),
-// 				array(id=>"44", title=>"个人历史名次分析", url=>"aly_history_rank.php?act=list")
+			array(id=>"50", title=>"量化管理",submenus=>array(
+				array(id=>"501", title=>"量化项目", url=>"duty_item.php?act=list"),
+				array(id=>"502", title=>"值日记录", url=>"duty.php?act=list"),
+				array(id=>"503", title=>"量化分析", url=>"aly_duty.php?act=list")
 			)),
-			array(id=>"5", title=>"量化管理",submenus=>array(
-				array(id=>"51", title=>"量化项目", url=>"duty_item.php?act=list"),
-				array(id=>"52", title=>"值日记录", url=>"duty.php?act=list"),
-				array(id=>"53", title=>"量化分析", url=>"aly_duty.php?act=list")
+			array(id=>"60", title=>"家长互动",submenus=>array(
+				array(id=>"601", title=>"意见箱", url=>"message.php?act=list"),
 			)),
-			array(id=>"6", title=>"投诉建议",submenus=>array(
-				array(id=>"61", title=>"讨论区", url=>"forum.php?act=list"),
-				array(id=>"62", title=>"意见箱", url=>"user_msg.php?act=list")
+			array(id=>"20", title=>"班级公告",submenus=>array(
+				array(id=>"201", title=>"通知通告", url=>"notice.php?act=list")
 			)),
-			array(id=>"7", title=>"短信平台",submenus=>array(
-				array(id=>"71", title=>"自定义短信", url=>"sms.php?act=def"),
-				array(id=>"72", title=>"短信记录", url=>"sms.php?act=record")
-			))
+// 			array(id=>"21", title=>"班级展示",submenus=>array(
+// 				array(id=>"211", title=>"展示类型", url=>"show_type.php?act=list"),
+// 				array(id=>"212", title=>"图片管理", url=>"show.php?act=list")
+// 			)),
+// 			array(id=>"22", title=>"上传下载",submenus=>array(
+// 				array(id=>"221", title=>"文件类型", url=>"download_type.php?act=list"),
+// 				array(id=>"222", title=>"下载管理", url=>"download.php?act=list")
+// 			)),
+			array(id=>"70", title=>"投诉建议",submenus=>array(
+				array(id=>"701", title=>"给超级管理员意见", url=>"user_msg.php?act=list")
+			)),
+			array(id=>"80", title=>"短信平台",submenus=>array(
+				array(id=>"801", title=>"自定义短信", url=>"sms.php?act=def"),
+				array(id=>"802", title=>"短信记录", url=>"sms.php?act=record")
+			)),
+			array(id=>"90", title=>"公共平台",submenus=>array(
+				array(id=>"901", title=>"讨论区", url=>"forum.php?act=list")
+// 				array(id=>"902", title=>"资料库", url=>"library.php?act=list"),
+			)),
 		);
 	}
 	return array();

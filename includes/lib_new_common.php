@@ -199,6 +199,16 @@ function get_guardian($class_code, $student_code)
 	return $GLOBALS['db']->getRow($sql);
 }
 
+function get_guardians($class_code)
+{
+	$sql = "select * from ".$GLOBALS['ecs']->table("guardian")." where class_code= '" . $class_code."'";
+	return $GLOBALS['db']->getAll($sql);
+}
+
+function get_class_admins($class_code){
+	$sql = "select * from hteacher.ht_admin_user where class_code= '" . $class_code."'";
+	return $GLOBALS['db']->getAll($sql);
+}
 /**
 * 根据班级代码获取所有考试
 *
@@ -345,7 +355,7 @@ function get_exam_prj_name($prj_id)
 function get_exam_subjects()
 {
 	$sql = "SELECT * ".
-                " FROM hteacher.ht_subject order by subject_id ";
+                " FROM ".$GLOBALS['ecs']->table("subject")." where class_code='".$_SESSION['class_code']."' order by subject_id ";
 	return $GLOBALS['db']->getAll($sql);
 }
 
@@ -487,4 +497,14 @@ function getAdminByPhone($phone){
 	return $GLOBALS["db"]->getRow($sql);
 }
 
+
+function get_user_name($id, $type='guardian'){
+	if($type=='guardian'){
+		$sql = "select name from ".$GLOBALS["ecs"]->table("guardian")." where class_code='".$_SESSION['class_code']."' and guardian_id=".$id;
+		return $GLOBALS["db"]->getOne($sql);
+	}else {
+		$sql = "select user_name from hteacher.ht_admin_user where user_id=".$id;
+		return $GLOBALS["db"]->getOne($sql);
+	}
+}
 ?>

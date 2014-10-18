@@ -21,7 +21,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	$id    = !empty($_REQUEST['prj_id'])        ? intval($_REQUEST['prj_id'])      : 0;
 	
 	//判断重复
-	$isExit = $db->getRow("select * from ".$ecs->table("exam_prj")." where name='".$_REQUEST["name"]."' and prj_id!=".$id." limit 1 ");
+	$isExit = $db->getRow("select * from ".$ecs->table("exam_prj")." where name='".$_REQUEST["name"]."' and class_code='".$_SESSION["class_code"]."' and prj_id!=".$id." limit 1 ");
 	if($isExit){
 		make_json_error("考试名称“".$_REQUEST["name"]."”已经存在！ID为：“".$isExit["prj_id"]."”");
 		exit;

@@ -4,7 +4,7 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
-$table = "hteacher.ht_subject";
+$table = $ecs->table("subject");
 if ($_REQUEST['act'] == 'list')
 {
 	$smarty->display('exam_subject_list.htm');
@@ -21,7 +21,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 {
 	$id    = !empty($_REQUEST['subject_id'])        ? intval($_REQUEST['subject_id'])      : 0;
 	//判断重复
-	$isExit = $db->getRow("select * from ".$table." where subject='".$_REQUEST["subject"]."' and subject_id!=".$id." limit 1 ");
+	$isExit = $db->getRow("select * from ".$table." where subject='".$_REQUEST["subject"]."' and class_code='".$_SESSION['class_code']."' and subject_id!=".$id." limit 1 ");
 	if($isExit){
 		make_json_error("科目“".$_REQUEST["subject"]."”已经存在！ID为：“".$isExit["subject_id"]."”");
 		exit;
@@ -30,9 +30,9 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	if($id==0){//insert
 		
 		$sql = "insert into ".$table
-		." (subject,user_id,created )
+		." (subject,class_code,user_id,created )
 		values 
-			('".$_REQUEST["subject"]."','".$_SESSION["admin_id"]."',
+			('".$_REQUEST["subject"]."','".$_SESSION['class_code']."','".$_SESSION["admin_id"]."',
 			now())";
 		
 		$db->query($sql);
@@ -90,13 +90,15 @@ function exam_subject_list($table)
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
-		$sql = "SELECT COUNT(*) FROM " . $table;
+		$where = " WHERE class_code='".$_SESSION['class_code']."' ";
+		
+		$sql = "SELECT COUNT(*) FROM " . $table.$where;
 		$filter['record_count'] = $GLOBALS['db']->getOne($sql);
 
 		/* 分页大小 */
 		$filter = page_and_size($filter);
 		$sql = "SELECT * ".
-                " FROM " . $table .
+                " FROM " . $table .$where.
                 " ORDER by " . $filter['sort'] . ' ' . $filter['order'] .
                 " LIMIT " . $filter['start'] . ',' . $filter['page_size'];
 

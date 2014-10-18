@@ -132,6 +132,12 @@ if (!isset($_SESSION['class_code']) || trim($_SESSION["class_code"])=='')
 	$class_code = $_SESSION["class_code"];
 }
 
+if($school_code=='super' || $class_code=='super'){
+	clearstatcache();
+	ecs_header("Location: ../login.php\n");
+	exit();
+}
+
 $db_name = $school_code."_school";
 /* 创建 ECSHOP 对象 */
 $ecs = new ECS($db_name, $prefix);

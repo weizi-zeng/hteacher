@@ -45,17 +45,12 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	$notices = $db->getAll($sql);
 	$smarty->assign('notices', $notices);
 	
+	$guardian = get_guardian($class_code, $_SESSION["student_code"]);
 	//意见箱回复
-	$feedbackTable = "hteacher.ht_feedback";
-	$sql = "select * from ".$feedbackTable." where parent_id = '0' and user_id='".$_SESSION["admin_id"]."' and msg_status=2 order by msg_id desc limit 20";
+	$sql = "select * from ".$ecs->table("message")." where to_type='guardian' and to_='".$guardian["guardian_id"]."' order by message_id desc limit 20";
 	$msg_list = $db->getAll($sql);
-	foreach ($msg_list AS $key => $value)
-	{
-		$reply = $db->getOne("select msg_content  from ".$feedbackTable. " where parent_id=".$value["msg_id"]." limit 1");
-		$msg_list[$key]['msg_status'] = $reply?1:0;
-		$msg_list[$key]['msg_reply'] = $reply;
-		$msg_list[$key]['msg_time'] = local_date($GLOBALS['_CFG']['time_format'], $value['msg_time']);
-		$msg_list[$key]['msg_type'] = $GLOBALS['_LANG']['type'][$value['msg_type']];
+	foreach($msg_list as $k=>$msg){
+		$msg_list[$k]['from_user'] = get_user_name($msg['from_'], $msg['from_type']);
 	}
 	$smarty->assign('msg_list', $msg_list);
 	
@@ -597,13 +592,15 @@ function get_menus_by_status($status){
 				array(id=>"52", title=>"值日记录", url=>"duty.php?act=list"),
 				array(id=>"53", title=>"量化分析", url=>"aly_duty.php?act=list")
 			)),
-			array(id=>"6", title=>"投诉建议",submenus=>array(
-				array(id=>"61", title=>"讨论区", url=>"forum.php?act=list"),
-				array(id=>"62", title=>"意见箱", url=>"user_msg.php?act=list")
+			array(id=>"6", title=>"教师互动",submenus=>array(
+				array(id=>"62", title=>"意见箱", url=>"message.php?act=list")
 			)),
 			array(id=>"7", title=>"短信平台",submenus=>array(
 				array(id=>"72", title=>"短信记录", url=>"sms.php?act=record")
-			))
+			)),
+			array(id=>"90", title=>"公共平台",submenus=>array(
+				array(id=>"901", title=>"讨论区", url=>"forum.php?act=list"),
+			)),
 		);
 }
 

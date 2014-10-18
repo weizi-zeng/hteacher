@@ -1,5 +1,3 @@
-DROP TABLE IF EXISTS `ht_response`;
-DROP TABLE IF EXISTS `ht_message`;
 DROP TABLE IF EXISTS `ht_notice`;
 DROP TABLE IF EXISTS `ht_log`;
 DROP TABLE IF EXISTS `ht_album`;
@@ -246,6 +244,16 @@ CREATE TABLE  `ht_course` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+DROP TABLE IF EXISTS `ht_subject`;
+CREATE TABLE  `ht_subject` (
+  `subject_id` int(10) unsigned NOT NULL auto_increment,
+  `subject` varchar(20) NOT NULL,
+  `class_code` varchar(20) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`subject_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE  `ht_album` (
   `album_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `class` int(10) unsigned NOT NULL,
@@ -294,29 +302,20 @@ CREATE TABLE  `ht_notice_attach` (
   PRIMARY KEY  (`attach_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `ht_message`;
 CREATE TABLE  `ht_message` (
-  `message_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) NOT NULL,
-  `msg` varchar(45) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `tel` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `qq` varchar(45) DEFAULT NULL,
-  `has_response` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `message_id` int(10) unsigned NOT NULL auto_increment,
+  `fid` int(10) unsigned default '0',
+  `title` varchar(45) default '',
+  `message` text NOT NULL,
+  `msg_type` smallint(5) unsigned NOT NULL default '0',
+  `to_` int(10) unsigned NOT NULL,
+  `to_type` varchar(45) NOT NULL default 'admin',
+  `from_` int(10) unsigned NOT NULL,
+  `from_type` varchar(45) NOT NULL default 'guardian',
+  `class_code` varchar(45) NOT NULL,
   `created` datetime NOT NULL,
-  `person` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE  `ht_response` (
-  `response_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(45) NOT NULL,
-  `msg` int(10) unsigned NOT NULL,
-  `response` varchar(45) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `person` int(10) unsigned NOT NULL,
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`response_id`)
+  PRIMARY KEY  (`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
