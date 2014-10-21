@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>图片查询</title>
+    
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="images/icon/favicon.ico" />
+
+    <link href="../resource/easyui/themes/default/easyui.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../resource/easyui/themes/icon.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../data/uploadify/uploadify.css" />
+    <link href="css/default.css" rel="stylesheet" type="text/css" />
+    <script src="../resource/easyui/jquery.min.js" type="text/javascript"></script>
+    <script src="../resource/easyui/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../resource/easyui/easyui-lang-zh_CN.js" type="text/javascript"></script>
+	<script src="../data/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+	
+    <script src="js/common.js" type="text/javascript"></script>
+    <script src="js/album.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+    </script>
+</head>
+<body class="easyui-layout">
+    <noscript>
+        <div style="position: absolute; z-index: 100000; height: 2046px; top: 0px; left: 0px;
+            width: 100%; text-align: center;">
+            <img src="images/noscript.gif" alt='抱歉，请开启脚本支持！' />
+        </div>
+    </noscript>
+    
+     <!-- 固定写法，用于加载ajax正在处理提示 -->
+    <div id="loadingDiv" style="display:none;"></div>
+    
+    <div title="图片列表" region="center" style="height:300px;" border="false">
+    	<table id="dgData" style="height:400px"></table>
+    
+     	<div id="toolbar" style="padding:5px;height:auto">
+    	 <div style="margin-bottom:5px;" >
+          <form id="search_form" method="post">
+                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
+                    <tr>
+                   		<td style="text-align: right; width:80px;">类型：</td>
+                        <td style="text-align: left; width:150px;">
+                        	<select id="search_album_type" name="search_album_type" style="width:110px;">
+                        		<option value="">所有...</option>
+                        		{foreach from=$album_types item=atype}
+                        		<option value="{$atype.atype_id}">{$atype.name}</option>
+                        		{/foreach}
+                        	</select>
+                        </td>
+                        
+                        <td style="text-align: left; width:150px;">
+                        	<a href="javascript:void(0)" onclick="searchalbums();" class="easyui-linkbutton" icon="icon-search">查找</a>
+                        </td>
+                        <td>&nbsp;</td>
+                    </tr>
+                </table>
+           </form>
+     	</div>
+     </div>
+    </div>
+    
+        
+    <div id="add_window" class="easyui-window" closed="true" title="上传图片" style="width: 440px;
+        height: 420px; padding: 0px;" >
+        <div class="easyui-layout" fit="true">
+            <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
+                <form id="add_form" action="album.php?act=upload" name="add_form" method="post" enctype="multipart/form-data" style="padding-top:20px;text-align:center;">
+                	<label class="warn">选择完图片，系统将自动上传！请一次性不要上传超过10M的图片！</label>
+                	<div style="text-align: left; margin-top:20px;">
+                		类型：<select id="add_album_type" name="add_album_type" style="width:110px;">
+                       		{foreach from=$album_types item=atype}
+                       		<option value="{$atype.atype_id}">{$atype.name}</option>
+                       		{/foreach}
+                       	</select>
+					</div>
+                	<div style="text-align: left; margin-top:20px;dispaly:block;">
+                		<div id="queue"></div>
+						<input id="file_upload" name="file_upload" value="选择图片" type="file" multiple="true" width="120px;"/>
+					</div>
+                </form>
+            </div>
+            <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
+		         <a onclick="cancel();" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
+		    </div>
+        </div>
+    </div>
+    
+    
+    <div id="edit_window" class="easyui-window" closed="true" title="修改" style="width: 440px; height: 180px; padding: 0px;" >
+        <div class="easyui-layout" fit="true">
+            <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
+                <form id="edit_form" name="edit_form" method="post" style="padding-top:20px;">
+                
+                <div title="隐藏参数">
+                    <input type="hidden" id="album_id" name="album_id" value="0" />
+                </div>
+                <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">
+                	<tr>
+                        <th style="text-align: right">名称：</th>
+                        <td style="width:70%">
+                        	<input type="text" id="name" name="name" class="easyui-validatebox" data-options="required:true"  maxlength="128" style="width: 180px"  />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: right">排序：</th>
+                        <td><input id="sort" name="sort" class="easyui-numberbox" data-options="required:true"  maxlength="20" style="width: 180px" /></td>
+                    </tr>
+                </table>
+                </form>
+            </div>
+            <div region="south" border="false" style="text-align: center;  height:35px; line-height: 10px; padding: 0px;">
+                <a id="save" icon="icon-save" class="easyui-linkbutton" href="javascript:void(0)">确定</a>
+                <a id="btn_edit_cancel" onclick="me.edit_window.window('close');" class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)" data-options="draggable:false">关闭</a>
+            </div>
+        </div>
+    </div>
+  
+</body>
+</html>
