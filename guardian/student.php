@@ -92,7 +92,7 @@ function student_list()
 		$filter['page'] = empty($_REQUEST['page']) ? '1'     : trim($_REQUEST['page']);
 		$filter['page_size']	= empty($_REQUEST['rows']) ? '25'     : trim($_REQUEST['rows']);
 		
-		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."'  ";//AND code='".$_SESSION["student_code"]."'
+		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' AND code='".$_SESSION["student_code"]."' ";//AND code='".$_SESSION["student_code"]."'
 		if ($filter['keywords'])
 		{
 			$ex_where .= " AND name LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";

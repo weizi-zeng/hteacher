@@ -254,17 +254,6 @@ CREATE TABLE  `ht_subject` (
   PRIMARY KEY  (`subject_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE  `ht_album` (
-  `album_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `class` int(10) unsigned NOT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `path` varchar(45) NOT NULL,
-  `filesize` varchar(45) DEFAULT NULL,
-  `removed` tinyint(1) unsigned DEFAULT '0',
-  `created` datetime NOT NULL,
-  PRIMARY KEY (`album_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 CREATE TABLE  `ht_log` (
   `log_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -453,4 +442,78 @@ CREATE TABLE  `ht_duty` (
   `class_code` varchar(20) NOT NULL,
   `created` datetime NOT NULL,
   PRIMARY KEY  (`duty_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ht_album_type`;
+CREATE TABLE  `ht_album_type` (
+  `atype_id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL,
+  `class_code` varchar(45) NOT NULL,
+  `removed` smallint(1) unsigned default '0',
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`atype_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_album`;
+CREATE TABLE  `ht_album` (
+  `album_id` int(10) unsigned NOT NULL auto_increment,
+  `class_code` varchar(45) NOT NULL,
+  `type` int(10) unsigned NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `path` varchar(225) NOT NULL,
+  `sort` int(11) default '0',
+  `filesize` varchar(45) default NULL,
+  `removed` tinyint(1) unsigned default '0',
+  `creator` int(10) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`album_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_download_type`;
+CREATE TABLE  `ht_download_type` (
+  `dtype_id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL,
+  `class_code` varchar(45) NOT NULL,
+  `removed` smallint(1) unsigned default '0',
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`dtype_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_download`;
+CREATE TABLE  `ht_download` (
+  `download_id` int(10) unsigned NOT NULL auto_increment,
+  `fid` int(10) unsigned default '0',
+  `name` varchar(128) NOT NULL,
+  `path` varchar(225) NOT NULL,
+  `sort` int(11) default '0',
+  `class_code` varchar(45) NOT NULL,
+  `filesize` varchar(45) NOT NULL,
+  `type` int(10) unsigned NOT NULL,
+  `download_num` int(10) default '0',
+  `creator` int(10) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`download_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_resource_type`;
+CREATE TABLE  `ht_resource_type` (
+  `rtype_id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL,
+  `class_code` varchar(45) NOT NULL,
+  `removed` smallint(1) unsigned default '0',
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`rtype_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ht_resource`;
+CREATE TABLE  `ht_resource` (
+  `resource_id` int(10) unsigned NOT NULL auto_increment,
+  `type` int(10) unsigned NOT NULL,
+  `title` varchar(128) NOT NULL,
+  `content` text NOT NULL,
+  `class_code` varchar(45) NOT NULL,
+  `creator` int(10) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY  (`resource_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

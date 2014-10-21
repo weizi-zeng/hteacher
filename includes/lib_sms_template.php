@@ -12,7 +12,7 @@ if (!defined('IN_ECS'))
  * 用户注册成功时短信提醒 
  */
 function sms_tmp_reg_success($guardian, $password, $regCode){
-	$content = "尊敬的".$guardian["guardian_name"]."家长，您已成功注册我爱我班系统！您的账号密码为：".$guardian["guardian_phone"]."/".$password."，注册码".$regCode."，感谢您的使用！";
+	$content = "尊敬的".$guardian["guardian_name"]."家长，您已成功注册我爱我班系统！您的账号密码为：".$guardian["guardian_phone"]."/".$password."，感谢您的使用！";
 	return $content;
 }
 

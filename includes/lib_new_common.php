@@ -500,11 +500,102 @@ function getAdminByPhone($phone){
 
 function get_user_name($id, $type='guardian'){
 	if($type=='guardian'){
-		$sql = "select name from ".$GLOBALS["ecs"]->table("guardian")." where class_code='".$_SESSION['class_code']."' and guardian_id=".$id;
-		return $GLOBALS["db"]->getOne($sql);
+		$sql = "select * from ".$GLOBALS["ecs"]->table("guardian")." where class_code='".$_SESSION['class_code']."' and guardian_id=".$id;
+		$g = $GLOBALS["db"]->getRow($sql);
+		$name = $g['student_name'].'——'.$g['name']."(家长)";
+		return $name;
 	}else {
 		$sql = "select user_name from hteacher.ht_admin_user where user_id=".$id;
 		return $GLOBALS["db"]->getOne($sql);
+	}
+}
+
+function get_album_types(){
+	$sql = "select * from ".$GLOBALS["ecs"]->table("album_type")." where class_code='".$_SESSION['class_code']."' and removed=0";
+	return $GLOBALS["db"]->getAll($sql);
+}
+
+function get_download_types(){
+	$sql = "select * from ".$GLOBALS["ecs"]->table("download_type")." where class_code='".$_SESSION['class_code']."' and removed=0";
+	return $GLOBALS["db"]->getAll($sql);
+}
+
+function get_album_type_name($id){
+	$sql = "select name from ".$GLOBALS["ecs"]->table("album_type")." where atype_id=".$id;
+	return $GLOBALS["db"]->getOne($sql);
+}
+
+function get_download_type_name($id){
+	$sql = "select name from ".$GLOBALS["ecs"]->table("download_type")." where dtype_id=".$id;
+	return $GLOBALS["db"]->getOne($sql);
+}
+
+/**
+*  生成指定目录不重名的文件名
+*
+* @access  public
+* @param   string      $dir        要检查是否有同名文件的目录
+*
+* @return  string      文件名
+*/
+function unique_name($dir)
+{
+	$filename = '';
+	while (empty($filename))
+	{
+		$filename = random_filename();
+		if (file_exists($dir . $filename . '.jpg') || file_exists($dir . $filename . '.gif') || file_exists($dir . $filename . '.png'))
+		{
+			$filename = '';
+		}
+	}
+
+	return $filename;
+}
+
+/**
+* 生成随机的数字串
+*
+* @author: weber liu
+* @return string
+*/
+function random_filename()
+{
+	$str = '';
+	for($i = 0; $i < 9; $i++)
+	{
+		$str .= mt_rand(0, 9);
+	}
+	return gmtime() . $str;
+}
+
+function get_prefix($filename){
+	$str = explode(".", $filename);
+	if(count($str)>1){
+		return $str[count($str)-1];
+	}
+	return "uk";
+}
+
+function delsvndir($svndir){
+	//先删除目录下的文件：
+	$dh=opendir($svndir);
+	while($file=readdir($dh)){
+		if($file!="."&&$file!=".."){
+			$fullpath=$svndir."/".$file;
+			if(is_dir($fullpath)){
+				delsvndir($fullpath);
+			}else{
+				unlink($fullpath);
+			}
+		}
+	}
+	closedir($dh);
+	//删除目录文件夹
+	if(rmdir($svndir)){
+		return  true;
+	}else{
+		return false;
 	}
 }
 ?>

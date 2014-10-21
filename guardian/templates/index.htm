@@ -44,8 +44,10 @@
     
     <div region="north" split="true" class="winHeader">
          <div class="userOpera">
+         	<a href="javascript:void(0);" onclick="closeTab('mm-tabupdate');">刷新页面</a>|
             <a href="javascript:void(0);" id="editpass">修改密码</a>|
             <a href="javascript:void(0);" onclick="logOut()">安全退出</a>
+            <a href="../index.php" target="_blank">查看首页</a>
         </div>
 
         <div class="userInfo">
@@ -80,57 +82,7 @@
 
  
     <div id="center" region="center" style="background: #eee; overflow-y: hidden">
-        <div id="tabs" class="easyui-tabs" fit="true" border="false">
-
-            <div title="首页" iconCls="icon-code" style="overflow: hidden; color:Black; display: block;">
-                
-                <div class="easyui-layout" data-options="fit:true,border:false">
-				    <div data-options="region:'center',border:false" style="width:540px;padding-left:20px;padding-top:20px;">
-				    	<div id="home-notice" class="easyui-panel" title="通知通告" data-options="collapsible:true" style="width:500px;height:240px;">
-		                    <ul>
-		                    {foreach from=$notices item=notice}
-		                    	<li><a href="notice.php?act=view&notice_id={$notice.notice_id}" target="blank_">{$notice.title}——{$notice.created}</a></li>
-		                    {foreachelse}
-		                     	<li>目前还没有数据</li>
-		                    {/foreach}
-		                    </ul>
-		                </div>
-		                <br/>
-		                <div id="home-notice" class="easyui-panel" title="短信消息" data-options="collapsible:true" style="width:500px;height:240px;">
-		                    <ul>
-		                         {foreach from=$sms item=sms_item}
-		                    	<li><p>{$sms_item.content}——{$sms_item.created}</p></li>
-		                   		 {foreachelse}
-		                     	<li>目前还没有数据</li>
-		                   		 {/foreach}
-		                    </ul>
-		                </div>
-				    </div>
-				    <div data-options="region:'west',border:false" style="width:540px;padding-left:20px;padding-top:20px;">
-				    	<div id="home-notice" class="easyui-panel" title="讨论区" data-options="collapsible:true" style="width:500px;height:240px;">
-		                    <ul>
-		                           {foreach from=$forums item=forum}
-		                    	<li><a href="forum.php?act=view&forum_id={$forum.forum_id}" target="blank_">{$forum.title}——{$forum.created}</a></li>
-		                   		{foreachelse}
-		                     	<li>目前还没有数据</li>
-		                   		 {/foreach}
-		                    </ul>
-		                </div>
-		                <br/>
-		                <div id="home-notice" class="easyui-panel" title="意见箱" data-options="collapsible:true" style="width:500px;height:240px;">
-		                    <ul>
-		                          {foreach from=$msg_list item=msg_item}
-		                    	<li><a href="message.php?act=view&message_id={$msg_item.message_id}" target="blank_">{$msg_item.message}——{$msg_item.from_user}——{$msg_item.created}</a></li>
-		                   		{foreachelse}
-		                     	<li>目前还没有数据</li>
-		                   		 {/foreach}
-		                    </ul>
-		                </div>
-				    </div>
-				</div>
-            </div>
-
-        </div>
+        <div id="tabs" class="easyui-tabs" fit="true" border="false"></div>
     </div>
     
     <div id="win_changepwd" class="easyui-window" closed="true" title="修改密码" icon="icon-save" style="width: 350px; height: 190px; padding: 5px; background: #fafafa;">

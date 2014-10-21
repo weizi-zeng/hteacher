@@ -2,13 +2,15 @@
 
 define('IN_ECS',true);
 
-$str2 = intval("-24");
 
+echo get_prefix("asdfaasd*asdfase.xt");
 
-echo $str2; echo '<br>';
-
-
-
-
+function get_prefix($filename){
+	$str = explode(".", $filename);
+	if(count($str)>1){
+		return $str[count($str)-1];
+	}
+	return "uk";
+}
 
 ?>

@@ -16,10 +16,12 @@ define('IN_ECS', true);
 
 require(dirname(__FILE__) . '/includes/init.php');
 
+$_REQUEST['act'] = empty($_REQUEST['act'])?'signin':$_REQUEST['act'];
+
 /*------------------------------------------------------ */
 //-- 框架
 /*------------------------------------------------------ */
-if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
+if ($_REQUEST['act']=='list' || $_REQUEST['act'] == 'signin')
 {
 	$admin["admin_name"] = $_SESSION["admin_name"];
 	
@@ -32,35 +34,6 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	
 	$status = get_status($_SESSION["status_id"]);
 	$smarty->assign('status', $status);
-	
-	/*
-	 * 通知通告
-		讨论信息
-		短信信息
-		班级相册
-	 */
-	//通知通告
-	$sql = "select * from ".$ecs->table("notice")." where class_code='".$_SESSION["class_code"]."' order by notice_id desc limit 20";
-	$notices = $db->getAll($sql);
-	$smarty->assign('notices', $notices);
-	
-	//意见箱回复
-	$sql = "select * from ".$ecs->table("message")." where to_type='admin' and to_='".$_SESSION["admin_id"]."' order by message_id desc limit 20";
-	$msg_list = $db->getAll($sql);
-	foreach($msg_list as $k=>$msg){
-		$msg_list[$k]['from_user'] = get_user_name($msg['from_'], $msg['from_type']);
-	}
-	$smarty->assign('msg_list', $msg_list);
-	
-	//短信
-	$sql = "select * from ".$ecs->table("sms")." where class_code='".$_SESSION["class_code"]."' order by sms_id desc limit 20";
-	$sms = $db->getAll($sql);
-	$smarty->assign('sms', $sms);
-	
-	//讨论信息
-	$sql = "select * from ".$ecs->table("forum")." where parent_id=0 and is_active=1 order by forum_id desc limit 20";
-	$forums = $db->getAll($sql);
-	$smarty->assign('forums', $forums);
 	
     $smarty->display('index.htm');
 }
@@ -618,14 +591,15 @@ function get_menus_by_status($status){
 			array(id=>"20", title=>"班级公告",submenus=>array(
 				array(id=>"201", title=>"通知通告", url=>"notice.php?act=list")
 			)),
-// 			array(id=>"21", title=>"班级展示",submenus=>array(
-// 				array(id=>"211", title=>"展示类型", url=>"show_type.php?act=list"),
-// 				array(id=>"212", title=>"图片管理", url=>"show.php?act=list")
-// 			)),
-// 			array(id=>"22", title=>"上传下载",submenus=>array(
-// 				array(id=>"221", title=>"文件类型", url=>"download_type.php?act=list"),
-// 				array(id=>"222", title=>"下载管理", url=>"download.php?act=list")
-// 			)),
+			array(id=>"21", title=>"班级展示",submenus=>array(
+				array(id=>"211", title=>"展示类型", url=>"album_type.php?act=list"),
+				array(id=>"212", title=>"图片管理", url=>"album.php?act=list"),
+				array(id=>"213", title=>"图片展示", url=>"album_show.php?act=list")
+			)),
+			array(id=>"22", title=>"上传下载",submenus=>array(
+				array(id=>"221", title=>"上传类型", url=>"download_type.php?act=list"),
+				array(id=>"222", title=>"下载管理", url=>"download.php?act=list")
+			)),
 			array(id=>"70", title=>"投诉建议",submenus=>array(
 				array(id=>"701", title=>"给超级管理员意见", url=>"user_msg.php?act=list")
 			)),
@@ -635,7 +609,7 @@ function get_menus_by_status($status){
 			)),
 			array(id=>"90", title=>"公共平台",submenus=>array(
 				array(id=>"901", title=>"讨论区", url=>"forum.php?act=list")
-// 				array(id=>"902", title=>"资料库", url=>"library.php?act=list"),
+// 				array(id=>"902", title=>"资料库", url=>"library.php?act=list")
 			)),
 		);
 	}

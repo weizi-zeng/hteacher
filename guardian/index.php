@@ -573,9 +573,6 @@ function get_menus_by_status($status){
 				array(id=>"14", title=>"教师信息", url=>"teacher.php?act=list"),
 				array(id=>"15", title=>"课程安排表", url=>"course.php?act=list")
 			)),
-			array(id=>"2", title=>"班级公告",submenus=>array(
-				array(id=>"21", title=>"通知通告", url=>"notice.php?act=list")
-			)),
 			array(id=>"3", title=>"成绩管理",submenus=>array(
 				array(id=>"33", title=>"考试安排", url=>"exam.php?act=list"),
 				array(id=>"34", title=>"考试成绩", url=>"score.php?act=list"),
@@ -594,6 +591,19 @@ function get_menus_by_status($status){
 			)),
 			array(id=>"6", title=>"教师互动",submenus=>array(
 				array(id=>"62", title=>"意见箱", url=>"message.php?act=list")
+			)),
+			array(id=>"20", title=>"班级公告",submenus=>array(
+				array(id=>"201", title=>"通知通告", url=>"notice.php?act=list")
+			)),
+			array(id=>"21", title=>"班级展示",submenus=>array(
+				array(id=>"212", title=>"图片查询", url=>"album.php?act=list"),
+				array(id=>"213", title=>"图片展示", url=>"album_show.php?act=list")
+			)),
+			array(id=>"22", title=>"上传下载",submenus=>array(
+				array(id=>"222", title=>"文件下载", url=>"download.php?act=list")
+			)),
+			array(id=>"70", title=>"投诉建议",submenus=>array(
+				array(id=>"701", title=>"给超级管理员意见", url=>"user_msg.php?act=list")
 			)),
 			array(id=>"7", title=>"短信平台",submenus=>array(
 				array(id=>"72", title=>"短信记录", url=>"sms.php?act=record")

@@ -60,7 +60,7 @@
       <div style=" float: left;"><span>附　件</span></div>
       <div style="clear:both;"></div>
        {foreach from=$attachs item=at}
-       <div><a href="download.php?path={$at.path}" target="_blank">{$at.name}&nbsp;&nbsp;({$at.size}kb)</a></div>
+       <div><a href="download.php?act=download&path={$at.path}" target="_blank">{$at.name}&nbsp;&nbsp;({$at.size}kb)</a></div>
        {/foreach}
        {/if}
        
