@@ -147,8 +147,12 @@
 			                        			<td>
 			                        				{$student.code}-{$student.name}
 			                        			</td>
-			                        			<td><input name="add_rank_{$student.code}" class="easyui-numberbox" data-options="min:0,precision:0"  maxlength="10" style="width: 80px" /></td>
-			                        			<td><input name="add_up_down_{$student.code}" class="easyui-numberbox" data-options="precision:0"  maxlength="10" style="width: 80px" /></td>
+			                        			<td>
+			                        				<input name="add_rank_{$student.code}" class="easyui-numberspinner" style="width:80px;"  data-options="min:1,max:100000,editable:true"/>
+			                        			</td>
+			                        			<td>
+			                        				<input name="add_up_down_{$student.code}" class="easyui-numberspinner" style="width:80px;"  data-options="min:1,max:100000,editable:true"/>
+			                        			</td>
 			                        		</tr>
 			                        		{/foreach}
 			                        	</table>
