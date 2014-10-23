@@ -448,7 +448,7 @@ CREATE TABLE  `ht_duty` (
 DROP TABLE IF EXISTS `ht_album_type`;
 CREATE TABLE  `ht_album_type` (
   `atype_id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) NOT NULL,
+  `name` varchar(128) NOT NULL,
   `class_code` varchar(45) NOT NULL,
   `removed` smallint(1) unsigned default '0',
   `created` datetime NOT NULL,
@@ -473,7 +473,7 @@ CREATE TABLE  `ht_album` (
 DROP TABLE IF EXISTS `ht_download_type`;
 CREATE TABLE  `ht_download_type` (
   `dtype_id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) NOT NULL,
+  `name` varchar(128) NOT NULL,
   `class_code` varchar(45) NOT NULL,
   `removed` smallint(1) unsigned default '0',
   `created` datetime NOT NULL,
@@ -499,7 +499,7 @@ CREATE TABLE  `ht_download` (
 DROP TABLE IF EXISTS `ht_resource_type`;
 CREATE TABLE  `ht_resource_type` (
   `rtype_id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) NOT NULL,
+  `name` varchar(128) NOT NULL,
   `class_code` varchar(45) NOT NULL,
   `removed` smallint(1) unsigned default '0',
   `created` datetime NOT NULL,

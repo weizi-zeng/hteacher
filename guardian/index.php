@@ -608,7 +608,7 @@ function get_menus_by_status($status){
 			array(id=>"7", title=>"短信平台",submenus=>array(
 				array(id=>"72", title=>"短信记录", url=>"sms.php?act=record")
 			)),
-			array(id=>"90", title=>"公共平台",submenus=>array(
+			array(id=>"90", title=>"公共论坛",submenus=>array(
 				array(id=>"901", title=>"讨论区", url=>"forum.php?act=list"),
 			)),
 		);

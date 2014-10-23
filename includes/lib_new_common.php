@@ -520,6 +520,11 @@ function get_download_types(){
 	return $GLOBALS["db"]->getAll($sql);
 }
 
+function get_resource_types(){
+	$sql = "select * from ".$GLOBALS["ecs"]->table("resource_type")." where class_code='".$_SESSION['class_code']."' and removed=0";
+	return $GLOBALS["db"]->getAll($sql);
+}
+
 function get_album_type_name($id){
 	$sql = "select name from ".$GLOBALS["ecs"]->table("album_type")." where atype_id=".$id;
 	return $GLOBALS["db"]->getOne($sql);
@@ -530,6 +535,10 @@ function get_download_type_name($id){
 	return $GLOBALS["db"]->getOne($sql);
 }
 
+function get_resource_type_name($id){
+	$sql = "select name from ".$GLOBALS["ecs"]->table("resource_type")." where rtype_id=".$id;
+	return $GLOBALS["db"]->getOne($sql);
+}
 /**
 *  生成指定目录不重名的文件名
 *

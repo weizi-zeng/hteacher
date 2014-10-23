@@ -607,9 +607,12 @@ function get_menus_by_status($status){
 				array(id=>"801", title=>"自定义短信", url=>"sms.php?act=def"),
 				array(id=>"802", title=>"短信记录", url=>"sms.php?act=record")
 			)),
-			array(id=>"90", title=>"公共平台",submenus=>array(
-				array(id=>"901", title=>"讨论区", url=>"forum.php?act=list")
-// 				array(id=>"902", title=>"资料库", url=>"library.php?act=list")
+			array(id=>"90", title=>"公共资料",submenus=>array(
+				array(id=>"901", title=>"资料类型", url=>"resource_type.php?act=list"),
+				array(id=>"902", title=>"资料库", url=>"resource.php?act=list")
+			)),
+			array(id=>"100", title=>"公共论坛",submenus=>array(
+				array(id=>"10001", title=>"讨论区", url=>"forum.php?act=list")
 			)),
 		);
 	}
