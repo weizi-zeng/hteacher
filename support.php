@@ -26,7 +26,7 @@
 	$title = "技术支持";
 	require_once 'themes/default/header.htm';
 ?>
-  
+
   <script type="text/javascript">
 		function submsg(o){
 			if(!$("#e_mail").val()){

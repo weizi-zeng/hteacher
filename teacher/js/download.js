@@ -25,12 +25,6 @@
             	save(e);
             });
             
-            $('#add').click(function(e){
-            	if ($(this).linkbutton("options").disabled) {
-                    return;
-                }
-            	adddownload(e);
-            });
         }
 
         //加载数据列表

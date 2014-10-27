@@ -109,7 +109,7 @@
         	$("#album_id").val(row.album_id);
         	$("#path").val(row.path);
         	$("#name").val(row.name);
-        	$('#sort').numberbox('setValue', row.sort);
+        	$("#sort").val(row.sort);
 
              me.edit_window.window('open');
              

@@ -8,7 +8,6 @@
 	
 	$problems_id = empty($_REQUEST["problems_id"])?"0":intval($_REQUEST["problems_id"]);
 ?>
-  <link href="themes/default/css/notice.css" rel="stylesheet" type="text/css" />
   
   <div class="content" id="cont" style="overflow:hidden">
     <div class="left" style="overflow:hidden">

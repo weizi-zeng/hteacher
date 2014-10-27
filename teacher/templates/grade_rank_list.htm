@@ -173,7 +173,7 @@
         height: 220px; padding: 0px;" >
         <div class="easyui-layout" fit="true">
             <div region="center" border="false" fit="true" style="padding: 0px; background: #fff; border: 0px;">
-                <form id="edit_form" name="edit_form" method="post" style="padding-top:20px;">
+                <form id="edit_form" name="edit_form" method="post" style="padding-top:20px;" onkeydown="if(event.keyCode==13) save();" onsubmit="return false;">
                 
                 <div title="隐藏参数">
                     <input type="hidden" id="grank_id" name="grank_id" value="0" />

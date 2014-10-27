@@ -102,6 +102,8 @@
             });
             showLoading(e);
         	$("#save").linkbutton('disable');
+        }else {
+        	return false;
         }
     }
     

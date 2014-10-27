@@ -947,6 +947,7 @@ function GridColSorter(val1, val2) {
 
 
 function showLoading(e, title, left, top) {
+	var e = e || window.event; 
     if (!title) {
         title = "正在为您努力处理中，请稍等...";
     }

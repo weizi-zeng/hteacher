@@ -6,6 +6,7 @@
 	$msg = "";
 	require_once 'themes/default/header.htm';
 ?>
+
   <div class="content" id="cont" style="overflow:hidden">
     <div class="left" style="overflow:hidden">
     	<div width="100%" width="674px">

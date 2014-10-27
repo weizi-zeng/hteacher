@@ -45,7 +45,7 @@
     <div id="loadingDiv" style="display:none;"></div>
     
     <div title="数据列表" region="center" style="height:300px;" border="false">
-     <form id="edit_form" method="post">
+     <form id="edit_form" method="post" onkeydown="if(event.keyCode==13) save();" onsubmit="return false;">
      	<div id="toolbar" style="padding:5px;height:auto">
     	 <div style="height:40px;margin-bottom:5px;" >
                 <table width="100%" cellspacing="1" cellpadding="0" border="0" class="form_table">

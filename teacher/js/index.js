@@ -184,11 +184,12 @@ function createFrame(url) {
 function tabClose() {
   /*双击单独打开TAB选项卡*/
   $(".tabs-inner").not(":first").dblclick(function () {
-      var currentTab = $('#tabs').tabs('getSelected');
-      var iframe = $(currentTab.panel('options').content);
-      window.open(iframe.attr('src'));
-      //        var subtitle = $(this).children(".tabs-closable").text();
-      //        $('#tabs').tabs('close', subtitle);
+//      var currentTab = $('#tabs').tabs('getSelected');
+//      var iframe = $(currentTab.panel('options').content);
+//      window.open(iframe.attr('src'));
+	  
+      var subtitle = $(this).children(".tabs-closable").text();
+      $('#tabs').tabs('close', subtitle);
   })
 
   /*为选项卡绑定右键*/
