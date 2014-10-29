@@ -34,36 +34,6 @@ if ($_REQUEST['act'] == '' || $_REQUEST['act'] == 'signin')
 	$status = get_status($_SESSION["status_id"]);
 	$smarty->assign('status', $status);
 	
-	/*
-	 * 通知通告
-		讨论信息
-		短信信息
-		班级相册
-	 */
-	//通知通告
-	$sql = "select * from ".$ecs->table("notice")." where class_code='".$_SESSION["class_code"]."'  order by notice_id desc limit 20";
-	$notices = $db->getAll($sql);
-	$smarty->assign('notices', $notices);
-	
-	$guardian = get_guardian($class_code, $_SESSION["student_code"]);
-	//意见箱回复
-	$sql = "select * from ".$ecs->table("message")." where to_type='guardian' and to_='".$guardian["guardian_id"]."' order by message_id desc limit 20";
-	$msg_list = $db->getAll($sql);
-	foreach($msg_list as $k=>$msg){
-		$msg_list[$k]['from_user'] = get_user_name($msg['from_'], $msg['from_type']);
-	}
-	$smarty->assign('msg_list', $msg_list);
-	
-	//短信
-	$sql = "select * from ".$ecs->table("sms")." where phones like '%".$_SESSION["phone"]."%' order by sms_id desc limit 20";
-	$sms = $db->getAll($sql);
-	$smarty->assign('sms', $sms);
-	
-	//讨论信息
-	$sql = "select * from ".$ecs->table("forum")." where parent_id=0 and is_active=1 order by forum_id desc limit 20";
-	$forums = $db->getAll($sql);
-	$smarty->assign('forums', $forums);
-	
     $smarty->display('index.htm');
 }
 

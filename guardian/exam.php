@@ -225,7 +225,7 @@ function exam_list()
 		$ex_where = " WHERE class_code='".$_SESSION["class_code"]."' ";
 		if ($filter['prj_id'])
 		{
-			$ex_where .= " AND prj_id like '" . mysql_like_quote($filter['prj_id']) ."%'";
+			$ex_where .= " AND prj_id = '" . mysql_like_quote($filter['prj_id']) ."'";
 		}
 		if ($filter['subject'])
 		{

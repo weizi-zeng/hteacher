@@ -39,7 +39,7 @@ require(dirname(__FILE__) . '/includes/init.php');
 	$smarty->assign('msg_list', $msg_list);
 	
 	//短信
-	$sql = "select * from ".$ecs->table("sms")." where class_code='".$_SESSION["class_code"]."' order by sms_id desc limit 20";
+	$sql = "select * from ".$ecs->table("sms")." where phones like '%".$_SESSION["phone"]."%' order by sms_id desc limit 20";
 	$sms = $db->getAll($sql);
 	$smarty->assign('sms', $sms);
 	
