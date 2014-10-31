@@ -179,6 +179,7 @@ $_LANG['03_admin_add'] = '添加超级管理员';
 /* 注册码管理 */
 $_LANG['02_license_create'] = '生成注册码';
 $_LANG['03_license_list'] = '注册码列表';
+$_LANG['04_license_statistics'] = '使用情况';
 
 /* 系统日志 */
 $_LANG['04_admin_logs'] = '管理员日志';

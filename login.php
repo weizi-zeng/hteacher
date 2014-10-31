@@ -350,6 +350,10 @@ if ($_REQUEST['act'] == 'register')
 	
 	$guardian = getGuardianById($_POST['student_id'], $_POST['school_code']);
 	$guardian["school_code"] = $_POST['school_code'];
+	if($guardian["license"] && $guardian["is_active"]){
+		register_display($guardian, "您已经注册！注册码为“".$guardian["license"]."”，且当前有效，无需重复注册！");
+		exit;
+	}
 	
 	//检验注册码
 	$res = validateRegCode($_POST['regCode']);
@@ -495,7 +499,7 @@ function register_system($guardian,$school,$regCode,$password){
 	$sql = "update ".$table." set license='$regCode',password='".md5($password)."', is_active=1 where student_id=".$guardian['student_id'];
 	$GLOBALS["db"]->query($sql);
 	
-	$sql = "update hteacher.ht_license set is_active=1, regtime=now() where license='$regCode'";
+	$sql = "update hteacher.ht_license set state=1, regtime=now(), student_id=".$guardian['student_id'].", class_code='".$guardian['class_code']."', school_code='".$school."' where license='$regCode'";
 	$GLOBALS["db"]->query($sql);
 	
 	//发送短信提醒

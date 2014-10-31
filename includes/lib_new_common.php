@@ -148,6 +148,12 @@ function get_class_name($class_code)
 	return $GLOBALS['db']->getOne($sql);
 }
 
+function get_class_name_global($db, $class_code)
+{
+	$sql = "select name from ".$db.".ht_class where code='".$class_code."'";
+	return $GLOBALS['db']->getOne($sql);
+}
+
 function getWeekName($weekday){
 	$week = array(
 		"星期日",
@@ -183,6 +189,12 @@ function get_students($class_code, $orderby='')
 function get_student_name($class_code, $student_code)
 {
 	$sql = "select name from ".$GLOBALS['ecs']->table("student")." where class_code= '" . $class_code."' and code='".$student_code."'";
+	return $GLOBALS['db']->getOne($sql);
+}
+
+function get_student_name_global($db, $class_code, $student_id)
+{
+	$sql = "select name from ".$db.".ht_student where class_code= '" . $class_code."' and student_id='".$student_id."'";
 	return $GLOBALS['db']->getOne($sql);
 }
 
@@ -467,10 +479,12 @@ function validateRegCode($regCode){
 		if($license["removed"]){
 			return array("error"=>1,"msg"=>"您的注册码已经被废弃！");
 		}
-		if($license["is_active"]){
+		if($license["state"]>0){
 			return array("error"=>1,"msg"=>"您的注册码已经被使用！");
 		}
-
+		if($license["state"]<0){
+			return array("error"=>1,"msg"=>"您的注册码已经失效！");
+		}
 		$today = date("Y-m-d");
 		if($license["sdate"]>$today){
 			return array("error"=>1,"msg"=>"您的注册码要到".$license["sdate"]."才能生效！");

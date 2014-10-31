@@ -91,7 +91,7 @@ $modules['10_priv_admin']['03_admin_add']             = 'admin.php?act=add';
 //注册码
 $modules['10_license_manage']['02_license_create']             = 'license.php?act=create';
 $modules['10_license_manage']['03_license_list']             = 'license.php?act=list';
-
+$modules['10_license_manage']['04_license_statistics']             = 'license_statistics.php?act=list';
 
 $modules['10_sys_log']['04_admin_logs']             = 'admin_logs.php?act=list';
 

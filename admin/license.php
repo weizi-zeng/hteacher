@@ -108,6 +108,8 @@ elseif ($_REQUEST['act']== 'list')
     $smarty->display('license_list.htm');
 }
 
+
+
 /*------------------------------------------------------ */
 //-- ajax返回注册码列表
 /*------------------------------------------------------ */
@@ -342,7 +344,7 @@ function license_list()
 		
 		/* 过滤条件 */
 		$filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);//注册码
-		$filter['is_active'] = $_REQUEST['is_active']==="" ? -1 : intval($_REQUEST['is_active']);//注册码
+		$filter['state'] = $_REQUEST['state']==="" ? -10 : intval($_REQUEST['state']);//注册码
 		$filter['sdate'] = empty($_REQUEST['sdate']) ? '' : trim($_REQUEST['sdate']);//注册码
 		$filter['edate'] = empty($_REQUEST['edate']) ? '' : trim($_REQUEST['edate']);//注册码
 		
@@ -359,9 +361,9 @@ function license_list()
 		{
 			$ex_where .= " AND license LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
 		}
-		if ($filter['is_active']>-1)
+		if ($filter['state']>-10)
 		{
-			$ex_where .= " AND is_active = '" . $filter['is_active'] ."'";
+			$ex_where .= " AND state = '" . $filter['state'] ."'";
 		}
 		if ($filter['sdate'])
 		{
@@ -413,7 +415,7 @@ function license_list_export()
 {
 		/* 过滤条件 */
 		$filter['keywords'] = empty($_REQUEST['keywords']) ? '' : trim($_REQUEST['keywords']);//注册码
-		$filter['is_active'] = $_REQUEST['is_active']==="" ? -1 : intval($_REQUEST['is_active']);//注册码
+		$filter['state'] = $_REQUEST['state']==="" ? -10 : intval($_REQUEST['state']);//注册码
 		$filter['sdate'] = empty($_REQUEST['sdate']) ? '' : trim($_REQUEST['sdate']);//注册码
 		$filter['edate'] = empty($_REQUEST['edate']) ? '' : trim($_REQUEST['edate']);//注册码
 
@@ -427,9 +429,9 @@ function license_list_export()
 		{
 			$ex_where .= " AND license LIKE '%" . mysql_like_quote($filter['keywords']) ."%'";
 		}
-		if ($filter['is_active']>-1)
+		if ($filter['state']>-10)
 		{
-			$ex_where .= " AND is_active = '" . $filter['is_active'] ."'";
+			$ex_where .= " AND state = '" . $filter['state'] ."'";
 		}
 		if ($filter['sdate'])
 		{

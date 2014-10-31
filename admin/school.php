@@ -342,6 +342,11 @@ elseif ($_REQUEST['act'] == 'remove')
     $db->query("delete from " . $ecs->table('school') . "  where school_id = '" . $_GET['id'] . "'");
     $db->query("drop database if EXISTS " . $school['code'] . "_school ");
     
+    //删除相关的所有管理员
+//     $db->query("delete from " . $ecs->table('admin_user') . "  where school_code = '" . $school['code'] . "'");
+//     //使注册表中的所有注册码失效
+//     $db->query("update " . $ecs->table('license') . " set state=-1, removed=1, memo='".$school['name']."已经被删除' where school_code = '" . $school['code'] . "'");
+    
     /* 记录管理员操作 */
     admin_log(addslashes($school['name']), 'remove', 'school');
 

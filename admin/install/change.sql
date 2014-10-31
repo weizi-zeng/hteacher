@@ -27,3 +27,12 @@ CREATE TABLE  `hteacher`.`ht_education` (
   PRIMARY KEY  (`education_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+ALTER TABLE `hteacher`.`ht_license` CHANGE COLUMN `is_active` `state` SMALLINT(1) UNSIGNED DEFAULT 0;
+ALTER TABLE `hteacher`.`ht_license` MODIFY COLUMN `state` SMALLINT(1) DEFAULT 0,
+ ADD COLUMN `pay_id` INTEGER UNSIGNED DEFAULT 0 AFTER `regtime`,
+ ADD COLUMN `student_id` INTEGER UNSIGNED DEFAULT 0 AFTER `pay_id`,
+ ADD COLUMN `class_code` VARCHAR(45) DEFAULT 0 AFTER `student_id`,
+ ADD COLUMN `school_code` VARCHAR(45) DEFAULT '' AFTER `class_code`,
+ ADD COLUMN `memo` VARCHAR(128) DEFAULT '' AFTER `school_code`;
+ 
+ 

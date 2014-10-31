@@ -41,6 +41,7 @@ if (!defined('IN_ECS'))
     
     $purview['02_license_create']        = 'license_manage';
     $purview['03_license_list']         = 'license_manage';
+    $purview['04_license_statistics']         = 'license_manage';
     
     $purview['04_admin_logs']           = array('logs_manage', 'logs_drop');
 //     $purview['agency_list']          = 'agency_manage';
