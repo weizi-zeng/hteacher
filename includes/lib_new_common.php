@@ -621,4 +621,139 @@ function delsvndir($svndir){
 		return false;
 	}
 }
+
+function get_article_syscat(){
+	$sql = "select * from " .$GLOBALS['ecs']->table('article_cat'). "  where parent_id=0 and cat_id!=1 ";
+	return $GLOBALS['db']->getAll($sql);
+}
+
+function get_article_by_cat($cat_id=0, $limit=0, $is_important=-1){
+	$sql = "select * from " .$GLOBALS['ecs']->table('article'). "  where is_open=1  ";
+	if($cat_id>0){
+		$sql .= " and cat_id=".$cat_id." ";
+	}
+	if($is_important>-1){
+		$sql .= " and is_important=".$is_important." ";
+	}
+	$sql .= " order by article_id desc ";
+	if($limit>0){
+		$sql .= " limit ".$limit;
+	}
+	
+// 	echo $sql;
+	
+	$rows = $GLOBALS['db']->getAll($sql);
+	$arr = array();
+	foreach ($rows as $row)
+	{
+		$row['date'] = local_date('Y-m-d', $row['add_time']);
+		$row['add_time'] = local_date('Y-m-d H:i:s', $row['add_time']);
+		$row['alt'] = $row['title'];
+		$row['short_title'] = sub_str($row['title'], 13);
+		$row['middle_title'] = sub_str($row['title'], 16);
+		
+	    $arr[] = $row;
+	}
+	return $arr;
+}
+
+
+
+/* 获得文章列表 */
+function get_articles_list($cat_id=0, $page_size=20, $is_important=-1, $keyword='', $sort_by='a.article_id', $sort_order='DESC')
+{
+		$filter = array();
+		$filter['keyword']    = $keyword;
+		$filter['cat_id'] = $cat_id;
+		$filter['sort_by']    = $sort_by;
+		$filter['sort_order'] = $sort_order;
+		$filter['page_size']	= $page_size;
+
+		$where = '';
+		if (!empty($filter['keyword']))
+		{
+			$where = " AND a.title LIKE '%" . mysql_like_quote($filter['keyword']) . "%'";
+		}
+		if ($filter['cat_id'])
+		{
+			$where .= " AND a." . get_article_children($filter['cat_id']);
+		}
+		if($is_important>-1){
+			$where .= " AND a.is_important=".$is_important." ";
+		}
+		
+		/* 文章总数 */
+		$sql = 'SELECT COUNT(*) FROM ' .$GLOBALS['ecs']->table('article'). ' AS a '.
+               'LEFT JOIN ' .$GLOBALS['ecs']->table('article_cat'). ' AS ac ON ac.cat_id = a.cat_id '.
+               'WHERE is_open=1  ' .$where;
+		$filter['record_count'] = $GLOBALS['db']->getOne($sql);
+
+		$filter = page_and_size_new($filter);
+
+		/* 获取文章数据 */
+		$sql = 'SELECT a.* , ac.cat_name '.
+               'FROM ' .$GLOBALS['ecs']->table('article'). ' AS a '.
+               'LEFT JOIN ' .$GLOBALS['ecs']->table('article_cat'). ' AS ac ON ac.cat_id = a.cat_id '.
+               'WHERE is_open=1  ' .$where. ' ORDER by '.$filter['sort_by'].' '.$filter['sort_order'];
+
+		$filter['keyword'] = stripslashes($filter['keyword']);
+		
+	$arr = array();
+	$res = $GLOBALS['db']->selectLimit($sql, $filter['page_size'], $filter['start']);
+
+	while ($rows = $GLOBALS['db']->fetchRow($res))
+	{
+		$rows['date'] = local_date('Y-m-d', $rows['add_time']);
+		$rows['add_time'] = local_date('Y-m-d H:i:s', $rows['add_time']);
+		$rows['alt'] = $rows['title'];
+		$rows['short_title'] = sub_str($rows['title'], 13);
+		$rows['middle_title'] = sub_str($$rows['title'], 16);
+		$arr[] = $rows;
+	}
+	return array('arr' => $arr, 'filter' => $filter, 'page_count' => $filter['page_count'], 'record_count' => $filter['record_count']);
+}
+
+
+
+/**
+ * 分页的信息加入条件的数组
+ *
+ * @access  public
+ * @return  array
+ */
+function page_and_size_new($filter)
+{
+	if(empty($filter['page_size'])){
+		if (isset($_REQUEST['page_size']) && intval($_REQUEST['page_size']) > 0)
+		{
+			$filter['page_size'] = intval($_REQUEST['page_size']);
+		}
+		elseif (isset($_COOKIE['ECSCP']['page_size']) && intval($_COOKIE['ECSCP']['page_size']) > 0)
+		{
+			$filter['page_size'] = intval($_COOKIE['ECSCP']['page_size']);
+		}
+		else
+		{
+			$filter['page_size'] = 25;
+		}
+	}
+
+	/* 每页显示 */
+	$filter['page'] = (empty($_REQUEST['page']) || intval($_REQUEST['page']) <= 0) ? 1 : intval($_REQUEST['page']);
+
+	/* page 总数 */
+	$filter['page_count'] = (!empty($filter['record_count']) && $filter['record_count'] > 0) ? ceil($filter['record_count'] / $filter['page_size']) : 1;
+
+	/* 边界处理 */
+	if ($filter['page'] > $filter['page_count'])
+	{
+		$filter['page'] = $filter['page_count'];
+	}
+
+	$filter['start'] = ($filter['page'] - 1) * $filter['page_size'];
+
+	return $filter;
+}
+
+
 ?>

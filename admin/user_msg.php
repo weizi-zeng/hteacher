@@ -77,7 +77,7 @@ if ($_REQUEST['act']=='insert')
 {
     $sql = "INSERT INTO " . $ecs->table('feedback') . "(parent_id, user_id, user_name, user_email, msg_title, msg_type, msg_content, msg_time, message_img, order_id)" .
             " VALUES (0, '$_POST[user_id]', '$_SESSION[admin_name]', ' ', ".
-            " '$_POST[msg_title]', 1, '$_POST[msg_content]', '" . gmtime() . "', '', '$_POST[order_id]')";
+            " '$_POST[msg_title]', 0, '$_POST[msg_content]', '" . gmtime() . "', '', '$_POST[order_id]')";
 
     $db->query($sql);
 

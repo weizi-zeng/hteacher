@@ -17,6 +17,9 @@ if (!defined('IN_ECS'))
 {
     die('Hacking attempt');
 }
+//文章管理权限
+	$purview['02_articlecat_list']   = 'article_cat';
+	$purview['03_article_list']      = 'article_manage';
 
 //会员管理权限
     $purview['03_school_list']        = 'school_manage';
@@ -29,11 +32,11 @@ if (!defined('IN_ECS'))
 //     $purview['09_classAdmin_list']        = 'classAdmin_manage';
 //     $purview['10_classAdmin_add']         = 'classAdmin_manage';
     
-    $purview['01_education_list']        = 'education_manage';
-    $purview['02_education_add']         = 'education_manage';
+//     $purview['01_education_list']        = 'education_manage';
+//     $purview['02_education_add']         = 'education_manage';
     
-    $purview['01_problems_list']        = 'problems_manage';
-    $purview['02_problems_add']         = 'problems_manage';
+//     $purview['01_problems_list']        = 'problems_manage';
+//     $purview['02_problems_add']         = 'problems_manage';
     
 //权限管理
     $purview['02_admin_list']           = array('admin_manage', 'admin_drop', 'allot_priv');

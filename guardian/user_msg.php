@@ -42,7 +42,7 @@ elseif ($_REQUEST['act'] == 'ajax_save')
 	$sql = "INSERT INTO " . $table . "(parent_id, user_id, user_name, user_email, msg_title, 
 	                                                 msg_type, msg_content, msg_time, msg_status, msg_from)" .
 	            " VALUES (0, '$_SESSION[admin_id]', '$_SESSION[admin_name]', ' ', ".
-	            " '$_POST[msg_title]', 5, '$_POST[msg_content]', '" . gmtime() . "', '0', 'class')";
+	            " '$_POST[msg_title]', 0, '$_POST[msg_content]', '" . gmtime() . "', '0', 'class')";
 	
 	$db->query($sql);
 

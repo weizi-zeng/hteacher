@@ -130,6 +130,7 @@ $_LANG['kilogram'] = '千克';
 
 /* 菜单分类部分 */
 //系统管理员
+$_LANG['07_content'] = '文章管理';
 $_LANG['08_members'] = '会员管理';
 $_LANG['08_schools'] = '学校管理';
 $_LANG['09_advice'] = '系统留言';
@@ -163,6 +164,12 @@ $_LANG['02_schoolAdmin_msg'] = '学校管理员意见';
 $_LANG['03_classAdmin_msg'] = '班主任意见';
 $_LANG['04_customer_msg'] = '家长投诉';
 $_LANG['05_other_msg'] = '外围区意见箱';
+
+/* 文章管理 */
+$_LANG['02_articlecat_list'] = '文章分类';
+$_LANG['articlecat_add'] = '添加文章分类';
+$_LANG['03_article_list'] = '文章列表';
+$_LANG['article_add'] = '添加新文章';
 
 /*教育园地*/
 $_LANG['01_education_list'] = '文章列表';

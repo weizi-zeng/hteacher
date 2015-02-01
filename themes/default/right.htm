@@ -90,6 +90,12 @@
 		  $("#btreg").hide();
 	  }
   }
+  
+  function forget_pwd_dialog_open(){
+		$('#forgetPwd_form_tip').text("通过此操作，系统将根据电话号码，重置对应账户的密码，账户密码将由系统随机生成，重置成功后，系统会将重置后的账号密码发送到其账户绑定的手机号码上！");
+		$('#forgetPwd_dialog').dialog('open');
+	}
+  
 //-->
 </script>
 
@@ -117,9 +123,7 @@
 					        <table>
 					        	<tr>
 					        		<td colspan="2">
-						        		<div style="color:red;">
-						        			通过此操作，系统将根据电话号码，重置对应账户的密码，账户密码将由系统随机生成，重置成功后，系统会将重置后的账号密码发送到其账户绑定的手机号码上！
-						        		</div>
+						        		<div style="color:red;" id="forgetPwd_form_tip"></div>
 					        		</td>
 					        	</tr>
 					        	<tr>
@@ -208,38 +212,25 @@
       <div id="right" width="270">
 		
 		   <div class="right_box">
-				<div class="right_title">教育园地</div>
+				<div class="right_title">教育要闻	<a href="article_cat.php?is_important=1">更多...&nbsp;&nbsp;</a></div>
 				<ul class="right_list">
 				<?
-				$sql = "select * from ".$ecs->table('education')." where is_active=1 order by education_id desc limit 10";
-				$educations = $db->getAll($sql);
-
-					foreach($educations as $k=>$edu){
-						?>
-						<li><a href="education.php?act=view&education_id=<?=$edu[education_id] ?>"><?=$edu[title] ?></a></li>
-						<?php
+					$articles = get_article_by_cat(0, 20, 1);
+					foreach($articles as $k=>$art){
+				?>
+					<li align="left" style="height:20px;" title="<?=$art['title'] ?>">
+					<table width="100%" style="BORDER-BOTTOM: 333333 1px dotted">
+						<tbody><tr style="cursor:hand;">
+						<td align="left" valign="BOTTOM" title="<?=$art['title'] ?>"><img style="width:12px;margin-right:2px;" src="resource/easyui/themes/icons/control_play_blue.png"><a href="article.php?id=<?=$art['article_id'] ?>" target="_blank" class="lzt2"><?=$art['middle_title'] ?></a></td>
+						</tr>
+						</tbody>
+						</table>
+					</li>
+				<?
 					}
 				 ?>
-				 <li><a href="education.php">更多...</a></li>
 			   </ul>
 			  </div>
-			  
-			  <div class="right_box">
-				<div class="right_title">系统相关</div>
-				<ul class="right_list">
-				<?
-				$sql = "select * from ".$ecs->table('problems')." where is_active=1 order by problems_id desc limit 10";
-				$problems = $db->getAll($sql);
-
-					foreach($problems as $k=>$problem){
-						?>
-						<li><a href="problems.php?act=view&problems_id=<?=$problem[problems_id] ?>"><?=$problem[title] ?></a></li>
-						<?php
-					}
-				 ?>
-				 <li><a href="problems.php">更多...</a></li>
-			   </ul>
-			  </div> 
 			  
       </div>
     </div>

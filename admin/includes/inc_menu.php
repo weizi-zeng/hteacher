@@ -77,13 +77,19 @@ $modules['09_advice']['03_classAdmin_msg']           = 'user_msg.php?act=list_cl
 $modules['09_advice']['04_customer_msg']    = 'user_msg.php?act=list_customer';
 $modules['09_advice']['05_other_msg']    = 'user_msg.php?act=list_outer';
 
-//教育园地
-$modules['09_education']['01_education_list']    = 'education.php?act=list';
-$modules['09_education']['02_education_add']    = 'education.php?act=add';
+//文章类型管理
+$modules['07_content']['03_article_list']           = 'article.php?act=list';
 
-//系统相关
-$modules['09_problems']['01_problems_list']    = 'problems.php?act=list';
-$modules['09_problems']['02_problems_add']    = 'problems.php?act=add';
+//文章管理
+$modules['07_content']['02_articlecat_list']        = 'articlecat.php?act=list';
+
+//教育园地
+// $modules['09_education']['01_education_list']    = 'education.php?act=list';
+// $modules['09_education']['02_education_add']    = 'education.php?act=add';
+
+// //系统相关
+// $modules['09_problems']['01_problems_list']    = 'problems.php?act=list';
+// $modules['09_problems']['02_problems_add']    = 'problems.php?act=add';
 
 $modules['10_priv_admin']['02_admin_list']             = 'admin.php?act=list';
 $modules['10_priv_admin']['03_admin_add']             = 'admin.php?act=add';

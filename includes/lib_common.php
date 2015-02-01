@@ -1903,6 +1903,7 @@ function article_cat_list($cat_id = 0, $selected = 0, $re_type = true, $level = 
                ' FROM ' . $GLOBALS['ecs']->table('article_cat') . " AS c".
                " LEFT JOIN " . $GLOBALS['ecs']->table('article_cat') . " AS s ON s.parent_id=c.cat_id".
                " LEFT JOIN " . $GLOBALS['ecs']->table('article') . " AS a ON a.cat_id=c.cat_id".
+               " where c.cat_id >3  ".
                " GROUP BY c.cat_id ".
                " ORDER BY parent_id, sort_order ASC";
             $res = $GLOBALS['db']->getAll($sql);

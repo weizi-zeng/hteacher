@@ -8,8 +8,9 @@ var NEW_ORDER_INTERVAL = 180000;
  */
 function startCheckOrder()
 {
-  checkOrder()
-  window.setInterval("checkOrder()", NEW_ORDER_INTERVAL);
+	return true;
+//  checkOrder()
+//  window.setInterval("checkOrder()", NEW_ORDER_INTERVAL);
 }
 
 /*

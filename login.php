@@ -459,9 +459,11 @@ login_display();
 function login_display($msg_detail='')
 {
 	$username = empty($_REQUEST['username'])?"":trim($_REQUEST['username']);
+	$status = empty($_REQUEST['status'])?"":trim($_REQUEST['status']);
 	
 	$GLOBALS['smarty']->assign('msg_detail',  $msg_detail);
 	$GLOBALS['smarty']->assign('username',  $username);
+	$GLOBALS['smarty']->assign('status',  $status);
 	
 	if ((intval($GLOBALS['_CFG']['captcha']) & CAPTCHA_ADMIN) && gd_version() > 0)
 	{

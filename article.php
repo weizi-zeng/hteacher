@@ -2,11 +2,17 @@
 	define('IN_ECS', true);
 	require (dirname(__FILE__) . '/includes/sinit.php');
 
-	$title = "教育园地";
+	$_REQUEST['id'] = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+	$article_id     = $_REQUEST['id'];
+	
+	$article = get_article_info($article_id);
+	$article_cat = get_articale_cat($article['cat_id']);
+	
+	$title = $article['title'].'_'.$article_cat['cat_name'];
+	
 	$msg = "";
 	require_once 'themes/default/header.htm';
 	
-	$education_id = empty($_REQUEST["education_id"])?"0":intval($_REQUEST["education_id"]);
 ?>
   
   <div class="content" id="cont" style="overflow:hidden">
@@ -28,44 +34,46 @@
 			
 						<div id="containerM1">
 							<?php 
-								if($education_id>0){
-									$id = $education_id;
-									$sql = "select * from ".$ecs->table("education")." where education_id=".$education_id;
-									$row = $db->getRow($sql);
+								if($article_id>0){
+									$id = $article_id;
+									$row = $article;
+									//浏览数字自动加一；
+									$view_count = ++$row["view_count"];
+									article_review_count_increment($article_id);
 									
-									if(empty($row) || $row["is_active"]!=1){
+									if(empty($row) || $row["is_open"]!=1){
 										echo('<font style="color:red;">您所有查看的文章不存在或者是被屏蔽</font>');
 										
 									}else {
 										
 										/* 上一篇下一篇文章 */
-										$next_education = $db->getRow("SELECT education_id, title FROM " .$ecs->table('education'). " WHERE education_id > $id AND is_active=1 LIMIT 1");
+										$next_article = $db->getRow("SELECT article_id, title FROM " .$ecs->table('article'). " WHERE article_id > $id AND is_open=1 LIMIT 1");
 											
-										$prev_aid = $db->getOne("SELECT max(education_id) FROM " . $ecs->table('education') . " WHERE education_id < $id AND is_active=1");
+										$prev_aid = $db->getOne("SELECT max(article_id) FROM " . $ecs->table('article') . " WHERE article_id < $id AND is_open=1");
 										if (!empty($prev_aid))
 										{
-											$prev_education = $db->getRow("SELECT education_id, title FROM " .$ecs->table('education'). " WHERE education_id = $prev_aid");
+											$prev_article = $db->getRow("SELECT article_id, title FROM " .$ecs->table('article'). " WHERE article_id = $prev_aid");
 										}
 										
 										?>
 										<div style="border:4px solid #fcf8f7; background-color:#fff; padding:20px 15px;max-width:1200px;">
 										<div class="tc" style="padding:8px;">
 											<font class="f5 f6"><?=$row["title"] ?></font><br />
-											<font class="f3"><?=$row["author"] ?> / <?=$row["created"] ?></font>
+											<font class="f3">第<?=$row["view_count"] ?>次浏览 / <?=$row["date"] ?></font>
 											</div>
 											<?=$row["content"] ?>
 											<div style="margin-top:20px;"></div>
-											
+											<div style="text-align:center">[<a href="javascript:window.close();">关闭窗口</a>]</div>
 											<div style="padding:8px; margin-top:15px; text-align:left; border-top:1px solid #ccc;">
 											<?php 
-												if($prev_education){
+												if($prev_article){
 													?>
-													上一篇:<a href="education.php?act=view&education_id=<?=$prev_education[education_id] ?>" class="f6"><?=$prev_education["title"] ?></a><br />
+													上一篇:<a href="article.php?act=view&id=<?=$prev_article[article_id] ?>" class="f6"><?=$prev_article["title"] ?></a><br />
 													<?php 	
 												}
-												if($next_education){
+												if($next_article){
 													?>
-													下一篇:<a href="education.php?act=view&education_id=<?=$next_education[education_id] ?>" class="f6"><?=$next_education["title"] ?></a><br />
+													下一篇:<a href="article.php?act=view&id=<?=$next_article[article_id] ?>" class="f6"><?=$next_article["title"] ?></a><br />
 													<?php 	
 												}
 												
@@ -80,28 +88,7 @@
 									<div class="blank"></div>
 									<?php 
 									
-								}else {
-									?>
-									<div >
-									<div style="font-size: 14px;padding: 0 15px;font-weight: bold;">教育园地</div>
-										<ul class="right_list">
-										<?
-										$sql = "select * from ".$ecs->table('education')." where is_active=1 order by education_id desc";
-										$education = $db->getAll($sql);
-										
-										foreach($education as $k=>$edu){
-											?>
-											<li>
-												<a href="education.php?act=view&education_id=<?=$edu[education_id] ?>"><?=$edu[title] ?>  <?=$edu["created"] ?></a>
-											</li>
-											<?php
-										}
-										 ?>
-									   </ul>
-								  </div> 
-									<?php 
 								}
-							
 							?>
 						</div>
 
@@ -151,4 +138,51 @@
 
  <?php 
 	require_once 'themes/default/footer.htm';
+?>
+
+<?php 
+
+
+/**
+ * 获得指定的文章的详细信息
+ *
+ * @access  private
+ * @param   integer     $article_id
+ * @return  array
+ */
+function get_article_info($article_id)
+{
+	/* 获得文章的信息 */
+	$sql = "SELECT a.* ".
+            "FROM " .$GLOBALS['ecs']->table('article'). " AS a ".
+            "WHERE a.is_open = 1 AND a.article_id = '$article_id' ";
+	$row = $GLOBALS['db']->getRow($sql);
+
+	if ($row !== false)
+	{
+		$row['date'] = local_date('Y-m-d H:i:s', $row['add_time']);
+		/* 作者信息如果为空，则用网站名称替换 */
+		if (empty($row['author']))
+		{
+			$row['author'] = $GLOBALS['_CFG']['shop_name'];
+		}
+	}
+
+	return $row;
+}
+
+//获取文章类型
+function get_articale_cat($cat_id)
+{
+	$sql = "select * from ".$GLOBALS['ecs']->table('article_cat')." where cat_id=".$cat_id;
+	$row = $GLOBALS['db']->getRow($sql);
+	return $row;
+}
+
+function article_review_count_increment($article_id)
+{
+	$sql = "update " .$GLOBALS['ecs']->table('article'). " set view_count=view_count+1 where article_id=".$article_id;
+	$GLOBALS['db']->query($sql);
+}
+
 ?>

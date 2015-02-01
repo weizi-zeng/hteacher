@@ -18,6 +18,7 @@ define('IN_ECS', true);
 require(dirname(__FILE__) . '/includes/init.php');
 require_once(ROOT_PATH . "includes/fckeditor/fckeditor.php");
 require_once(ROOT_PATH . 'includes/cls_image.php');
+// print_r($_SESSION);die();
 
 /*初始化数据交换对象 */
 $exc   = new exchange($ecs->table("article"), $db, 'article_id', 'title');
@@ -88,19 +89,8 @@ if ($_REQUEST['act'] == 'add')
     /*初始化*/
     $article = array();
     $article['is_open'] = 1;
+    $article['is_important'] = 1;
 
-    /* 取得分类、品牌 */
-    $smarty->assign('goods_cat_list', cat_list());
-    $smarty->assign('brand_list',     get_brand_list());
-
-    /* 清理关联商品 */
-    $sql = "DELETE FROM " . $ecs->table('goods_article') . " WHERE article_id = 0";
-    $db->query($sql);
-
-    if (isset($_GET['id']))
-    {
-        $smarty->assign('cur_id',  $_GET['id']);
-    }
     $smarty->assign('article',     $article);
     $smarty->assign('cat_select',  article_cat_list(0));
     $smarty->assign('ur_here',     $_LANG['article_add']);
@@ -127,55 +117,21 @@ if ($_REQUEST['act'] == 'insert')
         sys_msg(sprintf($_LANG['title_exist'], stripslashes($_POST['title'])), 1);
     }
 
-    /* 取得文件地址 */
-    $file_url = '';
-    if ((isset($_FILES['file']['error']) && $_FILES['file']['error'] == 0) || (!isset($_FILES['file']['error']) && isset($_FILES['file']['tmp_name']) && $_FILES['file']['tmp_name'] != 'none'))
-    {
-        // 检查文件格式
-        if (!check_file_type($_FILES['file']['tmp_name'], $_FILES['file']['name'], $allow_file_types))
-        {
-            sys_msg($_LANG['invalid_file']);
-        }
-
-        // 复制文件
-        $res = upload_article_file($_FILES['file']);
-        if ($res != false)
-        {
-            $file_url = $res;
-        }
-    }
-
-    if ($file_url == '')
-    {
-        $file_url = $_POST['file_url'];
-    }
-
-    /* 计算文章打开方式 */
-    if ($file_url == '')
-    {
-        $open_type = 0;
-    }
-    else
-    {
-        $open_type = $_POST['FCKeditor1'] == '' ? 1 : 2;
-    }
-
     /*插入数据*/
     $add_time = gmtime();
     if (empty($_POST['cat_id']))
     {
         $_POST['cat_id'] = 0;
     }
-    $sql = "INSERT INTO ".$ecs->table('article')."(title, cat_id, article_type, is_open, author, ".
-                "author_email, keywords, content, add_time, file_url, open_type, link, description) ".
-            "VALUES ('$_POST[title]', '$_POST[article_cat]', '$_POST[article_type]', '$_POST[is_open]', ".
-                "'$_POST[author]', '$_POST[author_email]', '$_POST[keywords]', '$_POST[FCKeditor1]', ".
-                "'$add_time', '$file_url', '$open_type', '$_POST[link_url]', '$_POST[description]')";
-    $db->query($sql);
-
-    /* 处理关联商品 */
-    $article_id = $db->insert_id();
-    $sql = "UPDATE " . $ecs->table('goods_article') . " SET article_id = '$article_id' WHERE article_id = 0";
+    
+    $author = $_SESSION['admin_name'];
+    $user_id = $_SESSION['admin_id'];
+    
+    $sql = "INSERT INTO ".$ecs->table('article')."(title, cat_id, is_open, author, ".
+                "keywords, content, add_time, description, is_important, school_code, class_code, user_id) ".
+            "VALUES ('$_POST[title]', '$_POST[article_cat]', '$_POST[is_open]', ".
+                "'$author', '$_POST[keywords]', '$_POST[FCKeditor1]', ".
+                "'$add_time', '$_POST[description]', '$_POST[is_important]', '$_POST[school_code]', '$_POST[class_code]','$user_id')";
     $db->query($sql);
 
     $link[0]['text'] = $_LANG['continue_add'];
@@ -206,14 +162,6 @@ if ($_REQUEST['act'] == 'edit')
     /* 创建 html editor */
     create_html_editor('FCKeditor1',$article['content']);
 
-    /* 取得分类、品牌 */
-    $smarty->assign('goods_cat_list', cat_list());
-    $smarty->assign('brand_list', get_brand_list());
-
-    /* 取得关联商品 */
-    $goods_list = get_article_goods($_REQUEST['id']);
-    $smarty->assign('goods_list', $goods_list);
-
     $smarty->assign('article',     $article);
     $smarty->assign('cat_select',  article_cat_list(0, $article['cat_id']));
     $smarty->assign('ur_here',     $_LANG['article_edit']);
@@ -243,48 +191,7 @@ if ($_REQUEST['act'] =='update')
         $_POST['cat_id'] = 0;
     }
 
-    /* 取得文件地址 */
-    $file_url = '';
-    if (empty($_FILES['file']['error']) || (!isset($_FILES['file']['error']) && isset($_FILES['file']['tmp_name']) && $_FILES['file']['tmp_name'] != 'none'))
-    {
-        // 检查文件格式
-        if (!check_file_type($_FILES['file']['tmp_name'], $_FILES['file']['name'], $allow_file_types))
-        {
-            sys_msg($_LANG['invalid_file']);
-        }
-
-        // 复制文件
-        $res = upload_article_file($_FILES['file']);
-        if ($res != false)
-        {
-            $file_url = $res;
-        }
-    }
-
-    if ($file_url == '')
-    {
-        $file_url = $_POST['file_url'];
-    }
-
-    /* 计算文章打开方式 */
-    if ($file_url == '')
-    {
-        $open_type = 0;
-    }
-    else
-    {
-        $open_type = $_POST['FCKeditor1'] == '' ? 1 : 2;
-    }
-
-    /* 如果 file_url 跟以前不一样，且原来的文件是本地文件，删除原来的文件 */
-    $sql = "SELECT file_url FROM " . $ecs->table('article') . " WHERE article_id = '$_POST[id]'";
-    $old_url = $db->getOne($sql);
-    if ($old_url != '' && $old_url != $file_url && strpos($old_url, 'http://') === false && strpos($old_url, 'https://') === false)
-    {
-        @unlink(ROOT_PATH . $old_url);
-    }
-
-    if ($exc->edit("title='$_POST[title]', cat_id='$_POST[article_cat]', article_type='$_POST[article_type]', is_open='$_POST[is_open]', author='$_POST[author]', author_email='$_POST[author_email]', keywords ='$_POST[keywords]', file_url ='$file_url', open_type='$open_type', content='$_POST[FCKeditor1]', link='$_POST[link_url]', description = '$_POST[description]'", $_POST['id']))
+    if ($exc->edit("title='$_POST[title]', cat_id='$_POST[article_cat]', is_open='$_POST[is_open]', is_important='$_POST[is_important]', keywords ='$_POST[keywords]', open_type='$open_type', content='$_POST[FCKeditor1]', description = '$_POST[description]'", $_POST['id']))
     {
         $link[0]['text'] = $_LANG['back_list'];
         $link[0]['href'] = 'article.php?act=list&' . list_link_postfix();
@@ -330,6 +237,21 @@ elseif ($_REQUEST['act'] == 'edit_title')
             make_json_error($db->error());
         }
     }
+}
+/*------------------------------------------------------ */
+//-- 切换为教育要闻
+/*------------------------------------------------------ */
+elseif ($_REQUEST['act'] == 'toggle_is_important')
+{
+	check_authz_json('article_manage');
+
+	$id     = intval($_POST['id']);
+	$val    = intval($_POST['val']);
+
+	$exc->edit("is_important = '$val'", $id);
+	clear_cache_files();
+
+	make_json_result($val);
 }
 
 /*------------------------------------------------------ */

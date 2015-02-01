@@ -26,7 +26,7 @@
       <a href="javascript:listTable.sort('article_id'); ">{$lang.article_id}</a>{$sort_article_id}</th>
     <th><a href="javascript:listTable.sort('title'); ">{$lang.title}</a>{$sort_title}</th>
     <th><a href="javascript:listTable.sort('cat_id'); ">{$lang.cat}</a>{$sort_cat_id}</th>
-    <th><a href="javascript:listTable.sort('article_type'); ">{$lang.article_type}</a>{$sort_article_type}</th>
+    <th><a href="javascript:listTable.sort('is_important'); ">教育要闻</a>{$sort_is_important}</th>
     <th><a href="javascript:listTable.sort('is_open'); ">{$lang.is_open}</a>{$sort_is_open}</th>
     <th><a href="javascript:listTable.sort('add_time'); ">{$lang.add_time}</a>{$sort_add_time}</th>
     <th>{$lang.handler}</th>
@@ -34,10 +34,11 @@
   {foreach from=$article_list item=list}
   <tr>
     <td><span><input name="checkboxes[]" type="checkbox" value="{$list.article_id}" {if $list.cat_id <= 0 }disabled="true"{/if}/>{$list.article_id}</span></td>
-    <td class="first-cell">
+    <td class="first-cell" style="text-align:left;">
     <span onclick="javascript:listTable.edit(this, 'edit_title', {$list.article_id})">{$list.title|escape:html}</span></td>
-    <td align="left"><span><!-- {if $list.cat_id > 0} -->{$list.cat_name|escape:html}<!-- {else} -->{$lang.reserve}<!-- {/if} --></span></td>
-    <td align="center"><span>{if $list.article_type eq 0}{$lang.common}{else}{$lang.top}{/if}</span></td>
+    <td align="left" style="text-align:left;"><span><!-- {if $list.cat_id > 0} -->{$list.cat_name|escape:html}<!-- {else} -->{$lang.reserve}<!-- {/if} --></span></td>
+    <td align="center">{if $list.cat_id > 0}<span>
+    <img src="images/{if $list.is_important eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_is_important', {$list.article_id})" /></span>{else}<img src="images/yes.gif" alt="yes" />{/if}</td>
     <td align="center">{if $list.cat_id > 0}<span>
     <img src="images/{if $list.is_open eq 1}yes{else}no{/if}.gif" onclick="listTable.toggle(this, 'toggle_show', {$list.article_id})" /></span>{else}<img src="images/yes.gif" alt="yes" />{/if}</td>
     <td align="center"><span>{$list.date}</span></td>

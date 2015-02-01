@@ -4,7 +4,7 @@
 /***** 全局 *****/
 body{ width:100%; margin:0; text-align:center; font-size:12px; color:#555; font-family:Tahoma,Verdana,Arial,微软雅黑,宋体;}
 a{ color:#555; text-decoration:none; margin:0; padding:0;}
-a:hover{ text-decoration:underline;}
+a:hover{ text-decoration:none;color:red;}
 a img{ border:0;}
 .clearfix{ clear:both;}
 
@@ -75,7 +75,7 @@ a img{ border:0;}
 .right_button{ text-align:center; margin:10px 0 15px;}
 .button_1{ width:72px; height:26px; line-height:26px; cursor:pointer; color:#0F4957; }
 .right_list{text-align:left; line-height:23px; padding:0; margin:10px 0;}
-.right_list li{list-style:none; padding:0 0 0 10px; margin:0 15px;}
+.right_list li{list-style:none; padding:0 0 0 6px; margin:0 4px;}
 .service{ width:270px; height:119px; margin:10px 0 0 0;}
 
 /***** 左栏目 *****/
@@ -250,8 +250,7 @@ a img{ border:0;}
 
 #containerM1{
 	text-align:left; 
-	padding-left:60px;
-	padding-right:60px;
+	padding:10px;
 }
 
 #login{
@@ -278,4 +277,8 @@ a img{ border:0;}
     border-width: medium 0 1pt;
     font-size: 12px;
     padding: 3px 5px;
+}
+
+.ariticle_cat_list_container{
+	padding:14px;
 }

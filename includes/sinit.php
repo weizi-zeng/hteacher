@@ -73,6 +73,7 @@ require(ROOT_PATH . 'includes/lib_common.php');
 require(ROOT_PATH . 'includes/lib_main.php');
 require(ROOT_PATH . 'includes/lib_insert.php');
 require(ROOT_PATH . 'includes/lib_article.php');
+require(ROOT_PATH . 'includes/lib_new_common.php');
 
 /* 对用户传入的变量进行转义操作。*/
 if (!get_magic_quotes_gpc())

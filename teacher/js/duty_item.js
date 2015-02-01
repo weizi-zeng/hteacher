@@ -35,7 +35,6 @@
                 remoteSort: false,  //列少设为true,列多设为false
                 singleSelect: true,
                 autoRowHeight: false,
-                checkOnSelect:true,
                 pagination: true,
                 pageSize: 25,
                 pageList: [15, 25, 50, 100, 200],
@@ -47,7 +46,7 @@
 	            	  update();
 	              },
                 columns: [[
-				  { field: 'duty_item_id', title: 'ID', checkbox: true },
+				  { field: 'duty_item_id', title: 'ID', hidden: true },
                   { field: 'name', title: '量化项目', width: 120, sortable: true, align: 'center' },
                   { field: 'score', title: '分值', width: 120, sortable: true, align: 'center' },
                   { field: 'created', title: '创建日期', width: 220, sortable: true, align: 'center' }
