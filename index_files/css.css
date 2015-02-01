@@ -242,6 +242,7 @@ a img{ border:0;}
 .error .sorry{ font-size:18px; margin:0;}
 .error hr{ border:0; border-top:1px solid #fff; margin:10px 0 0 0;}
 .error .tips{ font-size:14px; margin:10px 0 0 0; line-height:25px;}
+.toTop{position: fixed; bottom: 240px; right: 342px; cursor:pointer;z-index:1;background-color: #76E1F9;padding:10px;opacity:0.3;}
 
 #container {
     margin-top: 15px;

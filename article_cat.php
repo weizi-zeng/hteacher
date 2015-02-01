@@ -111,7 +111,7 @@
   </div>
   
   
-  <div id="toTop" style="position: fixed; bottom: 240px; right: 270px; cursor:pointer;z-index:1;background-color: #76E1F9;padding:10px;opacity:0.3;">
+  <div id="toTop" class="toTop" >
   	置顶
   </div>
   <script type="text/javascript" >
