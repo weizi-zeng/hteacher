@@ -598,7 +598,7 @@ function get_menus_by_status($status){
 			)),
 			array(id=>"22", title=>"上传下载",submenus=>array(
 				array(id=>"221", title=>"上传类型", url=>"download_type.php?act=list"),
-				array(id=>"222", title=>"下载管理", url=>"download.php?act=list")
+				array(id=>"222", title=>"上传下载", url=>"download.php?act=list")
 			)),
 			array(id=>"70", title=>"投诉建议",submenus=>array(
 				array(id=>"701", title=>"给超级管理员意见", url=>"user_msg.php?act=list")

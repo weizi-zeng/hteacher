@@ -27,7 +27,7 @@ a img{ border:0;}
 
 /***** 导航 *****/
 .nav{ width:980px; height:40px;}
-.nav_1{ width:950px; height:40px; padding:0 0 0 160px;}
+.nav_1{ width:350px; height:40px; padding:0 0 0 160px;}
 .nav_1 a{ width:112px; height:37px; padding:4px 0 0 0; line-height:37px; color:#fff; font-size:14px; display:block; float:left;}
 .nav_1 a:hover{color:#000; text-decoration:none;}
 .nav_1 a.current{color:#000; font-weight:bold; text-decoration:none;}

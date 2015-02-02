@@ -15,6 +15,9 @@
 	$article_cat = get_articale_cat($cat_id);
 	
 	$title = $is_important>-1?"教育要闻":$article_cat['cat_name'];
+	if($keyword){
+		$title .= $keyword;
+	}
 	
 	$msg = "";
 	require_once 'themes/default/header.htm';
